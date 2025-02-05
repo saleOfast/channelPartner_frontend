@@ -1,0 +1,1123 @@
+/* Channel register start */
+.channel_partner_register {
+  padding: 0 10px;
+}
+.form-label,
+.Attachment {
+  display: inline-block;
+  color: #000;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+}
+.input-field {
+  width: 100%;
+  color: #646464;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+  padding: 11px 16px;
+  border-radius: 6px;
+  box-shadow: 0px 0px 4px -3px;
+  background: #fff;
+}
+/* Channel register end */
+
+/* Signin Start */
+/* .Sign-In .Sign-In-logo img {
+  height: 136px;
+} */
+.Sign-In .Perfect-Home {
+  font-size: 48px;
+  font-weight: 700;
+  color: #293790;
+}
+
+.card {
+  width: auto;
+  height: auto;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+}
+
+.card a.fp {
+  width: 100%;
+  display: flex;
+  color: #5881d0;
+}
+
+.login_register {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgba(221, 221, 221, 1);
+  border-radius: 15px;
+  margin: 20px 0;
+}
+
+.login_register a {
+  font-size: 1em;
+  padding: 10px 55px;
+  border: none;
+  width: 50%;
+}
+
+.login_register a.login {
+  border-radius: 15px;
+  background-color: transparent;
+  color: black;
+}
+
+.login_register a.register {
+  border-radius: 15px;
+  background: linear-gradient(90deg, #003a74, #006ad5);
+  color: white;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+}
+
+.form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dddddd;
+  color: #a0a6a3;
+  font-family: "Roboto Mono", sans-serif;
+  box-shadow: 1px 5px 9px rgba(211, 211, 211, 0.7);
+}
+
+.form input.email {
+  margin-bottom: 15px;
+}
+
+.form input.pass {
+  margin-bottom: 15px;
+}
+
+.form input.comfirm_pass {
+  margin-bottom: 5px;
+}
+
+.login_btn {
+  font-size: 20px;
+  color: white;
+  border-radius: 15px;
+  border: none;
+  background-color: #003a74;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background: linear-gradient(-90deg, #003a74, #006ad5);
+  box-shadow: 1px 5px 9px rgba(211, 211, 211, 0.9);
+}
+.Sign-In .Sign-In_Sign-Up {
+  width: 358px;
+
+}
+.Sign-In_Sign-Up .underline {
+  background-color: #ec2027;
+  width: 126px;
+  height: 3px;
+  margin-left: 48%;
+}
+.Sign-In_Sign-Up .Sign-In-btn {
+  background-color: #293790;
+  color: #fff;
+  width: 175px;
+  /* height: 35px; */
+  padding: 8px 20px 8px 20px;
+  gap: 10px;
+  border-radius: 8px;
+  
+}
+.Sign-In_Sign-Up .Sign-Up-btn {
+  background-color: #ecf0ff;
+  color: #9c9aa5;
+  width: 175px;
+  /* height:35px; */
+  padding: 8px 20px 8px 20px;
+  gap: 10px;
+  border-radius: 8px;
+  
+}
+.Sign-In_Sign-Up .nav-tabs .nav-link.active {
+  background-color: #293790 !important;
+  color: #fff;
+}
+.Sign-In_Sign-Up form label {
+  color: #26203b;
+  font-size: 16px;
+  font-weight: 400;
+}
+.Sign-In_Sign-Up form input {
+  width: 100%;
+  height: 48px;
+  padding: 8px 16px 8px 16px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #a1a7cf;
+  
+}
+.Sign-In_Sign-Up .form ::placeholder {
+  color: #9c9aa5;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.Sign-In .login_btn {
+  background: #ec2027;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.perfect-home-form .fp {
+  font-size: 12px;
+  font-weight: 400;
+  color: #293790;
+}
+/* Signin End */
+
+/* Signup Start */
+.Sign-Up .Sign-Up-logo img {
+  height: 136px;
+}
+.Sign-Up .Perfect-Home {
+  font-size: 48px;
+  font-weight: 700;
+  color: #293790;
+}
+
+
+.card {
+  width: auto;
+  height: auto;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+}
+
+.card a.fp {
+  width: 100%;
+  display: flex;
+  color: #5881d0;
+}
+
+.login_register {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgba(221, 221, 221, 1);
+  border-radius: 15px;
+  margin: 20px 0;
+}
+
+.login_register a {
+  font-size: 1em;
+  padding: 10px 55px;
+  border: none;
+  width: 50%;
+}
+
+.login_register a.login {
+  border-radius: 15px;
+  background-color: transparent;
+  color: black;
+}
+
+.login_register a.register {
+  border-radius: 15px;
+  background: linear-gradient(90deg, #003a74, #006ad5);
+  color: white;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+}
+
+.form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dddddd;
+  color: #a0a6a3;
+  font-family: "Roboto Mono", sans-serif;
+  box-shadow: 1px 5px 9px rgba(211, 211, 211, 0.7);
+}
+
+.form input.email {
+  margin-bottom: 15px;
+}
+
+.form input.pass {
+  margin-bottom: 15px;
+}
+
+.form input.comfirm_pass {
+  margin-bottom: 5px;
+}
+
+.login_btn {
+  font-size: 20px;
+  color: white;
+  border-radius: 15px;
+  border: none;
+  background-color: #003a74;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background: linear-gradient(-90deg, #003a74, #006ad5);
+  box-shadow: 1px 5px 9px rgba(211, 211, 211, 0.9);
+}
+.Sign-Up .Sign-Up_Sign-In {
+  width: 358px;
+  
+}
+.Sign-Up_Sign-In .underline {
+  background-color: #ec2027;
+  width: 126px;
+  height: 3px;
+  margin-left: 48%;
+}
+.Sign-Up_Sign-In .Sign-In-btn {
+  background-color: #293790;
+  color: #fff;
+  width: 175px;
+  /* height: 35px; */
+  padding: 8px 20px 8px 20px;
+  gap: 10px;
+  border-radius: 8px;
+  
+}
+.Sign-Up_Sign-In .Sign-Up-btn {
+  background-color: #ecf0ff;
+  color: #9c9aa5;
+  width: 175px;
+  /* height:35px; */
+  padding: 8px 20px 8px 20px;
+  gap: 10px;
+  border-radius: 8px;
+  
+}
+.Sign-Up_Sign-In .nav-tabs .nav-link.active {
+  background-color: #293790 !important;
+  color: #fff;
+}
+.Sign-Up_Sign-In form label {
+  color: #26203b;
+  font-size: 16px;
+  font-weight: 400;
+}
+.Sign-Up_Sign-In form input {
+  width: 100%;
+  height: 48px;
+  padding: 8px 16px 8px 16px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #a1a7cf;
+  
+}
+.Sign-Up_Sign-In .form ::placeholder {
+  color: #9c9aa5;
+  font-weight: 400;
+  font-size: 14px;
+}
+.Sign-Up_Sign-In .form select option {
+  color: #9c9aa5;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.Sign-Up .login_btn {
+  background: #ec2027;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.perfect-home-form .fp {
+  font-size: 12px;
+  font-weight: 400;
+  color: #293790;
+}
+.Sign-Up_Sign-In .upload-files .form-control {
+  background-color: #293790;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+}
+.Sign-Up_Sign-In #craete-account {
+  background-color: #ec2027;
+  color: #fff;
+  border-radius: 8px;
+  padding: 10px 20px;
+}
+/* Signup SEnd */
+
+/* .Sign-In .Sign-In-logo img {
+  height: 90px;
+} */
+.Sign-In .Perfect-Home {
+  font-size: 48px;
+  font-weight: 700;
+  color: #293790;
+}
+
+.card {
+  width: auto;
+  height: auto;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  border-radius: 20px;
+}
+
+.card h2 {
+  margin-bottom: 10px;
+}
+
+.card a.fp {
+  width: 100%;
+  display: flex;
+  color: #5881d0;
+}
+
+.login_register {
+  display: flex;
+  width: 100%;
+  border: 1px solid rgba(221, 221, 221, 1);
+  border-radius: 15px;
+  margin: 20px 0;
+}
+
+.login_register a {
+  font-size: 1em;
+  padding: 10px 55px;
+  border: none;
+  width: 50%;
+}
+
+.login_register a.login {
+  border-radius: 15px;
+  background-color: transparent;
+  color: black;
+}
+
+.login_register a.register {
+  border-radius: 15px;
+  background: linear-gradient(90deg, #003a74, #006ad5);
+  color: white;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 16px;
+}
+
+.form input {
+  padding: 10px;
+  border-radius: 5px;
+  border: 1px solid #dddddd;
+  color: #a0a6a3;
+  font-family: "Roboto Mono", sans-serif;
+  box-shadow: 1px 5px 9px rgba(211, 211, 211, 0.7);
+}
+
+.form input.email {
+  margin-bottom: 15px;
+}
+
+.form input.pass {
+  margin-bottom: 15px;
+}
+
+.form input.comfirm_pass {
+  margin-bottom: 5px;
+}
+
+.login_btn {
+  font-size: 20px;
+  color: white;
+  border-radius: 15px;
+  border: none;
+  background-color: #003a74;
+  width: 100%;
+  padding: 10px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+  background: linear-gradient(-90deg, #003a74, #006ad5);
+  box-shadow: 1px 5px 9px rgba(211, 211, 211, 0.9);
+}
+.Sign-In .Sign-In_Sign-Up {
+  width: 358px;
+}
+.Sign-In_Sign-Up .underline {
+  background-color: #ec2027;
+  width: 126px;
+  height: 3px;
+  margin-left: 48%;
+}
+.Sign-In_Sign-Up .Sign-In-btn {
+  background-color: #293790;
+  color: #fff;
+  width: 175px;
+  /* height: 35px; */
+  padding: 8px 20px 8px 20px;
+  gap: 10px;
+  border-radius: 8px;
+  
+}
+.Sign-In_Sign-Up .Sign-Up-btn {
+  background-color: #ecf0ff;
+  color: #9c9aa5;
+  width: 175px;
+  /* height:35px; */
+  padding: 8px 20px 8px 20px;
+  gap: 10px;
+  border-radius: 8px;
+  
+}
+.Sign-In_Sign-Up .nav-tabs .nav-link.active {
+  background-color: #293790 !important;
+  color: #fff;
+}
+.Sign-In_Sign-Up form label {
+  color: #26203b;
+  font-size: 16px;
+  font-weight: 400;
+}
+.Sign-In_Sign-Up form input {
+  width: 100%;
+  height: 48px;
+  padding: 8px 16px 8px 16px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #a1a7cf;
+  
+  box-shadow: 0px 0px 4px 0px #a1a7cf;
+}
+.Sign-In_Sign-Up .form ::placeholder {
+  color: #9c9aa5;
+  font-weight: 400;
+  font-size: 14px;
+}
+
+.Sign-In .set-password {
+  background-color: #293790;
+  padding: 8px 20px;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.Sign-In .new-password {
+  background-color: #ecf0ff;
+  border-radius: 8px;
+}
+.Sign-In .login_btn {
+  background: #ec2027;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 700;
+}
+.perfect-home-form .fp {
+  font-size: 12px;
+  font-weight: 400;
+  color: #293790;
+}
+
+/* Dashboard Start */
+.Reports-Dashboard{
+  background: white;
+}
+
+.Reports-Dashboard .navbar-toggler:focus{
+  outline: none;
+}
+.Reports-Dashboard .navbar-nav .nav-link.active{
+  color: #EC2027;
+  padding:0px 0px 7px 0px;
+  border-bottom: 2px solid #EC2027;
+}
+.Reports-Dashboard .nav-link{
+  color: #293790;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 0;
+}
+/* Dashboard End */
+
+/* Channel Profile Start*/
+.Channel-profile {
+  background: #f5f5f5;
+}
+.Channel-profile .profile-text{
+  color: #26203B;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top: 30px;
+}
+.Channel-profile .profile-details {
+  /* width: 320px; */
+  height: 398px;
+  background-color: #fff;
+  /* cursor: pointer; */
+  transition: all 0.5s;
+  padding: 44px 20px;
+  border-radius: 8px;
+  border: 1px solid #f5f5f5;
+  box-shadow: 0px 0px 1px -1px;
+}
+.Channel-profile .profile-details .person-name {
+  color: #293790;
+  font-size: 24px;
+  font-weight: 600;
+}
+.Channel-profile .profile-edit img{
+  top: 29%;
+  right: 39%;
+}
+.Channel-profile .profile-details .idd {
+  color: #9c9aa5;
+  font-size: 16px;
+  font-weight: 600;
+}
+.Channel-profile .profile-details .person-email .edit-email,
+.edit-phone {
+  color: #9c9aa5;
+  font-size: 16px;
+  font-weight: 600;
+}
+.Channel-profile .profile-logout {
+  /* width: 320px; */
+  border: 1px solid #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0px 0px 1px -1px;
+  padding: 14px 24px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.Channel-profile .btn {
+  height: 140px;
+  width: 140px;
+  border-radius: 50%;
+}
+
+.Channel-profile .name {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.Channel-profile .idd {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.Channel-profile .idd1 {
+  font-size: 12px;
+}
+.Channel-profile .list-group {
+  border-radius: 8px;
+  overflow: hidden;
+  height: 477px;
+}
+@media screen and (max-width: 768px){
+  .Channel-profile .channel-profile-logout{
+    height: 437px !important;
+  } 
+}
+
+.Channel-profile .General-list li:hover > span {
+  background-color: transparent;
+}
+.Channel-profile .list-group-item.active {
+  background-color: #2f2c6d;
+  border: none;
+  font-size: 20px !important;
+  font-weight: 600;
+}
+
+.Channel-profile .list-group .General-list:hover {
+  background-color: #000;
+}
+.Channel-profile .list-group .active-list {
+  padding: 20px 24px;
+}
+.Channel-profile .list-group .list-group-item-action {
+  color: #9c9aa5;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 16px 24px 15px 24px;
+}
+.Channel-profile .list-group .list-right {
+  color: #13263c;
+}
+
+@media screen and (max-width: 992px) {
+  .Sign-In .Perfect-Home {
+    font-size: 38px;
+  }
+  .Channel-profile .profile-details,
+  .profile-logout {
+    width: 100% !important;
+  }
+  .Channel-profile .list-group {
+    margin-top: 40px;
+  }
+  .Channel-profile .profile-edit img {
+    top: 29%;
+    right: 43%;
+}
+}
+
+@media screen and (max-width: 769px) {
+  .Sign-In .Sign-In-logo img {
+    height: 72px !important;
+  }
+  .Sign-In .Perfect-Home {
+    font-size: 19px;
+  }
+  .Register {
+    width: 100% !important;
+  }
+  .Register .underline {
+    margin-left: 2px !important;
+  }
+  .Sign-In .set-new-password {
+    width: 100% !important;
+    padding-top: 30px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .Channel-profile .profile-edit img {
+    top: 30%;
+    right: 36%;
+}
+}
+
+/* Channel Profile END */
+
+/* Create New-leades Start*/
+.Create-New-Lead .Perfect-Home{
+  font-size: 20px; 
+  font-weight: 600;
+  color: #293790;
+}
+.Create-New-Lead  form label {
+  color: #9C9AA5;
+  font-size: 14px;
+  font-weight: 400;
+}
+.Create-New-Lead .rowTab{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.Create-New-Lead form .rightTab{
+  width: 70%;
+}
+.Create-New-Lead form .possible-visit{
+  width: 70%;
+}
+.Create-New-Lead  form input {
+  width: 100%;
+  height: 48px;
+  padding: 8px 16px 8px 16px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #EFEFEF;
+  box-shadow: 0px 0px 1px 0px;
+}
+.Create-New-Lead form .Leads-form-details{
+  width: 40%;
+}
+.Create-New-Lead form{
+  justify-content: space-between;
+}
+.Create-New-Lead .Sign-In_Sign-Up form .form-select {
+  border: 1px solid #EFEFEF;
+  border-radius: 8px;
+  /* box-shadow: 0px 0px 1px 0px; */
+}
+
+.Create-New-Lead form .new-leades-btn .cancel-btn, .submit-btn{
+   padding: 6px 16px;
+   border-radius: 40px;
+   font-size: 14px;
+   font-weight: 500;
+}
+.Create-New-Lead form .new-leades-btn .cancel-btn{
+  width: 74px;
+  height: 32px;
+  border: 1px solid #293790;
+  color: #293790;
+}
+.Create-New-Lead form .new-leades-btn .submit-btn{
+  width: 76px;
+  height: 32px;
+  background-color: #293790;
+  padding: 6px 16px;
+}
+
+/* Create New-leades Start */
+
+/* lead-details Start */
+.Visit-Details .list-group-item.active .lead-id {
+  font-size: 14px !important;
+  
+}
+.Visit-Details .list-group-item.active {
+  background-color: #293790;
+}
+.Visit-Details .leads-content {
+  padding: 34px 24px;
+}
+.Visit-Details .lead-detail-sec{
+  border: 1px solid #EBECEE;
+  border-radius: 8px;
+}
+.Visit-Details .list-group .list-group-item-action {
+  color: #9c9aa5;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 9px 24px 10px 24px;
+}
+.Visit-Details .details-btn .back-to-lead{
+  width: 116px;
+  height: 32px;
+  background-color: #293790;
+  padding: 6px 15px 6px 14px;
+  border-radius: 40px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.Visit-Details .list-group .list-right {
+  color: #293790;
+}
+/* lead-details End */
+
+/* booking-details Start */
+.Booking-Detail .list-group .active-list:hover{
+  background-color:  #293790 !important;
+}
+.Booking-Detail .list-group-item-action:hover {
+  z-index: 0;
+  text-decoration: none;
+  background-color: #fff;
+}
+
+.Booking-Detail .details-btn button{
+  width: 140px !important;
+  height: 32px;
+}
+/* booking-details End */
+
+/*  Create Brokerage Bill Start*/
+
+.Create-Brokerage-Bill .Leads-form-details .form-control {
+  background-color: #293790;
+  color: #fff;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 11px 24px 11px 26px;
+}
+.Create-Brokerage-Bill .Leads-form-details .form-select{
+  width: 162px;
+  height: 35px;
+}
+.Create-Brokerage-Bill form input {
+  width: 162px;
+  height: 35px;
+}
+.Create-Brokerage-Bill .Create-New-Lead form input {
+  width: 162px;
+  height: 35px;
+  padding: 8px 16px 8px 16px;
+  gap: 10px;
+  border-radius: 8px;
+  border: 1px solid #EFEFEF;
+  /* box-shadow: 0px 0px 1px 0px; */
+}
+.Create-Brokerage-Bill .new-leades-btn {
+  margin-top: 50px;
+}
+
+/*  Create Brokerage Bill End*/
+
+/* Visit-Date-and-Time Start */
+/* .Visit-Date-and-Time .container{
+  width: 461px;
+  height: 164px;
+}
+.Visit-Date-and-Time .rowTab .label{
+  color: #9C9AA5;
+  font-size: 14px;
+  font-weight: 400;
+}
+.Visit-Date-and-Time .rightTab .date{
+  color: #293790;
+  font-size: 12px;
+  font-weight: 700;
+} */
+/* Visit-Date-and-Time End */
+
+/* Campaigns-Project-Details Start */
+.Campaigns .Campaign-img{
+  background-size: cover;
+  background-position: center;
+  aspect-ratio: 16 / 9;
+  background-repeat: no-repeat;
+  border-radius: 8px;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  height: 256px;
+}
+.Campaigns .overlay{
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  aspect-ratio: 16/9;
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 25px 24px;
+  z-index: 1;
+}.Campaigns .cart-overlay-items{
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  padding: 25px 24px;
+}
+.cart-overlay-items .Campaign-name h3{
+   font-size: 36px;
+   font-weight: 700;
+}
+.Campaigns .Campaign-img{
+  height: 480px;
+}
+.Campaign-upload .list-group-item{
+  background-color: #F9F9F9;
+}
+.Campaign-upload .list-group-item-action:hover {
+ background-color: transparent;
+}
+.Campaign-upload  .details-btn .back-to-lead {
+  width: 158px !important;
+  height: 32px;
+}
+.Campaigns-Project-Details{
+  width: 926px;
+  height: 478px;
+}
+.Campaigns-Project-Details  form label , input {
+  color: #9C9AA5;
+  font-size: 14px;
+  font-weight: 400;
+}
+.Campaigns-Project-Details .Leads-form-details{
+  width: 100% !important;
+}
+.Campaigns-Project-Details  form input{
+  background-color:  #EFEFEF;
+}
+.Campaigns-Project-Details form .rowTab .Campaign-contact-num::placeholder{
+  color: #000;
+}
+.Campaigns-Project-Details .new-leades-btn .cancel-btn {
+  background-color: #EFEFEF !important;
+  color: #9C9AA5 !important;
+ border: none !important;
+}
+.Campaigns-Project-Details .rowTab {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.Campaigns-Project-Details .rightTab {
+  width: 70% !important;
+}
+/* Campaigns-Project-Details End*/
+
+@media screen and (max-width: 992px) {
+  .Sign-In .Perfect-Home {
+    font-size: 38px;
+  }
+  .Register .underline {
+    margin-left: 0;
+  }
+}
+@media screen and (max-width: 769px) {
+  .Sign-Up .upload-files{
+    justify-content:flex-start !important;
+  }
+  .Sign-Up .upload-files .rowTab{
+    width: 100% !important;
+  }
+  .Sign-Up .Sign-Up_Sign-In .upload-files .form-control{
+    width: 100% !important;
+  }
+  .Sign-In .Sign-In-logo img {
+    height: 72px;
+  }
+  .Sign-In .Perfect-Home {
+    font-size: 19px;
+  }
+  .Register {
+    width: 100% !important;
+    padding-top: 30px;
+  }
+  .Register .underline {
+    margin-left: 0;
+    width: 66px;
+  }
+  .Leads-form-details {
+    width: 100% !important;
+}
+.Create-New-Lead .Sign-In_Sign-Up form .form-select{
+  margin: 0px !important;
+}
+.Create-Brokerage-Bill .Leads-form-details .form-select{
+  width: 100% !important;
+}
+.rightTab {
+  width: 100% !important;
+}
+  .Create-New-Lead .rowTab {
+    display: block;
+}
+.Create-Brokerage-Bill form input {
+  width: 100% !important;
+}
+.Create-Brokerage-Bill .Leads-form-details .form-control{
+  width: 100% !important;
+}
+
+  /* DashBoard Start */
+  .Reports-Dashboard #navbarSupportedContent{
+    margin-top: 10px;
+   }
+  /* DashBoard End */
+
+  .Campaign-upload .Campaign-upload-logo img{
+    height: 30px !important;
+  }
+  .Campaigns-Project-Details .rightTab {
+    width: 100% !important;
+  }
+
+}
+
+.resend-label {
+  font-size: 12px;
+}
+.resend-text {
+  color: #293790;
+  font-size: 12px;
+  line-height: 12px;
+  font-weight: 400;
+}
+
+
+/* mui table channel partner only */
+
+/* .channelTable .MuiPaper-root div .MuiTable-root .MuiTableHead-root .MuiTableRow-root .MuiTableCell-root {
+  background-color: #293790 !important;
+  color: white !important;
+  text-wrap: nowrap !important;
+} */
+
+.channelTable .MuiPaper-root div .MuiTable-root .MuiTableHead-root .MuiTableRow-root .MuiTableCell-root div .MuiButtonBase-root .MuiSvgIcon-root {
+  color: white !important;
+  text-wrap: nowrap !important;
+}
+
+.channelTable .MuiTypography-root{
+  color: black;
+}
+
+.customToolHead p{
+  margin: 0 !important;
+}
+
+ .cp_nav_toggle .dropdown-toggle::after {
+  display: none;
+  margin-left: .255em;
+  vertical-align: .255em;
+  border:0; 
+  border-top: .3em solid;
+  border-right: .3em solid transparent;
+  border-bottom: 0;
+  border-left: .3em solid transparent;
+}
+.channelTable .MuiPaper-root .tss-1fz4yw6-MUIDataTableSelectCell-fixedLeft{
+  position: static;
+}
+
+/* lead visit request hover start */
+.table_btns .hide_div1{
+  display: none;
+  position:absolute;
+  left:-430px;
+  padding:5px;
+  background:white;
+}
+.table_btns .hide_div2{
+  display: none;
+  position:absolute;
+  left:-430px;
+  padding:5px;
+  background:white;
+}
+
+.table_btns .completed_hover:hover + .hide_div1{
+  display: block;
+  border-radius:10px;
+}
+
+.table_btns .requested_hover:hover + .hide_div1+.hide_div2{
+  display: block;
+  border-radius:10px;
+}
+
+.table_btns .scheduled_hover:hover + .hide_div1+.hide_div2{
+  display: block;
+  border-radius:10px;
+}
+
+
+/* lead visit request hover end */

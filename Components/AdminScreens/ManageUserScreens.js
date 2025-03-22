@@ -81,13 +81,13 @@ const ManageUserScreens = () => {
         if (hasCookie('token')) {
             let token = (getCookie('token'));
             let db_name = (getCookie('db_name'));
-
+            let num = 76;
             let header = {
                 headers: {
                     Accept: "application/json",
                     Authorization: "Bearer ".concat(token),
                     db: db_name,
-                    m_id: 76,
+                    m_id: num,
                 }
             }
 

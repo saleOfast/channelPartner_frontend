@@ -81,7 +81,7 @@ const ManageUserScreens = () => {
         if (hasCookie('token')) {
             let token = (getCookie('token'));
             let db_name = (getCookie('db_name'));
-            let num = 76;
+            let num = '76';
             let header = {
                 headers: {
                     Accept: "application/json",
@@ -122,7 +122,7 @@ const ManageUserScreens = () => {
                     Accept: "application/json",
                     Authorization: "Bearer ".concat(token),
                     db: db_name,
-                    m_id: 79
+                    m_id: '79'
                 }
             }
 
@@ -155,7 +155,7 @@ const ManageUserScreens = () => {
                     Accept: "application/json",
                     Authorization: "Bearer ".concat(token),
                     db: db_name,
-                    m_id: 80
+                    m_id: '80'
                 }
             }
 

@@ -21,7 +21,12 @@
 // export const Baseurl = 'http://192.168.1.20:8050/api/v1';
 // export const filesUrl = 'http://192.168.1.20:8050/images';
 
-/* -----------------NK Realtors links------------- */
+/* -----------------NK Realtors links With SSL---------------- */
 
 export const Baseurl = 'https://admin.theprosperity.in/api/v1';
 export const filesUrl = 'https://admin.theprosperity.in/images';
+
+/* -----------------NK Realtors links Without SSL------------- */
+
+// export const Baseurl = 'http://18.61.222.249:8050/api/v1';
+// export const filesUrl = 'http://18.61.222.249:8050/images';

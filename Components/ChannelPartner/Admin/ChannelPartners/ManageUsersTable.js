@@ -560,6 +560,7 @@ const ManageUsersTable = ({start, end, deleteConfirm, disableConfirm, dataList, 
       };
       const mappedDataList=dataList?.map(list=>({
         ...list,
+        createdAt: list?.onboarding_date || list?.createdAt,
         cpt_id: list?.db_role?.role_name,
         reportToUser: [list?.reportToUser?.user]?.filter(d => d !== null && d !== undefined),
         user_status: list?.user_status ? "active" : "inactive",

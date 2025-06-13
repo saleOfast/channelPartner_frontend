@@ -5,7 +5,7 @@ import WithUserhoc_CP from '../../HOC/WithUserhoc_CP'
 const ActivePartners = () => {
   return (
     <>
-      <ActivePartnersScreen/>
+      <ActivePartnersScreen />
     </>
   )
 }

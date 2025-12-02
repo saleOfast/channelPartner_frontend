@@ -20,43 +20,43 @@ import e from 'cors';
 import * as XLSX from "xlsx";
 
 
-const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, leadList, openEdtMdl, title, setShowAssignTo, oldAssignTo,setoldAssignTo, setShowDateFilter,getDataList,loader,maxDate,cpId,setCpId,statusId,setStatusId }) => {
-    const router = useRouter()
-    const [data, setData] = useState([])
-    const [userData, setUserData] =  useState([])
-    const [actionMode, setActionMode] =  useState('')
-    const [showModal, setShowModal] =  useState(false)
-    const [showModal2, setShowModal2] =  useState(false)
-    const userInfo=hasCookie("userInfo")?JSON.parse(getCookie("userInfo")):null;
+const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, leadList, openEdtMdl, title, setShowAssignTo, oldAssignTo, setoldAssignTo, setShowDateFilter, getDataList, loader, maxDate, cpId, setCpId, statusId, setStatusId }) => {
+  const router = useRouter()
+  const [data, setData] = useState([])
+  const [userData, setUserData] = useState([])
+  const [actionMode, setActionMode] = useState('')
+  const [showModal, setShowModal] = useState(false)
+  const [showModal2, setShowModal2] = useState(false)
+  const userInfo = hasCookie("userInfo") ? JSON.parse(getCookie("userInfo")) : null;
 
-    const daysToAdd = 10;
-    const minDate = moment().format("YYYY-MM-DD");
-    // const maxDate = moment().add(daysToAdd, 'days').format('YYYY-MM-DD');
+  const daysToAdd = 10;
+  const minDate = moment().format("YYYY-MM-DD");
+  // const maxDate = moment().add(daysToAdd, 'days').format('YYYY-MM-DD');
 
-    const getCurrentWeekDates = () => {
-      const startDate = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1));
-        const endDate = new Date(new Date().setDate(startDate.getDate() + 6));
-        if(hasCookie("LeadsFilter")){
-          
-         let data=JSON.parse(getCookie("LeadsFilter"))
-          return {startDate:data?.f_date,endDate:data?.t_date}
-        }
-        else{
-          return { startDate, endDate };
-        }
-      
-    };
-  
+  const getCurrentWeekDates = () => {
+    const startDate = new Date(new Date().setDate(new Date().getDate() - new Date().getDay() + 1));
+    const endDate = new Date(new Date().setDate(startDate.getDate() + 6));
+    if (hasCookie("LeadsFilter")) {
+
+      let data = JSON.parse(getCookie("LeadsFilter"))
+      return { startDate: data?.f_date, endDate: data?.t_date }
+    }
+    else {
+      return { startDate, endDate };
+    }
+
+  };
+
   const [value, setValue] = useState(getCurrentWeekDates());
-  const[visitId,setVisitId]=useState("");
+  const [visitId, setVisitId] = useState("");
   // const [p_visit_date, setVisitDate] = useState(moment().format("YYYY-MM-DD"));
-  const[p_visit_date,setVisitDate]=useState("");
-  const[p_visit_time,setVisitTime]=useState("");
+  const [p_visit_date, setVisitDate] = useState("");
+  const [p_visit_time, setVisitTime] = useState("");
   const [errorToast, setErrorToast] = useState(false);
   const [usersList, setUsersList] = useState([]);
-  const clientBtnColor=hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#293790"
-  const dispatch=useDispatch();
-  const {isButtonLoading}=useSelector((state)=>state.buttonLoader)
+  const clientBtnColor = hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#293790"
+  const dispatch = useDispatch();
+  const { isButtonLoading } = useSelector((state) => state.buttonLoader)
 
   const currentDate = moment().format("YYYY-MM-DD");
   const currentTime = moment().format("HH:mm");
@@ -68,39 +68,39 @@ const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, leadList,
     await fetchData("/db/users", setUsersList, errorToast, setErrorToast);
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     getUsersList()
-  },[])
+  }, [])
 
-const getVisitInfo=async(visitId)=>{
+  const getVisitInfo = async (visitId) => {
     if (hasCookie('token')) {
-        let token = (getCookie('token'));
-        let db_name = (getCookie('db_name'));
-        
-        let header = {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer ".concat(token),
-                db: db_name,
-                m_id: 76,
-            }
+      let token = (getCookie('token'));
+      let db_name = (getCookie('db_name'));
+
+      let header = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer ".concat(token),
+          db: db_name,
+          m_id: 76,
         }
-        
-        try {
-            
-            const {data} = await axios.get(Baseurl + `/db/channel/lead?lead_id=${visitId}`, header);
-            setVisitDate(data?.data?.p_visit_date)
-            setVisitTime(data?.data?.p_visit_time)
-        } catch (error) {
-            if (error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message,{autoClose:2500});
-            } else {
-                toast.error("Something went wrong!",{autoClose:2500});
-            }
+      }
+
+      try {
+
+        const { data } = await axios.get(Baseurl + `/db/channel/lead?lead_id=${visitId}`, header);
+        setVisitDate(data?.data?.p_visit_date)
+        setVisitTime(data?.data?.p_visit_time)
+      } catch (error) {
+        if (error?.response?.data?.message) {
+          toast.error(error?.response?.data?.message, { autoClose: 2500 });
+        } else {
+          toast.error("Something went wrong!", { autoClose: 2500 });
         }
+      }
     }
-}
-  
+  }
+
   function formatDate(date) {
     const d = new Date(date);
     const year = d.getFullYear();
@@ -113,9 +113,9 @@ const getVisitInfo=async(visitId)=>{
     const timeParts = (timeString || '').split(':');
     const hours = parseInt(timeParts[0]);
     const minutes = parseInt(timeParts[1]);
-  
+
     const date = new Date(2000, 0, 1, hours, minutes);
-  
+
     return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
   }
 
@@ -127,304 +127,455 @@ const getVisitInfo=async(visitId)=>{
     const hours = String(currentDate.getHours()).padStart(2, '0');
     const minutes = String(currentDate.getMinutes()).padStart(2, '0');
     const seconds = String(currentDate.getSeconds()).padStart(2, '0');
-  
+
     const formattedDateTime = `${year}-${month}-${day}: ${hours}:${minutes}:${seconds}`;
     return formattedDateTime;
   }
 
 
   const permitVisit = (status, createdAt) => {
-    const currentDate = new Date(); 
-    const statusDate = new Date(createdAt); 
+    const currentDate = new Date();
+    const statusDate = new Date(createdAt);
     switch (status) {
-        case "Requested":
-            statusDate.setDate(statusDate.getDate() + 1); 
-            
-            if (statusDate < currentDate) {
-                return false;
-            } else {
-              
-                return true;
-            }
-            break;
-            case "VISIT NOT DONE":
-              statusDate.setDate(statusDate.getDate() + 1); 
-              
-              if (statusDate < currentDate) {
-                  return false;
-              } else {
-                
-                  return true;
-              }
-              break;
-        case "Scheduled":
-          
-            return true;
-            break;
+      case "Requested":
+        statusDate.setDate(statusDate.getDate() + 1);
 
-        case "Completed":
-            statusDate.setDate(statusDate.getDate() + 90); 
-            if (statusDate < currentDate) {
-                return false;
-            } else {
-              
-                return true;
-            }
-            break;
+        if (statusDate < currentDate) {
+          return false;
+        } else {
 
-        default:
-            return false;
-            break;
+          return true;
+        }
+        break;
+      case "VISIT NOT DONE":
+        statusDate.setDate(statusDate.getDate() + 1);
+
+        if (statusDate < currentDate) {
+          return false;
+        } else {
+
+          return true;
+        }
+        break;
+      case "Scheduled":
+
+        return true;
+        break;
+
+      case "Completed":
+        statusDate.setDate(statusDate.getDate() + 90);
+        if (statusDate < currentDate) {
+          return false;
+        } else {
+
+          return true;
+        }
+        break;
+
+      default:
+        return false;
+        break;
     }
-}
+  }
 
 
-    const columns = [
-      {
-        name: 'lead_id',
-        label: "Lead ID",
-        options: {
-          display:false,
-            filter: false,
-            download:false,
-            viewColumns:false,
-            customHeadRender: (columnMeta, updateDirection) => (
-                <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                  {columnMeta.label}
-                </th>
-              ),
-              customBodyRender: (value, tableMeta, updateValue) => {
-                return (
-                    <div  className='status_box fw-bold' style={{color:"#293790"}} >
-                        {value}
-                    </div>
-                )
-            }
-              
+  const columns = [
+    {
+      name: 'lead_id',
+      label: "Lead ID",
+      options: {
+        display: false,
+        filter: false,
+        download: false,
+        viewColumns: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <div className='status_box fw-bold' style={{ color: "#293790" }} >
+              {value}
+            </div>
+          )
         }
-    },
-        {
-            name: 'lead_code',
-            label: "Lead ID",
-            options: {
-                filter: false,
-                customHeadRender: (columnMeta, updateDirection) => (
-                    <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                      {columnMeta.label}
-                    </th>
-                  ),
-                  customBodyRender: (value, tableMeta, updateValue) => {
-                    return (
-                        <div  className='status_box fw-bold' style={{color:"#293790"}} >
-                            {value}
-                        </div>
-                    )
-                }
-                  
-            }
-        },
-        {
-            name: 'lead_name',
-            label: "Lead Name",
-            options: {
-                filter: false,
-                customHeadRender: (columnMeta, updateDirection) => (
-                    <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                      {columnMeta.label}
-                    </th>
-                  ),
-                  customBodyRender: (value, tableMeta, updateValue) => {
-                    
-                    return (
-                        <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`}  className='status_box fw-bold text-decoration-underline' style={{color:"#293790"}}>
-                            {value}
-                        </Link>
-                    )
-                }
-            },
 
-        },
-        {
-            name: 'email_id',
-            label: "Email",
-            options: {
-                filter: false,
-                customHeadRender: (columnMeta, updateDirection) => (
-                    <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                      {columnMeta.label}
-                    </th>
-                  ),
-                  customBodyRender: (value, tableMeta, updateValue) => {
-                    
-                    return (
-                        <div className='status_box fw-bold' style={{color:"#293790"}}>
-                            {value}
-                        </div>
-                    )
-                }
-                
-            }
-        },
-        {
-            name: 'p_contact_no',
-            label: "Contact No.",
-            options: {
-                filter: false,
-                customHeadRender: (columnMeta, updateDirection) => (
-                    <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                      {columnMeta.label}
-                    </th>
-                  ),
-                customBodyRender: (value, tableMeta, updateValue) => {
-                    return (
-                        <div className='status_box' style={{color:"#667799"}}>
-                            +91-{value}
-                        </div>
-                    )
-                }
-            }
-        },
-        {
-          name: 'createdAt',
-          label: "Created Date",
-          options: {
-              filter: false,
-              customHeadRender: (columnMeta, updateDirection) => (
-                  <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                    {columnMeta.label}
-                  </th>
-                ),
-                customBodyRender: (value, tableMeta, updateValue) => {
-                    
-                  const date = new Date(value);
-                  const day = String(date.getDate()).padStart(2, '0');
-                  const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
-                  const year = date.getFullYear();
-                  return (
-                      <div className='status_box text-center' style={{color:"#667799"}}>
-                          {`${day}/${month}/${year}`}
-                      </div>
-                  )
-              }
-          }
-      },
-      {
-        name: 'assigned_lead',
-        label: "C.P Name",
-        options: {
-            filter: true,
-            customHeadRender: (columnMeta, updateDirection) => (
-                <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                  {columnMeta.label}
-                </th>
-              ),
-            customBodyRender: (value, tableMeta, updateValue) => {
-                return (
-                    <div className='status_box' style={{color:"#667799"}}>
-                        {value}
-                    </div>
-                )
-            }
+      }
+    },
+
+    {
+      name: 'lead_code',
+      label: "Lead ID",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <div className='status_box fw-bold' style={{ color: "#293790" }} >
+              {value}
+            </div>
+          )
         }
-    },
-   
- 
-        {
-            name: 'sales_project_name',
-            label: "Project",
-            options: {
-                filter: false,
-                customHeadRender: (columnMeta, updateDirection) => (
-                    <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                      {columnMeta.label}
-                    </th>
-                  ),
-                customBodyRender: (value, tableMeta, updateValue) => {
-                  
-                    return (
-                        <div className='status_box' style={{color:"#667799"}}>
-                            {value}
-                        </div>
-                    )
-                }
-            }
-        },
-        {
-          name: 'db_lead_stage',
-          label: "Stages",
-          options: {
-              filter: true,
-              customHeadRender: (columnMeta, updateDirection) => (
-                  <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                    {columnMeta.label}
-                  </th>
-                ),
-              customBodyRender: (value, tableMeta, updateValue) => {
-                  return (
-                      <div className='status_box' style={{color:"#667799"}}>
-                          {value}
-                      </div>
-                  )
-              }
-          }
-      },
-        {
-            name: 'visitList',
-            label: "Action",
-            options: {
-                filter: false,
-                download:false,
-                display:userInfo?.role_id==1? true:false,
-                viewColumns:false,
-                customHeadRender: (columnMeta, updateDirection) => (
-                    <th style={{background:`${clientBtnColor}`, color: 'white',paddingLeft:"15px",padding:"8px"}}   >
-                      {columnMeta.label}
-                    </th>
-                  ),
-                customBodyRender: (value, tableMeta, updateValue) => {
-                  const isDisabled=permitVisit(value[0]?.status, value[0]?.createdAt);
-                    return (
-                        <div className="table_btns">
-                            <button
-                                onClick={()=>{getVisitInfo(tableMeta?.rowData[0]); setVisitId(tableMeta?.rowData[0]); setShowModal(true);}}
-                                style={{background:isDisabled ? "#9C9AA5"  :`${clientBtnColor}`, color:"white",padding:"6px", borderRadius:"20px",border:"white"}}
-                                className={`pe-3 ps-3 ${isDisabled && (value[0]?.status==="Requested" || value[0]?.status==="VISIT NOT DONE") ? "requested_hover" : isDisabled && value[0]?.status==="Scheduled" ? "scheduled_hover": isDisabled && value[0]?.status==="Completed" ?"completed_hover" :"" }` }
-                                disabled={isDisabled}
-                                >
-                                  {!isDisabled && value[0]?.status==="VISIT NOT DONE" ? "VISIT NOT DONE" : "Request Visit"}
-                            </button>
-                            <div className=' hide_div1' >
-                                <div className='d-flex justify-content-center fw-bold'>
-                                <img style={{width:"20px",paddingRight:"2px"}} src='/ChannelPartner/error.png'/>
-                                Cannot request visit.Last visit completed within 90 days
-                                </div>
-                            </div>
-                            <div className=' hide_div2'>
-                                <div className='d-flex justify-content-center fw-bold'>
-                                <img style={{width:"20px",paddingRight:"2px"}} src='/ChannelPartner/error.png'/>
-                                {
-                                  value[0]?.status==="Scheduled" ? "Cannot request visit.Visit already scheduled" : "Cannot request visit.Last visit created within 24 hours"
-                                }
-                                
-                                
-                                </div>
-                            </div>
-                            
-                            
-                        </div>
-                    )
-                }
-            }
-        },
-    ];
 
-    let stageArray=[{id:"",label:"All"},{id:"1",label:"New"},{id:"2",label:"Visit Planned"},{id:"3",label:"Visit Completed"},{id:"4",label:"Close-Converted"},{id:"5",label:"Close-Converted"}]
-    
-    const CustomToolbar = () => {
-        return (
-            <div className=' d-flex justify-content-start gap-3 align-items-center '>
-                <p className='fw-bold ' style={{fontSize:"18px"}} >{title}</p>
-                {/* <DateRange value={value} setValue={setValue}  getData={getDataList} filterType={title} />
+      }
+    },
+    {
+      name: 'lead_name',
+      label: "Lead Name",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`} className='status_box fw-bold text-decoration-underline' style={{ color: "#293790" }}>
+              {value}
+            </Link>
+          )
+        }
+      },
+
+    },
+    {
+      name: 'email_id',
+      label: "Email",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <div className='status_box fw-bold' style={{ color: "#293790" }}>
+              {value}
+            </div>
+          )
+        }
+
+      }
+    },
+    {
+      name: 'p_contact_no',
+      label: "Contact No.",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <div className='status_box' style={{ color: "#667799" }}>
+              +91-{value}
+            </div>
+          )
+        }
+      }
+    },
+    {
+      name: 'createdAt',
+      label: "Created Date",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          const date = new Date(value);
+          const day = String(date.getDate()).padStart(2, '0');
+          const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+          const year = date.getFullYear();
+          return (
+            <div className='status_box text-center' style={{ color: "#667799" }}>
+              {`${day}/${month}/${year}`}
+            </div>
+          )
+        }
+      }
+    },
+    {
+      name: 'assigned_lead',
+      label: "C.P Name",
+      options: {
+        filter: true,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <div className='status_box' style={{ color: "#667799" }}>
+              {value}
+            </div>
+          )
+        }
+      }
+    },
+
+
+    {
+      name: 'sales_project_name',
+      label: "Project",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <div className='status_box' style={{ color: "#667799" }}>
+              {value}
+            </div>
+          )
+        }
+      }
+    },
+    {
+      name: 'db_lead_stage',
+      label: "Stages",
+      options: {
+        filter: true,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <div className='status_box' style={{ color: "#667799" }}>
+              {value}
+            </div>
+          )
+        }
+      }
+    },
+
+
+    {
+      name: 'Budget Range',
+      label: "Budget Range",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`} className='status_box fw-bold text-decoration-underline' style={{ color: "#293790" }}>
+              {value}
+            </Link>
+          )
+        }
+      },
+
+    },
+    {
+      name: 'Type of BHK',
+      label: "Type of BHK",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`} className='status_box fw-bold text-decoration-underline' style={{ color: "#293790" }}>
+              {value}
+            </Link>
+          )
+        }
+      },
+
+    },
+    {
+      name: 'Lead Valid upto',
+      label: "Lead Valid upto",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`} className='status_box fw-bold text-decoration-underline' style={{ color: "#293790" }}>
+              {value}
+            </Link>
+          )
+        }
+      },
+
+    },
+    {
+      name: 'Zone',
+      label: "Zone",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`} className='status_box fw-bold text-decoration-underline' style={{ color: "#293790" }}>
+              {value}
+            </Link>
+          )
+        }
+      },
+
+    },
+    {
+      name: 'Zone Area',
+      label: "Zone Area",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`} className='status_box fw-bold text-decoration-underline' style={{ color: "#293790" }}>
+              {value}
+            </Link>
+          )
+        }
+      },
+
+    },
+    {
+      name: 'Aadhar Number',
+      label: "Aadhar Number",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`} className='status_box fw-bold text-decoration-underline' style={{ color: "#293790" }}>
+              {value}
+            </Link>
+          )
+        }
+      },
+
+    },
+    {
+      name: 'Size Area',
+      label: "Size Area",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+
+          return (
+            <Link href={`/partner/LeadDetails?id=${tableMeta?.rowData[0]}`} className='status_box fw-bold text-decoration-underline' style={{ color: "#293790" }}>
+              {value}
+            </Link>
+          )
+        }
+      },
+
+    },
+
+    {
+      name: 'visitList',
+      label: "Action",
+      options: {
+        filter: false,
+        download: false,
+        display: userInfo?.role_id == 1 ? true : false,
+        viewColumns: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: 'white', paddingLeft: "15px", padding: "8px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          const isDisabled = permitVisit(value[0]?.status, value[0]?.createdAt);
+          return (
+            <div className="table_btns" >
+              <button
+                onClick={() => { getVisitInfo(tableMeta?.rowData[0]); setVisitId(tableMeta?.rowData[0]); setShowModal(true); }}
+                style={{ background: isDisabled ? "#9C9AA5" : `${clientBtnColor}`, color: "white", padding: "6px", borderRadius: "20px", border: "white" }}
+                className={`pe-3 ps-3 ${isDisabled && (value[0]?.status === "Requested" || value[0]?.status === "VISIT NOT DONE") ? "requested_hover" : isDisabled && value[0]?.status === "Scheduled" ? "scheduled_hover" : isDisabled && value[0]?.status === "Completed" ? "completed_hover" : ""}`}
+                disabled={isDisabled}
+              >
+                {!isDisabled && value[0]?.status === "VISIT NOT DONE" ? "VISIT NOT DONE" : "Request Visit"}
+              </button>
+              <div className=' hide_div1' >
+                <div className='d-flex justify-content-center fw-bold'>
+                  <img style={{ width: "20px", paddingRight: "2px" }} src='/ChannelPartner/error.png' />
+                  Cannot request visit.Last visit completed within 90 days
+                </div>
+              </div>
+              <div className=' hide_div2'>
+                <div className='d-flex justify-content-center fw-bold'>
+                  <img style={{ width: "20px", paddingRight: "2px" }} src='/ChannelPartner/error.png' />
+                  {
+                    value[0]?.status === "Scheduled" ? "Cannot request visit.Visit already scheduled" : "Cannot request visit.Last visit created within 24 hours"
+                  }
+
+
+                </div>
+              </div>
+
+
+            </div>
+          )
+        }
+      }
+    },
+  ];
+
+  let stageArray = [{ id: "", label: "All" }, { id: "1", label: "New" }, { id: "2", label: "Visit Planned" }, { id: "3", label: "Visit Completed" }, { id: "4", label: "Close-Converted" }, { id: "5", label: "Close-Converted" }]
+
+  const CustomToolbar = () => {
+    return (
+      <div className=' d-flex justify-content-start gap-3 align-items-center '>
+        <p className='fw-bold ' style={{ fontSize: "18px" }} >{title}</p>
+        {/* <DateRange value={value} setValue={setValue}  getData={getDataList} filterType={title} />
                 {
                   (userInfo?.isDB || userInfo?.role_id=="3") && (
                     <div className='col-md-4 mb-3'>
@@ -479,8 +630,8 @@ const getVisitInfo=async(visitId)=>{
                   </div>
                   )
                 } */}
-                
-                {/* <div className='col-md-4 mb-3'>
+
+        {/* <div className='col-md-4 mb-3'>
                   <label className='fw-bold' style={{ fontSize: '16px' }}>Stages</label>
                   <Select 
                     placeholder="Select Stage"
@@ -514,329 +665,332 @@ const getVisitInfo=async(visitId)=>{
                     }}
                   />
                 </div> */}
-                
-            </div>
-        );
-    }
 
-    const handleRowClick = (rowData, rowMeta) => {
-        const data = rowMeta?.reduce((accu, value) => {
-            accu.push(leadList[value.dataIndex].user_code);
-            return accu;
-        }, []);
-        setUserData([...data]);
-    };
+      </div>
+    );
+  }
 
-    const handleDelete = async (rowsDeleted) => {
-      let toastShown=false;
-      const deletedIndices = rowsDeleted.data.map((row) => row.dataIndex);
-      const leadIds = deletedIndices.map((index) => leadList[index].lead_id);
-  
-      if (hasCookie("token")) {
-          const token = getCookie("token");
-          const db_name = getCookie("db_name");
-  
-          const headers = {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-              db: db_name,
-              pass: "pass",
-          };
-  
-          try {
-              // Send a single request with all user IDs
-              const response = await axios.put(
-                  `${Baseurl}/db/channel/lead/delete`,
-                  { l_id: leadIds }, // Send all IDs in one payload
-                  { headers }
-              );
-              if (response.status === 200 || response.status === 201) {
-              if (!toastShown) { 
-                  toast.success(response?.data?.message,{autoClose:2500});
-                  toastShown = true; 
-              }    
-              getDataList();
-           } // Refresh the data list after successful deletion
-          } catch (error) {
-              console.error(error?.response?.data?.message || "Something went wrong!");
-              if (error?.response?.data?.status === 422) {
-                  if (!toastShown) { 
-                      toast.error(error?.response?.data?.message,{autoClose:2500});
-                      toastShown = true; 
-                  }
-              } else if (error?.response?.data?.message) {
-                  if (!toastShown) { 
-                      toast.error(error?.response?.data?.message,{autoClose:2500});
-                      toastShown = true; 
-                  }
-              } else {
-                  if (!toastShown) { 
-                      toast.error("Something went wrong!",{autoClose:2500});
-                      toastShown = true; 
-                  }
-              }
-          }
-      }
+  const handleRowClick = (rowData, rowMeta) => {
+    const data = rowMeta?.reduce((accu, value) => {
+      accu.push(leadList[value.dataIndex].user_code);
+      return accu;
+    }, []);
+    setUserData([...data]);
   };
 
-    const options = {
-        selectableRows: userInfo?.isDB ? 'multiple' : 'none',
-        responsive: "standard",
-        // onRowSelectionChange : handleRowClick,
-        onRowsDelete: handleDelete,
-        downloadOptions:{
-          filename:"ChannelLeads",
-          // filterOptions:{
-          //   useDisplayedColumnsOnly:true,
-          //   useDisplayedRowsOnly:true
-          // }
-        },
-        filterType:'multiselect',
-        viewColumns: false,
-        onDownload: (buildHead, buildBody, columns, data) => {
-              const workbook = XLSX.utils.book_new();
-              let range;
-              if(hasCookie("LeadsFilter")){
-                range= JSON.parse(getCookie("LeadsFilter"))
-              }
-              let filteredColumns = columns.slice(0, -1); // Remove the last two columns
-              const filteredData = data.map(row => {
-                return filteredColumns.map((col, index) => row.data[index]);
-              });
-              
-              const customData = [
-                ["Channel Leads Report"], 
-                [], 
-                [`Filter by:`],
-                [],
-                [`Date Range: ${range?.f_date ? formatDate(range?.f_date):formatDate(start)} to ${range?.t_date ? formatDate(range?.t_date):formatDate(end)}`],
-                [], 
-                [], 
-                filteredColumns.map(col => col.label || col.name), 
-                ...filteredData,
-              ];
-            
-              const worksheet = XLSX.utils.aoa_to_sheet(customData);
-            
-              worksheet['!merges'] = [
-                { s: { r: 0, c: 0 }, e: { r: 1, c: filteredColumns.length-1 } }, // Merge A1 and A2 for the title
-                { s: { r: 2, c: 0 }, e: { r: 3, c: filteredColumns.length-1 } }, // Merge A3 for the date range
-                { s: { r: 4, c: 0 }, e: { r: 4, c: filteredColumns.length-1 } }, // Merge A3 for the date range
-                { s: { r: 5, c: 0 }, e: { r: 6, c: filteredColumns.length-1 } }, // Merge A3 for the date range
-                
-              ];
-              worksheet['!cols'] = [
-                { wch: 8 }, 
-                { wch: 12 },
-                { wch: 18 },
-                { wch: 30 },
-                { wch: 14 },
-                { wch: 24 },
-                { wch: 22 },
-                { wch: 22 },
-                { wch: 18 },
-              ];
-              XLSX.utils.book_append_sheet(workbook, worksheet, "ChannelLeads");
-              XLSX.writeFile(workbook, "ChannelLeads.xlsx");
-              return false;
-            }        
-    };
+  const handleDelete = async (rowsDeleted) => {
+    let toastShown = false;
+    const deletedIndices = rowsDeleted.data.map((row) => row.dataIndex);
+    const leadIds = deletedIndices.map((index) => leadList[index].lead_id);
 
-    
+    if (hasCookie("token")) {
+      const token = getCookie("token");
+      const db_name = getCookie("db_name");
 
-    const updateUserHandler = async (e) => {
-        e.preventDefault()
-          if (!hasCookie("token")) return;
-          
-          const token = getCookie("token");
-          const db_name = getCookie("db_name");
-          
-          const header = {
-            headers: {
-              Accept: "application/json",
-              Authorization: `Bearer ${token}`,
-              db: db_name,
-              m_id: 79,
-            },
-          };
-
-          try {
-            dispatch(startButtonLoading())
-            const response = await axios.post(`${Baseurl}/db/channel/visit`, {
-                lead_id:visitId,
-                p_visit_date,
-                p_visit_time,
-                current_date:getCurrentDateTime()
-              }, header);
-            if (response.status === 200 || response.status === 201) {
-              toast.success(response?.data?.message,{autoClose:2500});
-              dispatch(stopButtonLoading())
-              setShowModal(false)
-              toast.success(response?.message,{autoClose:2500})
-              getDataList()
-            }
-          } catch (error) {
-            if (error?.response?.data?.status === 422) {
-              dispatch(stopButtonLoading())
-                  toast.error(error?.response?.data?.message,{autoClose:2500})
-                  
-            }
-            if (error?.response?.data?.message) {
-              dispatch(stopButtonLoading())
-              toast.error(error?.response?.data?.message,{autoClose:2500});
-            } else {
-              dispatch(stopButtonLoading())
-              toast.error("Something went wrong!",{autoClose:2500});
-            }
-          }
-      
-        
-        
+      const headers = {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        db: db_name,
+        pass: "pass",
       };
 
-      const mappedDataList=leadList?.map(list=>({
-        lead_id:list?.lead_id,
-        lead_code:list?.lead_code,
-        lead_name:list?.lead_name,
-        email_id:list?.email_id,
-        p_contact_no:list?.p_contact_no,
-        sales_project_name:list?.sales_project_name,
-        visitList:list?.visitList,
-        db_lead_stage:list?.db_lead_stage?.stage,
-        createdAt:list?.createdAt,
-        assigned_lead:`${list?.leadOwner?.user ?? ""} ${list?.leadOwner?.user_l_name ?? ""}`,
-      
-      }))
-      
- 
-
-    return (
-      <>
-      {
-        loader ? <div className="miuiTable channelTable"><Loader/></div>
-        :
-        (
-          <div className="miuiTable channelTable">
-          <MUIDataTable
-            title={<CustomToolbar />}
-            // data={leadList}
-            data={mappedDataList}
-            columns={columns}
-            // options={options}
-            options={{
-              ...options,
-              customFilterDialogFooter: () => (
-                <div
-                  style={{
-                    minWidth: "400px", // Set consistent width
-                  }}
-                />
-              ),
-            }}
-          />
-         
-        </div>
-        )
+      try {
+        // Send a single request with all user IDs
+        const response = await axios.put(
+          `${Baseurl}/db/channel/lead/delete`,
+          { l_id: leadIds }, // Send all IDs in one payload
+          { headers }
+        );
+        if (response.status === 200 || response.status === 201) {
+          if (!toastShown) {
+            toast.success(response?.data?.message, { autoClose: 2500 });
+            toastShown = true;
+          }
+          getDataList();
+        } // Refresh the data list after successful deletion
+      } catch (error) {
+        console.error(error?.response?.data?.message || "Something went wrong!");
+        if (error?.response?.data?.status === 422) {
+          if (!toastShown) {
+            toast.error(error?.response?.data?.message, { autoClose: 2500 });
+            toastShown = true;
+          }
+        } else if (error?.response?.data?.message) {
+          if (!toastShown) {
+            toast.error(error?.response?.data?.message, { autoClose: 2500 });
+            toastShown = true;
+          }
+        } else {
+          if (!toastShown) {
+            toast.error("Something went wrong!", { autoClose: 2500 });
+            toastShown = true;
+          }
+        }
       }
-        
+    }
+  };
 
-        <Modal
-          show={showModal}
-          onHide={() => {
-            if (!isButtonLoading) {
-              setShowModal(false);
-              setVisitDate("");
-              setVisitTime("");
-            }
-          }}          
-          size="lg"
-          centered
-        >
-          <Modal.Body>
-            <section
-              className="Sign-In pt-4 Create-New-Lead Create-Brokerage-Bill Add-New-Visit-Date-and-Time Visit-Date-and-Time d-flex justify-content-center align-items-center"
-              style={{ padding: "0 16px" }}
-            >
-              <div className="container p-0">
-                <div className="row d-flex flex-column gap-3">
-                  <h3 className=" Perfect-Home text-center text-black">
-                    Visit Date and Time
-                  </h3>
-                  <div className>
-                    <div className="Sign-In_Sign-Up Register w-100">
-                      <div className="perfect-home-form pt-1">
-                        <section className="Details_Form">
-                          <div className>
-                            <form
-                              id="survey-form"
-                              method="post"
-                              action
-                              className="d-flex flex-column gap-4"
-                                onSubmit={(e)=>{
-                                    updateUserHandler(e)
-                                }}
-                            >
-                              <div className="d-flex align-items-center justify-content-lg-between gap-3">
-                                <div className="d-flex flex-column gap-3 gap-md-4 gap-lg-5 Leads-form-details text-center text-lg-start">
-                                  <div className="rowTab">
-                                    <div className="labels">
-                                      <span
-                                        htmlFor="name"
-                                        className="pb-1 label"
-                                        style={{ color: "#9C9AA5" }}
-                                      >
-                                        Schedule Visit Date
-                                      </span>
-                                      <span className="star">*</span>
-                                    </div>
-                                    <div className="rightTab w-auto">
-                                      <span
-                                        style={{ color: "#293790" }}
-                                        className="date fw-bold"
-                                      >
-                                       {formatDate(p_visit_date)}
-                                      </span>
-                                    </div>
+  const options = {
+    selectableRows: userInfo?.isDB ? 'multiple' : 'none',
+    responsive: "standard",
+    // onRowSelectionChange : handleRowClick,
+    onRowsDelete: handleDelete,
+    downloadOptions: {
+      filename: "ChannelLeads",
+      // filterOptions:{
+      //   useDisplayedColumnsOnly:true,
+      //   useDisplayedRowsOnly:true
+      // }
+    },
+    filterType: 'multiselect',
+    viewColumns: false,
+    onDownload: (buildHead, buildBody, columns, data) => {
+      const workbook = XLSX.utils.book_new();
+      let range;
+      if (hasCookie("LeadsFilter")) {
+        range = JSON.parse(getCookie("LeadsFilter"))
+      }
+      let filteredColumns = columns.slice(0, -1); // Remove the last two columns
+      const filteredData = data.map(row => {
+        return filteredColumns.map((col, index) => row.data[index]);
+      });
+
+      const customData = [
+        ["Channel Leads Report"],
+        [],
+        [`Filter by:`],
+        [],
+        [`Date Range: ${range?.f_date ? formatDate(range?.f_date) : formatDate(start)} to ${range?.t_date ? formatDate(range?.t_date) : formatDate(end)}`],
+        [],
+        [],
+        filteredColumns.map(col => col.label || col.name),
+        ...filteredData,
+      ];
+
+      const worksheet = XLSX.utils.aoa_to_sheet(customData);
+
+      worksheet['!merges'] = [
+        { s: { r: 0, c: 0 }, e: { r: 1, c: filteredColumns.length - 1 } }, // Merge A1 and A2 for the title
+        { s: { r: 2, c: 0 }, e: { r: 3, c: filteredColumns.length - 1 } }, // Merge A3 for the date range
+        { s: { r: 4, c: 0 }, e: { r: 4, c: filteredColumns.length - 1 } }, // Merge A3 for the date range
+        { s: { r: 5, c: 0 }, e: { r: 6, c: filteredColumns.length - 1 } }, // Merge A3 for the date range
+
+      ];
+      worksheet['!cols'] = [
+        { wch: 8 },
+        { wch: 12 },
+        { wch: 18 },
+        { wch: 30 },
+        { wch: 14 },
+        { wch: 24 },
+        { wch: 22 },
+        { wch: 22 },
+        { wch: 18 },
+      ];
+      XLSX.utils.book_append_sheet(workbook, worksheet, "ChannelLeads");
+      XLSX.writeFile(workbook, "ChannelLeads.xlsx");
+      return false;
+    }
+  };
+
+
+
+  const updateUserHandler = async (e) => {
+    e.preventDefault()
+    if (!hasCookie("token")) return;
+
+    const token = getCookie("token");
+    const db_name = getCookie("db_name");
+
+    const header = {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        db: db_name,
+        m_id: 79,
+      },
+    };
+
+    try {
+      dispatch(startButtonLoading())
+      const response = await axios.post(`${Baseurl}/db/channel/visit`, {
+        lead_id: visitId,
+        p_visit_date,
+        p_visit_time,
+        current_date: getCurrentDateTime()
+      }, header);
+      if (response.status === 200 || response.status === 201) {
+        toast.success(response?.data?.message, { autoClose: 2500 });
+        dispatch(stopButtonLoading())
+        setShowModal(false)
+        toast.success(response?.message, { autoClose: 2500 })
+        getDataList()
+      }
+    } catch (error) {
+      if (error?.response?.data?.status === 422) {
+        dispatch(stopButtonLoading())
+        toast.error(error?.response?.data?.message, { autoClose: 2500 })
+
+      }
+      if (error?.response?.data?.message) {
+        dispatch(stopButtonLoading())
+        toast.error(error?.response?.data?.message, { autoClose: 2500 });
+      } else {
+        dispatch(stopButtonLoading())
+        toast.error("Something went wrong!", { autoClose: 2500 });
+      }
+    }
+
+
+
+  };
+
+  const mappedDataList = leadList?.map(list => ({
+    lead_id: list?.lead_id,
+    lead_code: list?.lead_code,
+    lead_name: list?.lead_name,
+    email_id: list?.email_id,
+    p_contact_no: list?.p_contact_no,
+    sales_project_name: list?.sales_project_name,
+    visitList: list?.visitList,
+    db_lead_stage: list?.db_lead_stage?.stage,
+    createdAt: list?.createdAt,
+    assigned_lead: `${list?.leadOwner?.user ?? ""} ${list?.leadOwner?.user_l_name ?? ""}`,
+
+  }))
+
+
+
+
+  return (
+    <>
+
+      {
+        loader ? <div className="miuiTable channelTable" ><Loader /></div>
+          :
+          (
+            <div className="miuiTable channelTable">
+              <MUIDataTable
+                title={<CustomToolbar />}
+                // data={leadList}
+                data={mappedDataList}
+                columns={columns}
+                // options={options}
+                options={{
+                  ...options,
+                  customFilterDialogFooter: () => (
+                    <div
+                      style={{
+                        minWidth: "400px", // Set consistent width
+
+                      }}
+                    />
+                  ),
+                }}
+              />
+
+            </div>
+          )
+      }
+
+
+      <Modal
+        show={showModal}
+        onHide={() => {
+          if (!isButtonLoading) {
+            setShowModal(false);
+            setVisitDate("");
+            setVisitTime("");
+          }
+        }}
+        size="lg"
+        centered
+      >
+        <Modal.Body>
+          <section
+            className="Sign-In pt-4 Create-New-Lead Create-Brokerage-Bill Add-New-Visit-Date-and-Time Visit-Date-and-Time d-flex justify-content-center align-items-center"
+            style={{ padding: "0 16px" }}
+          >
+            <div className="container p-0">
+              <div className="row d-flex flex-column gap-3">
+                <h3 className=" Perfect-Home text-center text-black">
+                  Visit Date and Time
+                </h3>
+                <div className>
+                  <div className="Sign-In_Sign-Up Register w-100">
+                    <div className="perfect-home-form pt-1">
+                      <section className="Details_Form">
+                        <div className>
+                          <form
+                            id="survey-form"
+                            method="post"
+                            action
+                            className="d-flex flex-column gap-4"
+                            onSubmit={(e) => {
+                              updateUserHandler(e)
+                            }}
+                          >
+                            <div className="d-flex align-items-center justify-content-lg-between gap-3">
+                              <div className="d-flex flex-column gap-3 gap-md-4 gap-lg-5 Leads-form-details text-center text-lg-start">
+                                <div className="rowTab">
+                                  <div className="labels">
+                                    <span
+                                      htmlFor="name"
+                                      className="pb-1 label"
+                                      style={{ color: "#9C9AA5" }}
+                                    >
+                                      Schedule Visit Date
+                                    </span>
+                                    <span className="star">*</span>
                                   </div>
-                                </div>
-                                <div className="d-flex flex-column  gap-3 gap-md-4 gap-lg-5 Leads-form-details text-center text-lg-start">
-                                  <div className="rowTab">
-                                    <div className="labels">
-                                      <span
-                                        htmlFor="name"
-                                        className="pb-1 label"
-                                        style={{ color: "#9C9AA5" }}
-                                      >
-                                        Schedule Visit Time
-                                      </span>
-                                      <span className="star">*</span>
-                                    </div>
-                                    <div className="rightTab w-auto">
-                                      <span
-                                        style={{ color: "#293790" }}
-                                        className="date fw-bold"
-                                      >
-                                        {formatTime(p_visit_time)}
-                                      </span>
-                                    </div>
+                                  <div className="rightTab w-auto">
+                                    <span
+                                      style={{ color: "#293790" }}
+                                      className="date fw-bold"
+                                    >
+                                      {formatDate(p_visit_date)}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
-                              <div className="new-leades-btn d-flex justify-content-center gap-4 mt-2">
-                                <div 
-
-                                  className="btn rounded-5"
-                                  style={{borderColor:clientBtnColor,color:clientBtnColor ? clientBtnColor:"white"}}
-                                  onClick={() => {
-                                    if(isButtonLoading==false){
-                                      setShowModal2(true);
-                                    }
-                                  }}
-                                >
-                                  Change
+                              <div className="d-flex flex-column  gap-3 gap-md-4 gap-lg-5 Leads-form-details text-center text-lg-start">
+                                <div className="rowTab">
+                                  <div className="labels">
+                                    <span
+                                      htmlFor="name"
+                                      className="pb-1 label"
+                                      style={{ color: "#9C9AA5" }}
+                                    >
+                                      Schedule Visit Time
+                                    </span>
+                                    <span className="star">*</span>
+                                  </div>
+                                  <div className="rightTab w-auto">
+                                    <span
+                                      style={{ color: "#293790" }}
+                                      className="date fw-bold"
+                                    >
+                                      {formatTime(p_visit_time)}
+                                    </span>
+                                  </div>
                                 </div>
-                                <button disabled={isButtonLoading} className="btn text-white rounded-5" style={{background:clientBtnColor}}>
-                                  {isButtonLoading ? (
+                              </div>
+                            </div>
+                            <div className="new-leades-btn d-flex justify-content-center gap-4 mt-2">
+                              <div
+
+                                className="btn rounded-5"
+                                style={{ borderColor: clientBtnColor, color: clientBtnColor ? clientBtnColor : "white" }}
+                                onClick={() => {
+                                  if (isButtonLoading == false) {
+                                    setShowModal2(true);
+                                  }
+                                }}
+                              >
+                                Change
+                              </div>
+                              <button disabled={isButtonLoading} className="btn text-white rounded-5" style={{ background: clientBtnColor }}>
+                                {isButtonLoading ? (
                                   <>
                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     &nbsp;Confirm
@@ -844,135 +998,144 @@ const getVisitInfo=async(visitId)=>{
                                 ) : (
                                   'Confirm'
                                 )}
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </section>
-                      </div>
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </section>
                     </div>
                   </div>
                 </div>
               </div>
-            </section>
-          </Modal.Body>
-        </Modal>
+            </div>
+          </section>
+        </Modal.Body>
+      </Modal>
 
-        <Modal
-          show={showModal2}
-          onHide={() => setShowModal2(false)}
-          size="lg"
-          centered
-        >
-          <Modal.Body>
-            <section
-              className="Sign-In pt-4 Create-New-Lead Create-Brokerage-Bill Add-New-Visit-Date-and-Time"
-              style={{ padding: "0 16px" }}
-            >
-              <div className="container">
-                <div className="row">
-                  <h3 className=" Perfect-Home text-center text-black">
-                    Add New Visit Date and Time
-                  </h3>
-                  <div className="col-12 mt-md-5">
-                    <div className="Sign-In_Sign-Up Register w-100">
-                      <div className="perfect-home-form pt-1">
-                        <section className="Details_Form">
-                          <div className="pt-3">
-                            <form id="survey-form" method='POST' onSubmit={(e)=>{
-                              e.preventDefault(); 
-                              setShowModal2(false)
-                            }} >
-                              <div className="d-lg-flex justify-content-lg-between">
-                                <div className="d-flex flex-column gap-3 gap-md-4 gap-lg-5 Leads-form-details">
-                                  <div className="rowTab">
-                                    <div className="labels">
-                                      <label htmlFor="name" className="pb-1">
-                                        Schedule Visit Date
-                                      </label>
-                                      <span className="star">*</span>
-                                    </div>
-                                    <div className="rightTab">
-                                      <input
-                                        autofocus
-                                        type="Date"
-                                        min={minDate}
-                                        max={maxDate}
-                                        value={p_visit_date}
-                                        onChange={(e)=>{
-                                            setVisitDate(e.target.value)
-                                        }}
-                                        name="name"
-                                        className="input-field"
-                                        required
-                                      />
-                                    </div>
+      <Modal
+        show={showModal2}
+        onHide={() => setShowModal2(false)}
+        size="lg"
+        centered
+      >
+        <Modal.Body>
+          <section
+            className="Sign-In pt-4 Create-New-Lead Create-Brokerage-Bill Add-New-Visit-Date-and-Time"
+            style={{ padding: "0 16px" }}
+          >
+            <div className="container">
+              <div className="row">
+                <h3 className=" Perfect-Home text-center text-black">
+                  Add New Visit Date and Time
+                </h3>
+                <div className="col-12 mt-md-5">
+                  <div className="Sign-In_Sign-Up Register w-100">
+                    <div className="perfect-home-form pt-1">
+                      <section className="Details_Form">
+                        <div className="pt-3">
+                          <form id="survey-form" method='POST' onSubmit={(e) => {
+                            e.preventDefault();
+                            setShowModal2(false)
+                          }} >
+                            <div className="d-lg-flex justify-content-lg-between">
+                              <div className="d-flex flex-column gap-3 gap-md-4 gap-lg-5 Leads-form-details">
+                                <div className="rowTab">
+                                  <div className="labels">
+                                    <label htmlFor="name" className="pb-1">
+                                      Schedule Visit Date
+                                    </label>
+                                    <span className="star">*</span>
                                   </div>
-                                </div>
-                                <div className="d-flex flex-column  gap-3 gap-md-4 gap-lg-5 Leads-form-details">
-                                  <div className="rowTab mt-3 mt-md-4 mt-lg-0">
-                                    <div className="labels">
-                                      <label
-                                        htmlFor="Location"
-                                        className="pb-1"
-                                      >
-                                        Schedule Visit Time
-                                      </label>
-                                      <span className="star">*</span>
-                                    </div>
-                                    <div className="rightTab">
-                                      <input
-                                        autofocus
-                                        type="time"
-                                        min={minTime}
-                                        value={p_visit_time}
-                                        onChange={(e)=>{
-                                            setVisitTime(e.target.value)
-                                        }}
-                                        name="name"
-                                        className="input-field"
-                                        required
-                                      />
-                                    </div>
+                                  <div className="rightTab">
+                                    <input
+                                      autofocus
+                                      type="Date"
+                                      min={minDate}
+                                      max={maxDate}
+                                      value={p_visit_date}
+                                      onChange={(e) => {
+                                        setVisitDate(e.target.value)
+                                      }}
+                                      name="name"
+                                      className="input-field"
+                                      required
+                                    />
                                   </div>
                                 </div>
                               </div>
-                              <div className="new-leades-btn d-flex justify-content-center gap-4 mt-5">
-                                <button 
+                              <div className="d-flex flex-column  gap-3 gap-md-4 gap-lg-5 Leads-form-details">
+                                <div className="rowTab mt-3 mt-md-4 mt-lg-0">
+                                  <div className="labels">
+                                    <label
+                                      htmlFor="Location"
+                                      className="pb-1"
+                                    >
+                                      Schedule Visit Time
+                                    </label>
+                                    <span className="star">*</span>
+                                  </div>
+                                  <div className="rightTab">
+                                    <input
+                                      autofocus
+                                      type="time"
+                                      min={minTime}
+                                      value={p_visit_time}
+                                      onChange={(e) => {
+                                        setVisitTime(e.target.value)
+                                      }}
+                                      name="name"
+                                      className="input-field"
+                                      required
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="new-leades-btn d-flex justify-content-center gap-4 mt-5">
+                              <button
                                 type='button'
-                                  className='btn btn-danger rounded-5 text-white'
-                                  onClick={() =>{ 
-                                    setShowModal2(false);
-                                     setShowModal(false)
-                                    }}
-                                >
-                                  Cancel
-                                </button>
-                                <button
+                                className='btn btn-danger rounded-5 text-white'
+                                onClick={() => {
+                                  setShowModal2(false);
+                                  setShowModal(false)
+                                }}
+                              >
+                                Cancel
+                              </button>
+                              <button
                                 type='submit'
                                 className="btn rounded-5 text-white"
-                                style={{background:clientBtnColor}}
-                                // onClick={(e)=>{
-                                //   e.preventDefault()
-                                //     setShowModal2(false)
-                                // }}
-                                >
-                                  Update
-                                </button>
-                              </div>
-                            </form>
-                          </div>
-                        </section>
-                      </div>
+                                style={{ background: clientBtnColor }}
+                              // onClick={(e)=>{
+                              //   e.preventDefault()
+                              //     setShowModal2(false)
+                              // }}
+                              >
+                                Update
+                              </button>
+                            </div>
+                          </form>
+                        </div>
+                      </section>
                     </div>
                   </div>
                 </div>
               </div>
-            </section>
-          </Modal.Body>
-        </Modal>
-      </>
-    );
+            </div>
+          </section>
+        </Modal.Body>
+      </Modal>
+    </>
+
+  );
+  const tableHeaderStyles = {
+    "& .MuiTableCell-head": {
+      backgroundColor: "rgb(133, 64, 232)",
+      color: "#fff",
+      fontWeight: "bold",
+    },
+  };
+
 }
 
 export default ManageUsersTable 

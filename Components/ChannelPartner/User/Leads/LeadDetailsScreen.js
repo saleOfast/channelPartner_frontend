@@ -12,189 +12,189 @@ import { startButtonLoading, stopButtonLoading } from '../../../../store/buttonL
 
 const LeadDetailsScreen = () => {
   const [showAssignTo, setShowAssignTo] = useState("");
-  const router=useRouter();
-  const {id}=router.query;
+  const router = useRouter();
+  const { id } = router.query;
   const DateNow = moment(new Date().toISOString()).format("YYYY-MM-DDTHH:mm");
   const [errorData, setErrorData] = useState({})
-  const userInfo=hasCookie("userInfo") ? JSON.parse(getCookie("userInfo")):null
-  const dispatch=useDispatch();
-    const {isButtonLoading}=useSelector((state)=>state.buttonLoader)
+  const userInfo = hasCookie("userInfo") ? JSON.parse(getCookie("userInfo")) : null
+  const dispatch = useDispatch();
+  const { isButtonLoading } = useSelector((state) => state.buttonLoader)
 
-  const [lead,setLead]=useState({
-    lead_code:"",
-    lead_id:"",
-    lead_name: "", 
+  const [lead, setLead] = useState({
+    lead_code: "",
+    lead_id: "",
+    lead_name: "",
     email_id: "",
-    p_contact_no: "", 
-    address: "", 
-    pincode: "", 
+    p_contact_no: "",
+    address: "",
+    pincode: "",
     p_visit_date: "",
-    p_visit_time: "", 
-    project_id:"",
-    project_name:"",
-    created_on:DateNow,
-    updated_on:DateNow
+    p_visit_time: "",
+    project_id: "",
+    project_name: "",
+    created_on: DateNow,
+    updated_on: DateNow
   })
- 
-  const [projectList,setProjectList]=useState([])
-  const [locationList,setLocationList]=useState([])
-  const [maxDate,setMaxDate]=useState()
-  const clientBtnColor=hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#293790"
+
+  const [projectList, setProjectList] = useState([])
+  const [locationList, setLocationList] = useState([])
+  const [maxDate, setMaxDate] = useState()
+  const clientBtnColor = hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#293790"
   const daysToAdd = 10;
   // const maxDate = moment().add(daysToAdd, 'days').format('YYYY-MM-DD');
 
   const getMaxDate = async () => {
-      if (hasCookie("token")) {
-        let token = getCookie("token");
-        let db_name = getCookie("db_name");
-  
-        let header = {
-          headers: {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-            db: db_name,
-            m_id: 76,
-          },
-        };
-  
-        try {
-          const { data } = await axios.get(
-            Baseurl + `/db/settings/generalSettings`,
-            header
-          );
-          setMaxDate(moment().add(Number(data?.data[0]?.setting_value), 'days').format('YYYY-MM-DD')); 
-        } catch (error) {
-          if (error?.response?.data?.message) {
-            toast.error(error?.response?.data?.message,{autoClose:2500});
-          } else {
-            toast.error("Something went wrong!",{autoClose:2500});
-          }
+    if (hasCookie("token")) {
+      let token = getCookie("token");
+      let db_name = getCookie("db_name");
+
+      let header = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          db: db_name,
+          m_id: 76,
+        },
+      };
+
+      try {
+        const { data } = await axios.get(
+          Baseurl + `/db/settings/generalSettings`,
+          header
+        );
+        setMaxDate(moment().add(Number(data?.data[0]?.setting_value), 'days').format('YYYY-MM-DD'));
+      } catch (error) {
+        if (error?.response?.data?.message) {
+          toast.error(error?.response?.data?.message, { autoClose: 2500 });
+        } else {
+          toast.error("Something went wrong!", { autoClose: 2500 });
         }
       }
-    };
+    }
+  };
 
-  useEffect(()=>{
-    if(id){
+  useEffect(() => {
+    if (id) {
       getDataListById();
       getMaxDate()
     }
-  },[id])
+  }, [id])
 
   const getDataListById = async () => {
     if (hasCookie('token')) {
-        let token = (getCookie('token'));
-        let db_name = (getCookie('db_name'));
-  
-        let header = {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer ".concat(token),
-                db: db_name,
-                m_id: 76,
-            }
+      let token = (getCookie('token'));
+      let db_name = (getCookie('db_name'));
+
+      let header = {
+        headers: {
+          Accept: "application/json",
+          Authorization: "Bearer ".concat(token),
+          db: db_name,
+          m_id: 76,
         }
-  
-        try {
-            
-            const leads = await axios.get(Baseurl + `/db/channel/lead?lead_id=${id}`, header);
-            const projects = await axios.get(Baseurl + `/db/channel/lead/projects`, header);
-            const locations = await axios.get(Baseurl + `/db/channel/lead/location`, header);
-            setLead({
-              ...lead,
-              lead_id:leads?.data?.data?.lead_id,
-              lead_code:leads?.data?.data?.lead_code,
-              lead_name: leads?.data?.data?.lead_name, 
-              email_id: leads?.data?.data?.email_id,
-              p_contact_no: leads?.data?.data?.p_contact_no, 
-              address: leads?.data?.data?.address, 
-              pincode: leads?.data?.data?.pincode, 
-              p_visit_date: leads?.data?.data?.p_visit_date,
-              p_visit_time: leads?.data?.data?.p_visit_time, 
-              project_id:leads?.data?.data?.sales_project_id,
-              project_name:leads?.data?.data?.sales_project_name,
-              created_on:leads?.data?.data?.createdAt?.split("T"),
-              createdBy:leads?.data?.data?.leadOwner?.user || ""
-            });
-            setProjectList(projects?.data?.data?.records);
-            setLocationList(locations?.data?.data)
-        } catch (error) {
-          console.log(error)
-            if (error?.response?.data?.message) {
-                toast.error(error?.response?.data?.message,{autoClose:2500});
-            } else {
-                toast.error("Something went wrong!",{autoClose:2500});
-            }
+      }
+
+      try {
+
+        const leads = await axios.get(Baseurl + `/db/channel/lead?lead_id=${id}`, header);
+        const projects = await axios.get(Baseurl + `/db/channel/lead/projects`, header);
+        const locations = await axios.get(Baseurl + `/db/channel/lead/location`, header);
+        setLead({
+          ...lead,
+          lead_id: leads?.data?.data?.lead_id,
+          lead_code: leads?.data?.data?.lead_code,
+          lead_name: leads?.data?.data?.lead_name,
+          email_id: leads?.data?.data?.email_id,
+          p_contact_no: leads?.data?.data?.p_contact_no,
+          address: leads?.data?.data?.address,
+          pincode: leads?.data?.data?.pincode,
+          p_visit_date: leads?.data?.data?.p_visit_date,
+          p_visit_time: leads?.data?.data?.p_visit_time,
+          project_id: leads?.data?.data?.sales_project_id,
+          project_name: leads?.data?.data?.sales_project_name,
+          created_on: leads?.data?.data?.createdAt?.split("T"),
+          createdBy: leads?.data?.data?.leadOwner?.user || ""
+        });
+        setProjectList(projects?.data?.data?.records);
+        setLocationList(locations?.data?.data)
+      } catch (error) {
+        console.log(error)
+        if (error?.response?.data?.message) {
+          toast.error(error?.response?.data?.message, { autoClose: 2500 });
+        } else {
+          toast.error("Something went wrong!", { autoClose: 2500 });
         }
+      }
     }
   }
-  
-  const editLead =  async(e) => {
-  e.preventDefault();
-     if (!hasCookie("token")) return;
-     const token = getCookie("token");
-     const db_name = getCookie("db_name");
-     const header = {
-       headers: {
-         Accept: "application/json",
-         Authorization: `Bearer ${token}`,
-         db: db_name,
-         m_id: 79,
-       },
-     };
-     
-     let updatedLeads={...lead,updated_on:DateNow}
-    
-     try {
+
+  const editLead = async (e) => {
+    e.preventDefault();
+    if (!hasCookie("token")) return;
+    const token = getCookie("token");
+    const db_name = getCookie("db_name");
+    const header = {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        db: db_name,
+        m_id: 79,
+      },
+    };
+
+    let updatedLeads = { ...lead, updated_on: DateNow }
+
+    try {
       dispatch(startButtonLoading())
-       const response = await axios.put(`${Baseurl}/db/channel/lead`,updatedLeads, header);
-       if (response.status === 200 || response.status === 201) {
-         toast.success(response?.data?.message,{autoClose:2500});
+      const response = await axios.put(`${Baseurl}/db/channel/lead`, updatedLeads, header);
+      if (response.status === 200 || response.status === 201) {
+        toast.success(response?.data?.message, { autoClose: 2500 });
         dispatch(stopButtonLoading())
-         setShowAssignTo(false)
-         toast.success(response?.message,{autoClose:2500})
-         getDataListById();
-       }
-     } catch (error) {
+        setShowAssignTo(false)
+        toast.success(response?.message, { autoClose: 2500 })
+        getDataListById();
+      }
+    } catch (error) {
       console.log(error)
-       if (error?.response?.data?.status === 422) {
-            //  toast.error(error?.response?.data?.message,{autoClose:2500})
-             const taskObject = {}
-             const array = error?.response?.data?.data;
-             for (let i = 0; i < array.length; i++) {
-              const key = Object.keys(array[i])[0];
-              const value = Object.values(array[i])[0];
-              taskObject[key] = value;
-          }
-          dispatch(stopButtonLoading())
-          setErrorData(taskObject);
-       }
-       if (error?.response?.data?.message) {
+      if (error?.response?.data?.status === 422) {
+        //  toast.error(error?.response?.data?.message,{autoClose:2500})
+        const taskObject = {}
+        const array = error?.response?.data?.data;
+        for (let i = 0; i < array.length; i++) {
+          const key = Object.keys(array[i])[0];
+          const value = Object.values(array[i])[0];
+          taskObject[key] = value;
+        }
         dispatch(stopButtonLoading())
-         toast.error(error?.response?.data?.message,{autoClose:2500});
-       } else {
+        setErrorData(taskObject);
+      }
+      if (error?.response?.data?.message) {
         dispatch(stopButtonLoading())
-         toast.error("Something went wrong!",{autoClose:2500});
-       }
-     }
- };
+        toast.error(error?.response?.data?.message, { autoClose: 2500 });
+      } else {
+        dispatch(stopButtonLoading())
+        toast.error("Something went wrong!", { autoClose: 2500 });
+      }
+    }
+  };
 
- function formatTime(timeString) {
-  const timeParts = timeString.split(':');
-  const hours = parseInt(timeParts[0]);
-  const minutes = parseInt(timeParts[1]);
+  function formatTime(timeString) {
+    const timeParts = timeString.split(':');
+    const hours = parseInt(timeParts[0]);
+    const minutes = parseInt(timeParts[1]);
 
-  const date = new Date(2000, 0, 1, hours, minutes);
+    const date = new Date(2000, 0, 1, hours, minutes);
 
-  return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
-}
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
+  }
 
-function formatDate(date) {
-  const d = new Date(date);
-  const year = d.getFullYear();
-  const month = String(d.getMonth() + 1).padStart(2, '0');
-  const day = String(d.getDate()).padStart(2, '0');
-  return `${day}/${month}/${year}`;
-}
+  function formatDate(date) {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${day}/${month}/${year}`;
+  }
 
 
 
@@ -214,13 +214,13 @@ function formatDate(date) {
                   >
                     <span className="lead-id text-white">{lead?.lead_code}</span>
                     {
-                      userInfo?.role_id==1 && (
+                      userInfo?.role_id == 1 && (
                         <img
-                        className=' cursor-pointer'
-                        src="/ChannelPartner/profile-edit-white.svg"
-                        onClick={() => setShowAssignTo(true)}
-                        alt
-                      />
+                          className=' cursor-pointer'
+                          src="/ChannelPartner/profile-edit-white.svg"
+                          onClick={() => setShowAssignTo(true)}
+                          alt
+                        />
                       )
                     }
                   </li>
@@ -291,7 +291,7 @@ function formatDate(date) {
                         <div className="col-7 col-md-6">
                           <div className="list-group-item list-group-item-action p-0 border-0">
                             <span className="list-right">
-                              {formatDate(lead?.created_on)=="NaN/NaN/NaN"? "":formatDate(lead?.created_on)}
+                              {formatDate(lead?.created_on) == "NaN/NaN/NaN" ? "" : formatDate(lead?.created_on)}
                             </span>
                           </div>
                         </div>
@@ -335,7 +335,7 @@ function formatDate(date) {
                         <div className="col-7 col-md-6">
                           <div className="list-group-item list-group-item-action p-0 border-0">
                             <span className="list-right">
-                              {formatDate(lead.p_visit_date)=="NaN/NaN/NaN"? "":formatDate(lead.p_visit_date)}
+                              {formatDate(lead.p_visit_date) == "NaN/NaN/NaN" ? "" : formatDate(lead.p_visit_date)}
                             </span>
                           </div>
                         </div>
@@ -344,7 +344,7 @@ function formatDate(date) {
                         <div className="col-5 col-md-5">
                           <div className="list-group-item list-group-item-action p-0 border-0">
                             <span className="list-left">
-                            Schedule Visit Time
+                              Schedule Visit Time
                             </span>
                           </div>
                         </div>
@@ -362,14 +362,63 @@ function formatDate(date) {
                         <div className="col-5 col-md-5">
                           <div className="list-group-item list-group-item-action p-0 border-0">
                             <span className="list-left">
-                            Created By
+                              Created By
                             </span>
                           </div>
                         </div>
                         <div className="col-7 col-md-6">
                           <div className="list-group-item list-group-item-action p-0 border-0">
                             <span className="list-right">
-                              {lead?.createdBy? lead?.createdBy: "----------"}
+                              {lead?.createdBy ? lead?.createdBy : "----------"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-7 col-md-6">
+                          <div className="list-group-item list-group-item-action p-0 border-0">
+                            <span className="list-right">
+                              {lead?.tyoeofbhk ? lead?.tyoeofbhk : "----------"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-7 col-md-6">
+                          <div className="list-group-item list-group-item-action p-0 border-0">
+                            <span className="list-right">
+                              {lead?.leadvalidupto ? lead?.leadvalidupto : "----------"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-7 col-md-6">
+                          <div className="list-group-item list-group-item-action p-0 border-0">
+                            <span className="list-right">
+                              {lead?.sizearea ? lead?.sizearea : "----------"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-7 col-md-6">
+                          <div className="list-group-item list-group-item-action p-0 border-0">
+                            <span className="list-right">
+                              {lead?.zonearea ? lead?.zonearea : "----------"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-7 col-md-6">
+                          <div className="list-group-item list-group-item-action p-0 border-0">
+                            <span className="list-right">
+                              {lead?.aadhar ? lead?.aadhar : "----------"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-7 col-md-6">
+                          <div className="list-group-item list-group-item-action p-0 border-0">
+                            <span className="list-right">
+                              {lead?.budgetrange ? lead?.budgetrange : "----------"}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="col-7 col-md-6">
+                          <div className="list-group-item list-group-item-action p-0 border-0">
+                            <span className="list-right">
+                              {lead?.size ? lead?.size : "----------"}
                             </span>
                           </div>
                         </div>
@@ -396,10 +445,12 @@ function formatDate(date) {
       <Modal
         className="w-100"
         show={!showAssignTo ? false : true}
-        onHide={() =>{ 
-            if(isButtonLoading==false){
-              setShowAssignTo("")}}
-            }
+        onHide={() => {
+          if (isButtonLoading == false) {
+            setShowAssignTo("")
+          }
+        }
+        }
         size="xl"
         centered
       >
@@ -453,8 +504,8 @@ function formatDate(date) {
                                       required
                                     />
                                     <span className='errorText text-danger'>
-                                          {errorData?.lead_name ? errorData.lead_name:""}
-                                      </span>
+                                      {errorData?.lead_name ? errorData.lead_name : ""}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -462,23 +513,23 @@ function formatDate(date) {
                               <div className='col col-xl-6 col-md-6 col-sm-12 my-2'>
                                 <div className='row '>
                                   <div className="col-3">
-                                      <label htmlFor="name" className="pb-1">Location<span className="star text-danger">*</span></label>
-                                    </div>
-                                    <div className="col-9">
-                                    <select required name 
-                                    value={lead?.address}
-                                    onChange={(e) => {
-                                      
-                                      const location_name = locationList?.find((l) => l?.name === e.target.value)?.name
-                                      setLead((lead) => ({
-                                        ...lead,
-                                        address: location_name,
-                                      }));
-                                    }} 
-                                    className="form-select dropdown" style={{paddingTop: 12, paddingBottom: 12}}>
+                                    <label htmlFor="name" className="pb-1">Location<span className="star text-danger">*</span></label>
+                                  </div>
+                                  <div className="col-9">
+                                    <select required name
+                                      value={lead?.address}
+                                      onChange={(e) => {
+
+                                        const location_name = locationList?.find((l) => l?.name === e.target.value)?.name
+                                        setLead((lead) => ({
+                                          ...lead,
+                                          address: location_name,
+                                        }));
+                                      }}
+                                      className="form-select dropdown" style={{ paddingTop: 12, paddingBottom: 12 }}>
                                       <option value selected disabled>Select</option>
                                       {
-                                        locationList?.map((location)=>(
+                                        locationList?.map((location) => (
                                           <option key={location?.lead_location_id} value={location?.name} className="dropdown-item" >
                                             {location?.name}
                                           </option>
@@ -486,9 +537,9 @@ function formatDate(date) {
                                       }
                                     </select>
                                     <span className='errorText text-danger'>
-                                          {errorData?.address ? errorData.address:""}
-                                      </span>
-                                    </div>
+                                      {errorData?.address ? errorData.address : ""}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
 
@@ -519,8 +570,8 @@ function formatDate(date) {
                                       required
                                     />
                                     <span className='errorText text-danger'>
-                                          {errorData?.email_id ? errorData.email_id:""}
-                                      </span>
+                                      {errorData?.email_id ? errorData.email_id : ""}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -552,8 +603,8 @@ function formatDate(date) {
                                       required
                                     />
                                     <span className='errorText text-danger'>
-                                          {errorData?.pincode ? errorData.pincode:""}
-                                      </span>
+                                      {errorData?.pincode ? errorData.pincode : ""}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -585,8 +636,8 @@ function formatDate(date) {
                                       required
                                     />
                                     <span className='errorText text-danger'>
-                                          {errorData?.p_contact_no ? errorData.p_contact_no:""}
-                                      </span>
+                                      {errorData?.p_contact_no ? errorData.p_contact_no : ""}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -620,8 +671,8 @@ function formatDate(date) {
                                       required
                                     />
                                     <span className='errorText text-danger'>
-                                          {errorData?.p_visit_date ? errorData.p_visit_date:""}
-                                      </span>
+                                      {errorData?.p_visit_date ? errorData.p_visit_date : ""}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -667,8 +718,8 @@ function formatDate(date) {
                                       ))}
                                     </select>
                                     <span className='errorText text-danger'>
-                                          {errorData?.project_id ? errorData.project_id:""}
-                                      </span>
+                                      {errorData?.project_id ? errorData.project_id : ""}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
@@ -700,16 +751,16 @@ function formatDate(date) {
                                       required
                                     />
                                     <span className='errorText text-danger'>
-                                          {errorData?.p_visit_time ? errorData.p_visit_time:""}
-                                      </span>
+                                      {errorData?.p_visit_time ? errorData.p_visit_time : ""}
+                                    </span>
                                   </div>
                                 </div>
                               </div>
                             </div>
                             <div className="new-leades-btn d-flex justify-content-center gap-4 mt-4 mt-md-5">
-                              <button 
-                              type='button'
-                              disabled={isButtonLoading}
+                              <button
+                                type='button'
+                                disabled={isButtonLoading}
                                 className="btn btn-danger text-white rounded-5"
                                 onClick={() => {
                                   setShowAssignTo("");
@@ -723,8 +774,8 @@ function formatDate(date) {
                               >
                                 Cancel
                               </button>
-                              <button className="btn rounded-5 text-white" style={{background:clientBtnColor}}>
-                              {isButtonLoading ? (
+                              <button className="btn rounded-5 text-white" style={{ background: clientBtnColor }}>
+                                {isButtonLoading ? (
                                   <>
                                     <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
                                     &nbsp;Submit

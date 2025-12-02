@@ -9,40 +9,103 @@ import { Baseurl, filesUrl } from "../../../Utils/Constants";
 import { setCookie } from "cookies-next";
 import { useDispatch, useSelector } from "react-redux";
 import { startButtonLoading, stopButtonLoading } from "../../../store/buttonLoaderSlice";
+import { Checkbox } from "@mui/material";
 
+const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 const NewRegistrationScreen = () => {
+  const [states, setStates] = useState([])
+  const [cities, setCities] = useState([])
+  const [loadingStates, setLoadingStates] = useState(false)
+  const [loadingCities, setLoadingCities] = useState(false)
+
   const [formFields, setFormFields] = useState({
     first_name: "",
     last_name: "",
     email: "",
-    contact: null
+    contact: null,
+    state_id: '',
+    city_id: '',
+    acceptedTerms: false,
   });
+
   const [clientData, setClientData] = useState();
   const { isButtonLoading } = useSelector((state) => state.buttonLoader)
   const dispatch = useDispatch()
-
   const router = useRouter();
+
+  // ✅ Fetch States from API on mount
+  useEffect(() => {
+    const fetchStates = async () => {
+      setLoadingStates(true);
+      try {
+        const { data } = await axios.get(Baseurl + "/db/admin/state/available?country_id=101");
+
+        // Adjust based on your API response structure
+        setStates(data?.data || data);
+      } catch (error) {
+        console.error("Error fetching states:", error);
+        toast.error("Failed to load states", { autoClose: 2500 });
+      } finally {
+        setLoadingStates(false);
+      }
+    };
+
+    fetchStates();
+  }, []);
+
+  // ✅ Handle State change and fetch cities
+  const handleStateChange = async (e) => {
+    const stateId = e.target.value;
+    setFormFields({ ...formFields, state_id: stateId, city_id: '' });
+
+    if (!stateId) {
+      setCities([]);
+      return;
+    }
+
+    setLoadingCities(true);
+    try {
+      const { data } = await axios.get(Baseurl + `/db/admin/city/by-state?state_id=${stateId}`);
+
+      // Adjust based on your API response structure
+      setCities(data?.data || data);
+    } catch (error) {
+      console.error("Error fetching cities:", error);
+      toast.error("Failed to load cities", { autoClose: 2500 });
+      setCities([]);
+    } finally {
+      setLoadingCities(false);
+    }
+  }
+
+  // ✅ Handle city change
+  const handleCityChange = (e) => {
+    setFormFields({ ...formFields, city_id: e.target.value });
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const { first_name, last_name, email, contact } = formFields;
+    const { first_name, last_name, email, contact, state_id, city_id } = formFields;
 
-    // Basic validations for mandatory fields
-    if (!first_name || !last_name || !email || !contact) {
+    if (!formFields?.acceptedTerms) {
+      dispatch(stopButtonLoading());
+      toast.warning("Please select the checkbox", { autoClose: 2500 });
+      return;
+    }
+
+    if (!first_name || !last_name || !email || !contact || !state_id || !city_id) {
       dispatch(stopButtonLoading());
       return toast.warning("Please fill all mandatory fields", { autoClose: 2500 });
     }
 
-    // Validate contact number for 10 digits
     const contactRegex = /^\d{10}$/;
     if (!contactRegex.test(contact)) {
       dispatch(stopButtonLoading());
       return toast.warning("Contact number must be a 10-digit number", { autoClose: 2500 });
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       dispatch(stopButtonLoading());
@@ -51,6 +114,7 @@ const NewRegistrationScreen = () => {
 
     let newFormfields = { ...formFields, db_name: clientData?.db_name }
     console.log(newFormfields)
+
     try {
       dispatch(startButtonLoading());
       const { data } = await axios.post(
@@ -73,7 +137,6 @@ const NewRegistrationScreen = () => {
     }
   };
 
-
   useEffect(() => {
     const getSignInData = async () => {
       try {
@@ -84,6 +147,7 @@ const NewRegistrationScreen = () => {
         const { data } = await axios.post(Baseurl + "/db/admin/url", {
           client_url: `${baseUrl}`,
         })
+        console.log("client url", data)
         setClientData(data?.data)
       } catch (error) {
         console.log(error)
@@ -102,8 +166,7 @@ const NewRegistrationScreen = () => {
                 <div className="Sign-In-logo pb-4">
                   <img src={
                     clientData?.logo
-                      ? `${filesUrl}` +
-                      `/logo/images${clientData?.logo}`
+                      ? `${filesUrl}/logo/images${clientData?.logo}`
                       : "/ChannelPartner/logo.png"
                   } alt="normal" />
                 </div>
@@ -112,7 +175,7 @@ const NewRegistrationScreen = () => {
                     style={{
                       height: 290,
                       width: "100%",
-                      backgroundImage: clientData?.client_image_1 ? `url(${filesUrl}/clientdoc/images${clientData?.client_image_1}` : `url(/ChannelPartner/signup-img1.png)`,
+                      backgroundImage: clientData?.client_image_1 ? `url(${filesUrl}/clientdoc/images${clientData?.client_image_1})` : `url(/ChannelPartner/signup-img1.png)`,
                       backgroundRepeat: "no-repeat",
                       backgroundSize: "cover",
                       marginBottom: 15,
@@ -123,21 +186,20 @@ const NewRegistrationScreen = () => {
                     style={{
                       height: 200,
                       width: "100%",
-                      backgroundImage: clientData?.client_image_2 ? `url(${filesUrl}/clientdoc/images${clientData?.client_image_2}` : `url(/ChannelPartner/signup-img3.png)`,
+                      backgroundImage: clientData?.client_image_2 ? `url(${filesUrl}/clientdoc/images${clientData?.client_image_2})` : `url(/ChannelPartner/signup-img3.png)`,
                       backgroundRepeat: "no-repeat",
                       backgroundSize: "cover",
                       marginBottom: 15,
                       borderBottomLeftRadius: 10,
                     }}
                   ></div>
-                  <div></div>
                 </div>
                 <div className="col-6">
                   <div
                     style={{
                       height: 200,
                       width: "100%",
-                      backgroundImage: clientData?.client_image_3 ? `url(${filesUrl}/clientdoc/images${clientData?.client_image_3}` : `url(/ChannelPartner/signup-img2.png)`,
+                      backgroundImage: clientData?.client_image_3 ? `url(${filesUrl}/clientdoc/images${clientData?.client_image_3})` : `url(/ChannelPartner/signup-img2.png)`,
                       backgroundRepeat: "no-repeat",
                       backgroundSize: "cover",
                       marginBottom: 15,
@@ -148,7 +210,7 @@ const NewRegistrationScreen = () => {
                     style={{
                       height: 290,
                       width: "100%",
-                      backgroundImage: clientData?.client_image_4 ? `url(${filesUrl}/clientdoc/images${clientData?.client_image_4}` : `url(/ChannelPartner/signup-img4.png)`,
+                      backgroundImage: clientData?.client_image_4 ? `url(${filesUrl}/clientdoc/images${clientData?.client_image_4})` : `url(/ChannelPartner/signup-img4.png)`,
                       backgroundRepeat: "no-repeat",
                       backgroundSize: "cover",
                       marginBottom: 15,
@@ -193,7 +255,7 @@ const NewRegistrationScreen = () => {
                             </div>
                             <div className="rightTab">
                               <input
-                                autofocus
+                                autoFocus
                                 type="text"
                                 name="first_name"
                                 id="first_name"
@@ -202,11 +264,10 @@ const NewRegistrationScreen = () => {
                                 value={formFields?.first_name}
                                 onChange={(e) => {
                                   const value = e.target.value;
-                                  const formattedValue = value.replace(/[^a-zA-Z0-9 ]/g, ''); // Allows letters, numbers, and spaces
+                                  const formattedValue = value.replace(/[^a-zA-Z0-9 ]/g, '');
                                   setFormFields({ ...formFields, first_name: formattedValue });
                                 }}
                               />
-
                             </div>
                           </div>
                           <div className="rowTab">
@@ -216,7 +277,6 @@ const NewRegistrationScreen = () => {
                             </div>
                             <div className="rightTab">
                               <input
-                                autofocus
                                 type="text"
                                 name="last_name"
                                 id="last_name"
@@ -229,6 +289,64 @@ const NewRegistrationScreen = () => {
                                   setFormFields({ ...formFields, last_name: formattedValue });
                                 }}
                               />
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* State Dropdown */}
+                        <div className="rowTab">
+                          <div className="labels">
+                            <label id="number" htmlFor="State">
+                              State
+                            </label>
+                            <span>*</span>
+                          </div>
+                          <div className="rightTab">
+                            <select
+                              className="input-field"
+                              style={{ height: '40px', border: '1px solid gray' }}
+                              onChange={handleStateChange}
+                              value={formFields.state_id}
+                              disabled={loadingStates}
+                            >
+                              <option value="">
+                                {loadingStates ? "Loading states..." : "Select State"}
+                              </option>
+                              {states.map((st) => (
+                                <option key={st.state_id} value={st.state_id}>
+                                  {st.state_name}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                        </div>
+
+                        {/* City Dropdown */}
+                        <div className="gap-2">
+                          <div className="rowTab">
+                            <div className="labels">
+                              <label id="state-label" htmlFor="District">
+                                District/City
+                              </label>
+                              <span>*</span>
+                            </div>
+                            <div className="rightTab">
+                              <select
+                                className="input-field"
+                                style={{ height: '40px', border: '1px solid gray' }}
+                                onChange={handleCityChange}
+                                value={formFields.city_id}
+                                disabled={loadingCities || !formFields.state_id}
+                              >
+                                <option value="">
+                                  {loadingCities ? "Loading cities..." : "Select District/City"}
+                                </option>
+                                {cities.map((city) => (
+                                  <option key={city.city_id} value={city.city_id}>
+                                    {city.city_name}
+                                  </option>
+                                ))}
+                              </select>
                             </div>
                           </div>
                         </div>
@@ -256,6 +374,7 @@ const NewRegistrationScreen = () => {
                             />
                           </div>
                         </div>
+
                         <div className="rowTab">
                           <div className="labels">
                             <label id="email-label" htmlFor="email">
@@ -275,6 +394,29 @@ const NewRegistrationScreen = () => {
                                 setFormFields({ ...formFields, email: e.target.value })
                               }}
                             />
+                          </div>
+                        </div>
+
+                        <div className="rowTab">
+                          <div className="labels"></div>
+                          <div className="rightTab">
+                            <label htmlFor="terms" style={{ margin: 0 }}>
+                              <Checkbox
+                                {...label}
+                                type="checkbox"
+                                checked={formFields.acceptedTerms}
+                                onChange={(e) => setFormFields({ ...formFields, acceptedTerms: e.target.checked })}
+                              />
+                              I agree to the{" "}
+                              <a
+                                href="/terms-and-conditions"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{ color: "blue", textDecoration: "underline" }}
+                              >
+                                Terms & Conditions
+                              </a>
+                            </label>
                           </div>
                         </div>
 

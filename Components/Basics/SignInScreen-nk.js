@@ -18,7 +18,7 @@ import {
   channel,
   media
 } from "../../store/permissionSlice";
-import { startLoading, stopLoading } from "../../store/loaderSlice";  
+import { startLoading, stopLoading } from "../../store/loaderSlice";
 import {
   clearTheme,
   setSidebarColor,
@@ -72,10 +72,10 @@ export default function SignInScreen({ setLoggedIn }) {
   };
 
   const submitHandler = async (e) => {
-    
+
     e.preventDefault();
     dispatch(startLoading());
-    const type=router.pathname==="/crm" ? "crm": router.pathname==="/dms" ? "dms": router.pathname==="/sales"? "sales": router.pathname==="/partner" ? "partner": router.pathname==="/media" ? "media": "common"
+    const type = router.pathname === "/crm" ? "crm" : router.pathname === "/dms" ? "dms" : router.pathname === "/sales" ? "sales" : router.pathname === "/partner" ? "partner" : router.pathname === "/media" ? "media" : "common"
     if (userForm.email === "" || userForm.email.length < 1) {
       toast.error("Email is Empty");
       dispatch(stopLoading())
@@ -91,19 +91,19 @@ export default function SignInScreen({ setLoggedIn }) {
         // if(baseUrl==="http://localhost:3000"){
         //   baseUrl = "https://crm.saleofast.com/"
         // }
-        let payload={};
-        if(baseUrl==="http://localhost:3000" || baseUrl==="http://192.168.1.33:3000"){
-          payload={
+        let payload = {};
+        if (baseUrl === "http://localhost:3000" || baseUrl === "http://192.168.1.33:3000") {
+          payload = {
             email: userForm.email.toLowerCase(),
-          password: userForm.password,
-          type:type,
+            password: userForm.password,
+            type: type,
           }
-        }else{
-          payload={
-          email: userForm.email.toLowerCase(),
-          password: userForm.password,
-          type:type,
-          client_url:baseUrl
+        } else {
+          payload = {
+            email: userForm.email.toLowerCase(),
+            password: userForm.password,
+            type: type,
+            client_url: baseUrl
           }
         }
         const res = await axios.post(Baseurl + "/db/login", payload);
@@ -127,35 +127,35 @@ export default function SignInScreen({ setLoggedIn }) {
           dispatch(setbuttonColor(res.data.Logo[0].button_color || "#405189"));
           dispatch(setTopNavColor(res.data.Logo[0].top_nav_color || "#405189"));
           assignPermission(res?.data?.platformData);
-          
-          if(router.pathname==="/crm"){
+
+          if (router.pathname === "/crm") {
             dispatch(crm())
             router.push("/crm")
           }
-          else if(router.pathname==="/partner"){
+          else if (router.pathname === "/partner") {
             dispatch(channel())
-              if(res?.data?.userData?.role_id===2){
-                setCookie("activeLink","/partner")
-                router.push("/partner");
-              }
-              else{
-                setCookie("activeLink","/partner")
-                router.push("/partner");
-              }
+            if (res?.data?.userData?.role_id === 2) {
+              setCookie("activeLink", "/partner")
+              router.push("/partner");
+            }
+            else {
+              setCookie("activeLink", "/partner")
+              router.push("/partner");
+            }
           }
-          else if(router.pathname==="/dms"){
+          else if (router.pathname === "/dms") {
             dispatch(dms())
             router.push("/dms")
           }
-          else if(router.pathname==="/sales"){
+          else if (router.pathname === "/sales") {
             dispatch(sales())
             router.push("/sales")
           }
-          else if(router.pathname==="/media"){
+          else if (router.pathname === "/media") {
             dispatch(media())
             router.push("/media")
           }
-          else{
+          else {
             router.push("/")
           }
 
@@ -186,7 +186,7 @@ export default function SignInScreen({ setLoggedIn }) {
         const { data } = await axios.post(Baseurl + "/db/admin/url", {
           client_url: `${baseUrl}`,
         });
-        setCookie("clientBtnColor",data?.data?.button_color)
+        setCookie("clientBtnColor", data?.data?.button_color)
         setClientData(data?.data);
       } catch (error) {
         console.log(error);
@@ -201,10 +201,10 @@ export default function SignInScreen({ setLoggedIn }) {
         <div className="row m-0  login">
           <div className="col-12 col-lg-6 m-0 p-0">
             <div className="form-left d-flex flex-column justify-content-between">
-              <img src="/images/Ellipse26.png" alt="normal"className="image-one" />
+              <img src="/images/Ellipse26.png" alt="normal" className="image-one" />
               <img
-                src={ clientData?.logo
-                  &&( `${filesUrl}` +
+                src={clientData?.logo
+                  && (`${filesUrl}` +
                     `/logo/images${clientData?.logo}`)}
                 alt
                 className=" mx-auto w-auto"
@@ -298,7 +298,7 @@ export default function SignInScreen({ setLoggedIn }) {
                 <div className="col-12">
                   <button
                     type="submit"
-                    style={{background:clientData?.button_color}}
+                    style={{ background: clientData?.button_color }}
                     className="btn text-white fs-4 fw-semibold px-4 float-end w-100 rounded-4"
                   >
                     Login

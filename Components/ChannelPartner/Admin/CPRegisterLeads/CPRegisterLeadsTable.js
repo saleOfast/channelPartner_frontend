@@ -40,6 +40,10 @@ const CPRegisterLeadsTable = ({
   const [showModal2, setShowModal2] = useState(false)
   const [id, setId] = useState("")
   const userInfo = hasCookie("userInfo") ? JSON.parse(getCookie("userInfo")) : null;
+  const [otp, setOtp] = useState(["", "", "", ""]);
+  const [confirm, setConfirm] = useState(false)
+  const [isOtpSent, setIsOtpSent] = useState(false)
+
   const [formData, setFormData] = useState({
     first_name: '',
     last_name: '',
@@ -263,7 +267,7 @@ const CPRegisterLeadsTable = ({
       options: {
         filter: false,
         customHeadRender: (columnMeta, updateDirection) => (
-          <th style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '15px', padding: "7px" }} >
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '15px', padding: "7px" }} >
             {columnMeta.label}
           </th>
         ),
@@ -286,7 +290,7 @@ const CPRegisterLeadsTable = ({
       options: {
         filter: false,
         customHeadRender: (columnMeta, updateDirection) => (
-          <th style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '15px', padding: "7px" }} >
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '15px', padding: "7px" }} >
             {columnMeta.label}
           </th>
         ),
@@ -309,7 +313,7 @@ const CPRegisterLeadsTable = ({
       options: {
         filter: false,
         customHeadRender: (columnMeta, updateDirection) => (
-          <th style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '15px', padding: "7px" }} >
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '15px', padding: "7px" }} >
             {columnMeta.label}
           </th>
         ),
@@ -332,7 +336,7 @@ const CPRegisterLeadsTable = ({
       options: {
         filter: false,
         customHeadRender: (columnMeta, updateDirection) => (
-          <th style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '15px', padding: "7px" }} >
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '15px', padding: "7px" }} >
             {columnMeta.label}
           </th>
         ),
@@ -355,7 +359,7 @@ const CPRegisterLeadsTable = ({
       options: {
         filter: false,
         customHeadRender: (columnMeta, updateDirection) => (
-          <th style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '15px', padding: "7px" }} >
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '15px', padding: "7px" }} >
             {columnMeta.label}
           </th>
         ),
@@ -378,7 +382,7 @@ const CPRegisterLeadsTable = ({
       options: {
         filter: false,
         customHeadRender: (columnMeta, updateDirection) => (
-          <th style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '15px', padding: "7px" }} >
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '15px', padding: "7px" }} >
             {columnMeta.label}
           </th>
         ),
@@ -401,7 +405,7 @@ const CPRegisterLeadsTable = ({
       options: {
         filter: true,
         customHeadRender: (columnMeta, updateDirection) => (
-          <th style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '15px', padding: "7px" }} >
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '15px', padding: "7px" }} >
             {columnMeta.label}
           </th>
         ),
@@ -425,7 +429,7 @@ const CPRegisterLeadsTable = ({
         filter: true,
         display: (userInfo?.isDB || userInfo?.role_id == 3) ? true : false,
         customHeadRender: (columnMeta, updateDirection) => (
-          <th style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '15px', padding: "7px" }} >
+          <th style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '15px', padding: "7px" }} >
             {columnMeta.label}
           </th>
         ),
@@ -450,7 +454,7 @@ const CPRegisterLeadsTable = ({
         download: false,
         customHeadRender: (columnMeta, updateDirection) => (
           <th
-            style={{ background: `${clientBtnColor}`, color: "white", paddingLeft: '65px' }}
+            style={{ background: `${clientBtnColor}`, backgroundColor: 'rgb(133, 64, 232)', color: "white", paddingLeft: '65px' }}
 
           >
             {columnMeta.label}
@@ -897,6 +901,7 @@ const CPRegisterLeadsTable = ({
 
 
 
+
             <Form.Group controlId="remarks">
               <Form.Label>Remarks</Form.Label>
               <Form.Control
@@ -916,9 +921,47 @@ const CPRegisterLeadsTable = ({
               {errors.remarks && <Form.Text className="text-danger">{errors.remarks}</Form.Text>}
             </Form.Group>
 
-            <Button variant="primary" type="submit" className=" float-end mt-4">
-              Update
-            </Button>
+            <div className="d-flex justify-content-between  mt-4">
+              {formData.stage == 'VISIT' && (
+                <Button variant="primary" disabled={isOtpSent} type="submit" onClick={() => {
+
+                  setConfirm(true)
+                  setIsOtpSent(true)
+                }}>
+                  SEND OPT
+                </Button>)}
+              <div className="d-flex gap-2">
+
+                {
+                  confirm && otp.map((digit, index) => (
+                    <input
+                      id={`otp-${index}`}
+                      key={index}
+                      type="text"
+                      maxLength="1"
+                      value={digit}
+                      onChange={(e) => handleOtpChange(e, index)}
+                      onKeyDown={(e) => handleOtpBackspace(e, index)}
+                      className="otp-box"
+                      style={{
+                        width: "40px",
+                        height: "40px",
+                        color: "white",
+                        fontSize: "20px",
+                        textAlign: "center",
+                        borderRadius: "6px",
+                        border: "1px solid #555",
+                      }}
+                    />
+                  ))}
+              </div>
+
+
+              <Button variant="primary" type="submit" disabled={true}>
+                UPDATE
+              </Button>
+            </div>
+
           </Form>
         </Modal.Body>
       </Modal>
@@ -969,7 +1012,7 @@ const CPRegisterLeadsTable = ({
                     id="select"
                     options={
                       usersList
-                        ?.filter(item => item?.role_id === 2)
+                        ?.filter(item => item?.role_id == 2)
                         ?.map(item => ({
                           value: item?.user_id,
                           label: item?.user ?? "",
@@ -978,7 +1021,7 @@ const CPRegisterLeadsTable = ({
                     }
                     value={
                       usersList
-                        ?.filter(item => item?.role_id === 2)
+                        ?.filter(item => item?.role_id == 2)
                         ?.map(item => ({
                           value: item?.user_id,
                           label: item?.user ?? "",
@@ -1019,7 +1062,8 @@ const CPRegisterLeadsTable = ({
           <button className=" btn btn-danger rounded-5"
             onClick={() => setShowAssignTo("")}
           >Cancel</button>
-          <div style={{ background: clientBtnColor }} className='btn rounded-5 text-white'
+          {/* <div style={{ background: clientBtnColor }} className='btn rounded-5 text-white' */}
+          <div style={{ backgroundColor: 'black' }} className='btn rounded-5 text-white'
             onClick={() => updateUserhandler(false)}
           >
             SUBMIT

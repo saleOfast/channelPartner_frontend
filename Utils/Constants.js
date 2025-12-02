@@ -23,10 +23,14 @@
 
 /* -----------------NK Realtors links With SSL---------------- */
 
-export const Baseurl = 'https://admin.theprosperity.in/api/v1';
-export const filesUrl = 'https://admin.theprosperity.in/images';
+// export const Baseurl = 'https://admin.theprosperity.in/api/v1';
+// export const filesUrl = 'https://admin.theprosperity.in/images';
 
 /* -----------------NK Realtors links Without SSL------------- */
 
 // export const Baseurl = 'http://18.61.222.249:8050/api/v1';
 // export const filesUrl = 'http://18.61.222.249:8050/images';
+
+
+/* ----------------- Local NK Realtors links Without SSL------------- */
+export const Baseurl = 'http://localhost:8050/api/v1';

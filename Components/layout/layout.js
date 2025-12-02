@@ -12,131 +12,157 @@ import { setSidebarColor, setTopNavColor, setbuttonColor } from '../../store/the
 import SideBar from '../Basics/SideBar';
 import SideBarDMSWeb from '../DMS/SidebarWeb/SideBarDMSWeb';
 
-const Layout = ({Component, pageProps}) => {
-    const userLogin = useSelector((state) => state.userLogin.value);
-    const permission = useSelector((state) => state.permissionMode.value);
-    const theme = useSelector((state) => state.themeMode);
-    const allowedpermission = useSelector((state) => state.permissionMode.allowedPermissions );
-    const isLoading=useSelector((state)=>state.loader.isLoading)
-    const dispatch = useDispatch()
-    const [showBasic, setShowBasic] = useState(false)
-    const [sidebarMode,setSidebarMode]=useState('') 
-    const [allowedPermissions,setAllowedPermissions]=useState([])
-    const [topnavPermission,setTopnavPermission]=useState("")
-    const clientBtnColor=hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#293790"
-   
-    const checkUSer = () => {
-   
-      if(hasCookie("user")){
-        setShowBasic(true)
-      }else if(hasCookie("Admin")){
-        setShowBasic(false)
-      }else{
-        setShowBasic(false)
-      }
-    }
-  
-  
-   
-    const checkSidebar=()=> {
-      if(hasCookie("crm")){
-        setSidebarMode("crm")
-        setTopnavPermission("crm")
-      }else if(hasCookie("dms")){
-        setSidebarMode("dms")
-        setTopnavPermission("dms")
-      } 
-      else if(hasCookie("media")){
-        setSidebarMode("media")
-        setTopnavPermission("media")
-      } else if(hasCookie("sales")){
-        setSidebarMode("sales")
-        setTopnavPermission("sales")
-      } else{
-        setSidebarMode("channel")
-        setTopnavPermission("channel")  
-      } 
-    }
+const Layout = ({ Component, pageProps }) => {
+  const userLogin = useSelector((state) => state.userLogin.value);
+  const permission = useSelector((state) => state.permissionMode.value);
+  const theme = useSelector((state) => state.themeMode);
+  const allowedpermission = useSelector((state) => state.permissionMode.allowedPermissions);
+  const isLoading = useSelector((state) => state.loader.isLoading)
+  const dispatch = useDispatch()
+  const [showBasic, setShowBasic] = useState(false)
+  const [sidebarMode, setSidebarMode] = useState('')
+  const [allowedPermissions, setAllowedPermissions] = useState([])
+  const [topnavPermission, setTopnavPermission] = useState("")
+  const clientBtnColor = hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#293790"
 
-    const checkColor=()=> {
-      if(hasCookie("clientLogo")){
-        const data = JSON.parse(getCookie("clientLogo"))
-        dispatch(setSidebarColor(data.sidebar_color))
-        dispatch(setbuttonColor(data.button_color))
-        dispatch(setTopNavColor(data.top_nav_color))
-      } 
-    
+  const checkUSer = () => {
+
+    if (hasCookie("user")) {
+      setShowBasic(true)
+    } else if (hasCookie("Admin")) {
+      setShowBasic(false)
+    } else {
+      setShowBasic(false)
+    }
+  }
+
+
+
+  const checkSidebar = () => {
+    if (hasCookie("crm")) {
+      setSidebarMode("crm")
+      setTopnavPermission("crm")
+    } else if (hasCookie("dms")) {
+      setSidebarMode("dms")
+      setTopnavPermission("dms")
+    }
+    else if (hasCookie("media")) {
+      setSidebarMode("media")
+      setTopnavPermission("media")
+    } else if (hasCookie("sales")) {
+      setSidebarMode("sales")
+      setTopnavPermission("sales")
+    } else {
+      setSidebarMode("channel")
+      setTopnavPermission("channel")
+    }
+  }
+
+  const checkColor = () => {
+    if (hasCookie("clientLogo")) {
+      const data = JSON.parse(getCookie("clientLogo"))
+      dispatch(setSidebarColor(data.sidebar_color))
+      dispatch(setbuttonColor(data.button_color))
+      dispatch(setTopNavColor(data.top_nav_color))
     }
 
+  }
 
-    const checkAllowedPermissions=()=>{
-      if(hasCookie("allowedPermissions")){
-        setAllowedPermissions(JSON.parse(getCookie("allowedPermissions")))
-      }
+
+  const checkAllowedPermissions = () => {
+    if (hasCookie("allowedPermissions")) {
+      setAllowedPermissions(JSON.parse(getCookie("allowedPermissions")))
     }
-  
-    useEffect(() => {
-      checkSidebar()
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [permission]);
-    
-    useEffect(() => {
-        checkUSer()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [userLogin]);
+  }
 
-      useEffect(() => {
-        checkAllowedPermissions()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [allowedpermission]);
+  useEffect(() => {
+    checkSidebar()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [permission]);
 
-      useEffect(()=>{
-        checkColor()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-      },[])
+  useEffect(() => {
+    checkUSer()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userLogin]);
+
+  useEffect(() => {
+    checkAllowedPermissions()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [allowedpermission]);
+
+  useEffect(() => {
+    checkColor()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   return (
     <>
-       {
-              isLoading ? <Loader /> :
-            
-              <>
-              {showBasic ?
-         
-              <main className="main_wrapper" 
+      {
+        isLoading ? <Loader /> :
+
+          <>
+            {showBasic ?
+
+              <main className="main_wrapper"
                 style={{
-                  marginTop:(hasCookie("channel") || hasCookie("dms")) ? "0px":"-70px"
+                  marginTop: (hasCookie("channel") || hasCookie("dms")) ? "0px" : "-70px"
                 }}
               >
-                
+
                 <Topnav allowedPermissions={allowedPermissions} topnavPermission={topnavPermission} />
-            
-                  <div className="content_wrapper">
-                      {sidebarMode==="crm" && <SideBar />}
 
-                      {sidebarMode==="media" && <MediaSideBar />}
+                <div className="content_wrapper" style={{ height: '90vh' }}>
+                  {sidebarMode === "crm" && <SideBar />}
 
-                      {/* sidebar of dms will change according to role */}
-                      {sidebarMode==="dms" &&
-                      //  <SidebarDMSMobile/>
-                      <SideBarDMSWeb/>
-                        } 
-                      {/* {sidebarMode==="channel" && <SideBarChannel    />} */}
-                      {sidebarMode==="sales" && <SideBarSales    />}
-                      <Component {...pageProps} />
-                  </div>
-                  </main>
+                  {sidebarMode === "media" && <MediaSideBar />}
 
-            : 
-            <>
-           
+                  {/* sidebar of dms will change according to role */}
+                  {sidebarMode === "dms" &&
+                    //  <SidebarDMSMobile/>
+                    <SideBarDMSWeb />
+                  }
+                  {/* {sidebarMode==="channel" && <SideBarChannel    />} */}
+                  {sidebarMode === "sales" && <SideBarSales />}
+                  <Component {...pageProps} />
+
+                </div>
+                <div>
+                  <footer
+                    style={{
+                      position: "fixed",
+                      bottom: 0,
+                      left: 0,
+                      width: "100%",
+                      textAlign: "center",
+                      padding: "12px 0",
+                      color: "#ccc",
+                      fontSize: "14px",
+                      backgroundColor: "#000"
+                    }}
+                  >
+                    © {new Date().getFullYear()} <strong>NK Realtors</strong>. All Rights Reserved.
+                  </footer>
+
+                </div>
+
+              </main>
+
+
+              :
+              <>
+
                 <Component {...pageProps} />
-             
-            </>
+
+
+
+              </>
+
             }
-      </>
-    }
-            <style jsx global>{`
+
+          </>
+
+      }
+      <style jsx global>{`
                 .btn-primary {
                     background-color: ${theme.buttons} !important;
                     border: none;
@@ -197,9 +223,9 @@ const Layout = ({Component, pageProps}) => {
 
 
             `}</style>
-    
+
     </>
-  
+
   )
 }
 

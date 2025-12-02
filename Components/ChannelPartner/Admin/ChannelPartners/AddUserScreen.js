@@ -23,6 +23,7 @@ const AddUserScreen = () => {
   const [divisionList, setDivisionList] = useState([]);
   const [departMentList, setDepartMentList] = useState([]);
   const [designationList, setDesignationList] = useState([]);
+  const [cpCategory, setcpCategory] = useState([]);
   const [countrylist, setcountrylist] = useState([]);
   const [statelist, setStatelist] = useState([]);
   const [errorData, setErrorData] = useState({});
@@ -41,24 +42,24 @@ const AddUserScreen = () => {
   });
   const [updtUId, setUpdtUId] = useState("");
   const [userInfo, setUserinfo] = useState({
-    role_id:"",
-    cpt_id:null,
-    user:"",
-    user_l_name:"",
-    email:""
+    role_id: "",
+    cpt_id: null,
+    user: "",
+    user_l_name: "",
+    email: ""
   });
   const [uploadDocs, setuploadDocs] = useState({
     aadhar: null,
     pan: null,
     rera: null,
     cheque: null,
-    aadharPreview:null,
-    panPreview:null,
-    reraPreview:null,
-    chequePreview:null,
+    aadharPreview: null,
+    panPreview: null,
+    reraPreview: null,
+    chequePreview: null,
   });
-  const clientBtnColor=hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#405189"
-  const userInfoCheck=hasCookie("userInfo")?JSON.parse(getCookie("userInfo")):null;
+  const clientBtnColor = hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#405189"
+  const userInfoCheck = hasCookie("userInfo") ? JSON.parse(getCookie("userInfo")) : null;
 
 
 
@@ -81,6 +82,15 @@ const AddUserScreen = () => {
       errorToast,
       setErrorToast
     );
+  }
+  async function getCpCategoryList() {
+    await fetchData(
+      "/db/cpcategory",
+      setcpCategory,
+      errorToast,
+      setErrorToast
+
+    )
   }
 
   async function getUsersList() {
@@ -150,7 +160,7 @@ const AddUserScreen = () => {
         user: data1?.user,
         user_l_name: data1?.user_l_name,
         email: data1?.email,
-        cpt_id:data1?.cpt_id,
+        cpt_id: data1?.cpt_id,
         contact_number: data1?.contact_number,
         db_name: data1?.db_name,
         isDB: data1?.isDB,
@@ -178,10 +188,10 @@ const AddUserScreen = () => {
         account_no: data2?.account_no,
         bank_ifsc_code: data2?.bank_ifsc_code,
         branch: data2?.branch,
-        isCRM:data1?.db_user_platforms[0].actions,
-        isDMS:data1?.db_user_platforms[1].actions,
-        isSALES:data1?.db_user_platforms[2].actions,
-        isCHANNEL:data1?.db_user_platforms[3].actions
+        isCRM: data1?.db_user_platforms[0].actions,
+        isDMS: data1?.db_user_platforms[1].actions,
+        isSALES: data1?.db_user_platforms[2].actions,
+        isCHANNEL: data1?.db_user_platforms[3].actions
       });
 
       setoldFiles({
@@ -192,33 +202,33 @@ const AddUserScreen = () => {
         cheque: data2?.c_cheque_file,
       });
     } catch (error) {
-      toast.error(error?.response?.data?.message,{autoClose:2500});
+      toast.error(error?.response?.data?.message, { autoClose: 2500 });
     }
   }
 
   const addUserHandler = async () => {
-    
+
     if (!hasCookie("token")) return;
-    if(userInfo?.role_id=="1" && userInfo?.cpt_id===null){
-      setErrorData({...errorData,cpt_id:"Please Enter a Valid Partner Type"})
+    if (userInfo?.role_id == "1" && userInfo?.cpt_id === null) {
+      setErrorData({ ...errorData, cpt_id: "Please Enter a Valid Partner Type" })
       return
     }
-    if(userInfo?.user_l_name===""){
-      setErrorData({...errorData,user_l_name:"Please Enter Last Name"})
+    if (userInfo?.user_l_name === "") {
+      setErrorData({ ...errorData, user_l_name: "Please Enter Last Name" })
       return
     }
     const db_name = getCookie("db_name");
     setisLoading(true);
     const token = getCookie("token");
     let reqOptions = { ...userInfo, db_name };
-    if(userInfo?.role_id=="3"){
-      reqOptions = { ...userInfo, report_to:userInfoCheck?.user_id }
+    if (userInfo?.role_id == "3") {
+      reqOptions = { ...userInfo, report_to: userInfoCheck?.user_id }
     }
     const header = {
       headers: {
         Accept: "application/json",
         Authorization: `Bearer ${token}`,
-        pass:"pass"
+        pass: "pass"
       },
     };
 
@@ -230,7 +240,7 @@ const AddUserScreen = () => {
       );
       const userId = response?.data?.data?.userProfileData?.user_id;
       if (response.status === 200 || response.status === 201) {
-        toast.success(response?.data?.message,{autoClose:2500});
+        toast.success(response?.data?.message, { autoClose: 2500 });
         if (uploadDocs.aadhar_card)
           AddUploadPicture(userId, "adh", uploadDocs.aadhar[0], 0);
         if (uploadDocs.pan_card)
@@ -238,7 +248,7 @@ const AddUserScreen = () => {
         if (uploadDocs.rera)
           AddUploadPicture(userId, "rera", uploadDocs.rera[0], 0);
         if (uploadDocs.cheque)
-        AddUploadPicture(userId, "cheque", uploadDocs.cheque[0], 0);
+          AddUploadPicture(userId, "cheque", uploadDocs.cheque[0], 0);
         if (userImage) AddUploadPicture(userId, "lsUser", userImage[0], 0);
         setisLoading(false);
         router.push("/partner/ActivePartners");
@@ -253,9 +263,9 @@ const AddUserScreen = () => {
         setErrorData(taskObject);
       }
       if (error?.response?.data?.message) {
-        toast.error(error?.response?.data?.message,{autoClose:2500});
+        toast.error(error?.response?.data?.message, { autoClose: 2500 });
       } else {
-        toast.error("Something went wrong!",{autoClose:2500});
+        toast.error("Something went wrong!", { autoClose: 2500 });
       }
       setisLoading(false);
     }
@@ -263,14 +273,14 @@ const AddUserScreen = () => {
 
   const updateUserhandler = async () => {
     if (!hasCookie("token")) return;
-    
+
     if (userInfo?.user === "") {
-      toast.error("Please Enter the Name",{autoClose:2500});
+      toast.error("Please Enter the Name", { autoClose: 2500 });
       return;
     }
 
-    if(userInfo?.role_id=="1" && userInfo?.cpt_id===null){
-      setErrorData({...errorData,cpt_id:"Please Enter a Valid Partner Type"})
+    if (userInfo?.role_id == "1" && userInfo?.cpt_id === null) {
+      setErrorData({ ...errorData, cpt_id: "Please Enter a Valid Partner Type" })
       return
     }
     setisLoading(true);
@@ -285,16 +295,16 @@ const AddUserScreen = () => {
       },
     };
 
-    
+
 
     try {
-      let updatedInfo={...userInfo,isAssigned:true}
-      if( userInfo?.role_id=="3"){
-        updatedInfo = { ...userInfo, report_to:userInfoCheck?.user_id }
+      let updatedInfo = { ...userInfo, isAssigned: true }
+      if (userInfo?.role_id == "3") {
+        updatedInfo = { ...userInfo, report_to: userInfoCheck?.user_id }
       }
       const response = await axios.put(`${Baseurl}/db/users`, updatedInfo, header);
       if (response.status === 200 || response.status === 201) {
-        toast.success(response?.data?.message,{autoClose:2500});
+        toast.success(response?.data?.message, { autoClose: 2500 });
         if (uploadDocs.aadhar)
           AddUploadPicture(
             updtUId,
@@ -334,9 +344,9 @@ const AddUserScreen = () => {
         setErrorData(taskObject);
       }
       if (error?.response?.data?.message) {
-        toast.error(error?.response?.data?.message,{autoClose:2500});
+        toast.error(error?.response?.data?.message, { autoClose: 2500 });
       } else {
-        toast.error("Something went wrong!",{autoClose:2500});
+        toast.error("Something went wrong!", { autoClose: 2500 });
       }
       setisLoading(false);
     }
@@ -371,7 +381,7 @@ const AddUserScreen = () => {
         requestOptions
       );
       const result = await response.text();
-      toast.info(result?.message,{autoClose:2500});
+      toast.info(result?.message, { autoClose: 2500 });
     } catch (error) {
       console.log("error", error);
     }
@@ -391,16 +401,16 @@ const AddUserScreen = () => {
     const acceptedImageTypes = ['image/png', 'image/jpg', 'image/jpeg'];
 
     if (files.length > 0 && acceptedImageTypes.includes(files[0].type)) {
-        const ImagesArray = Array.from(files).map((file) =>
-            URL.createObjectURL(file)
-        );
-        userInfo.client_logo = ImagesArray[0];
-        setuserImage(files);
-        setImgFile(ImagesArray);
+      const ImagesArray = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
+      userInfo.client_logo = ImagesArray[0];
+      setuserImage(files);
+      setImgFile(ImagesArray);
     } else {
-        toast.error('Please upload a valid image file (PNG, JPG, JPEG)',{autoClose:2500});
+      toast.error('Please upload a valid image file (PNG, JPG, JPEG)', { autoClose: 2500 });
     }
-};
+  };
 
 
 
@@ -419,7 +429,7 @@ const AddUserScreen = () => {
       reader.onloadend = () => {
         setoldFiles({
           ...oldFiles,
-          [type]:null
+          [type]: null
         })
         setuploadDocs((prevUploadDocs) => ({
           ...prevUploadDocs,
@@ -427,32 +437,32 @@ const AddUserScreen = () => {
           [previewType]: reader.result,
         }));
       };
-      
+
       reader.readAsDataURL(e.target.files[0]);
     }
   };
 
   const userListFilterBasisOfRole = (selectedOption, usersList) => {
     if (selectedOption == "1") {
-        return [{ value: userInfo?.user_id, label: "N.A" },...usersList
-            ?.filter(user => user.role_id === 2 || user.role_id === 3)
-            ?.map(data => ({
-                value: data?.user_id,
-                label: data?.user,
-            }))];
+      return [{ value: userInfo?.user_id, label: "N.A" }, ...usersList
+        ?.filter(user => user.role_id === 2 || user.role_id === 3)
+        ?.map(data => ({
+          value: data?.user_id,
+          label: data?.user,
+        }))];
     }
     if (selectedOption == "2") {
-        return [{ value: userInfo?.user_id, label: "N.A" },...usersList
-            ?.filter(user => user.role_id === 3)
-            ?.map(data => ({
-                value: data?.user_id,
-                label: data?.user,
-            }))];
+      return [{ value: userInfo?.user_id, label: "N.A" }, ...usersList
+        ?.filter(user => user.role_id === 3)
+        ?.map(data => ({
+          value: data?.user_id,
+          label: data?.user,
+        }))];
     }
     // If no match, return an empty array
     return [];
-};
-  
+  };
+
 
   useEffect(() => {
     checkCurrentImg();
@@ -466,6 +476,7 @@ const AddUserScreen = () => {
     getDesignation();
     getCountryList();
     getPartnerTypes()
+    getCpCategoryList()
   }, []);
 
   useEffect(() => {
@@ -494,7 +505,7 @@ const AddUserScreen = () => {
   }, [router.isReady, id]);
 
   return (
-    <div className={`main_Box w-100 pe-5 mt-3 `} style={{marginTop:"-50px"}}>
+    <div className={`main_Box w-100 pe-5 mt-3 `} style={{ marginTop: "-50px" }}>
 
       <div className="main_content w-100">
         <div className="Add_user_screen">
@@ -535,7 +546,7 @@ const AddUserScreen = () => {
                         value={userInfo.role_id ? userInfo.role_id : ""}
                       >
                         <option value="">Select User Profile </option>
-                        {userroles?.filter(item=>item?.role_id<4)?.map(({ role_id, role_name }) => {
+                        {userroles?.filter(item => item?.role_id < 4)?.map(({ role_id, role_name }) => {
                           return (
                             <option key={role_id} value={role_id}>
                               {role_name}
@@ -549,52 +560,52 @@ const AddUserScreen = () => {
                       </span>
                     </div>
                   </div>
-                  
+
                   {
-                    userInfo?.role_id=="1" && (
+                    userInfo?.role_id == "1" && (
                       <div className="col-xl-5 col-md-5 col-sm-12 col-12">
-                    <div
-                      className={
-                        errorData?.cpt_id ? "input_box errorBox" : "input_box"
-                      }
-                    >
-                      <label htmlFor="profilelevel">Partner Type *</label>
-                      <select
-                        className={
-                          errorData?.cpt_id
-                            ? "form-control is-invalid"
-                            : "form-control"
-                        }
-                        name="profilelevel"
-                        id="profilelevel"
-                        disabled={viewMode}
-                        onChange={(e) => {
-                          setUserinfo({
-                            ...userInfo,
-                            cpt_id: parseInt(e.target.value),
-                          });
-                          setErrorData({ ...errorData, cpt_id: "" });
-                        }}
-                        value={userInfo.cpt_id ? userInfo.cpt_id : ""}
-                      >
-                        <option value="">Select Partner Type </option>
-                        {partnerTypes?.map(({ cpt_id, name }) => {
-                          return (
-                            <option key={cpt_id} value={cpt_id}>
-                              {name}
-                            </option>
-                          );
-                        })}
-                      </select>
-                      <span className="errorText">
-                        {" "}
-                        {errorData?.cpt_id ? errorData.cpt_id : ""}
-                      </span>
-                    </div>
-                  </div>
+                        <div
+                          className={
+                            errorData?.cpt_id ? "input_box errorBox" : "input_box"
+                          }
+                        >
+                          <label htmlFor="profilelevel">Partner Type *</label>
+                          <select
+                            className={
+                              errorData?.cpt_id
+                                ? "form-control is-invalid"
+                                : "form-control"
+                            }
+                            name="profilelevel"
+                            id="profilelevel"
+                            disabled={viewMode}
+                            onChange={(e) => {
+                              setUserinfo({
+                                ...userInfo,
+                                cpt_id: parseInt(e.target.value),
+                              });
+                              setErrorData({ ...errorData, cpt_id: "" });
+                            }}
+                            value={userInfo.cpt_id ? userInfo.cpt_id : ""}
+                          >
+                            <option value="">Select Partner Type </option>
+                            {partnerTypes?.map(({ cpt_id, name }) => {
+                              return (
+                                <option key={cpt_id} value={cpt_id}>
+                                  {name}
+                                </option>
+                              );
+                            })}
+                          </select>
+                          <span className="errorText">
+                            {" "}
+                            {errorData?.cpt_id ? errorData.cpt_id : ""}
+                          </span>
+                        </div>
+                      </div>
                     )
                   }
-                  
+
 
                 </div>
                 <div className="row">
@@ -623,28 +634,28 @@ const AddUserScreen = () => {
                         value={userInfo.user ? userInfo.user : ""}
                       /> */}
                       <input
-                            type="text"
-                            placeholder="Enter User Name"
-                            name="name"
-                            id="firstName"
-                            className={
-                              errorData?.user
-                                ? "form-control is-invalid"
-                                : "form-control"
-                            }
-                            onChange={(e) => {
-                              const value = e.target.value;
-                              // Allow only alphabetic characters and spaces
-                              if (/^[A-Za-z\s]*$/.test(value)) {
-                                setUserinfo({ ...userInfo, user: value });
-                                setErrorData({ ...errorData, user: "" });
-                              } else {
-                                setErrorData({ ...errorData, user: "Only alphabetic characters are allowed" });
-                              }
-                            }}
-                            disabled={viewMode}
-                            value={userInfo.user ? userInfo.user : ""}
-                          />
+                        type="text"
+                        placeholder="Enter User Name"
+                        name="name"
+                        id="firstName"
+                        className={
+                          errorData?.user
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Allow only alphabetic characters and spaces
+                          if (/^[A-Za-z\s]*$/.test(value)) {
+                            setUserinfo({ ...userInfo, user: value });
+                            setErrorData({ ...errorData, user: "" });
+                          } else {
+                            setErrorData({ ...errorData, user: "Only alphabetic characters are allowed" });
+                          }
+                        }}
+                        disabled={viewMode}
+                        value={userInfo.user ? userInfo.user : ""}
+                      />
 
                       <span className="errorText">
                         {" "}
@@ -677,28 +688,28 @@ const AddUserScreen = () => {
                         value={userInfo.user_l_name ? userInfo.user_l_name : ""}
                       /> */}
                       <input
-                          type="text"
-                          placeholder="Enter User Name"
-                          name="name"
-                          id="firstName"
-                          className={
-                            errorData?.user_l_name
-                              ? "form-control is-invalid"
-                              : "form-control"
+                        type="text"
+                        placeholder="Enter User Name"
+                        name="name"
+                        id="firstName"
+                        className={
+                          errorData?.user_l_name
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          // Allow only alphabetic characters and spaces
+                          if (/^[A-Za-z\s]*$/.test(value)) {
+                            setUserinfo({ ...userInfo, user_l_name: value });
+                            setErrorData({ ...errorData, user_l_name: "" });
+                          } else {
+                            setErrorData({ ...errorData, user_l_name: "Only alphabetic characters are allowed" });
                           }
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            // Allow only alphabetic characters and spaces
-                            if (/^[A-Za-z\s]*$/.test(value)) {
-                              setUserinfo({ ...userInfo, user_l_name: value });
-                              setErrorData({ ...errorData, user_l_name: "" });
-                            } else {
-                              setErrorData({ ...errorData, user_l_name: "Only alphabetic characters are allowed" });
-                            }
-                          }}
-                          disabled={viewMode}
-                          value={userInfo.user_l_name ? userInfo.user_l_name : ""}
-                        />
+                        }}
+                        disabled={viewMode}
+                        value={userInfo.user_l_name ? userInfo.user_l_name : ""}
+                      />
 
                       <span className="errorText">
                         {" "}
@@ -738,31 +749,31 @@ const AddUserScreen = () => {
                         }
                       /> */}
                       <input
-                          type="text"
-                          pattern="\d{10}"
-                          placeholder="Enter Contact No."
-                          name="contact-no"
-                          id="contact_no"
-                          className={
-                            errorData?.contact_number
-                              ? "form-control is-invalid"
-                              : "form-control"
+                        type="text"
+                        pattern="\d{10}"
+                        placeholder="Enter Contact No."
+                        name="contact-no"
+                        id="contact_no"
+                        className={
+                          errorData?.contact_number
+                            ? "form-control is-invalid"
+                            : "form-control"
+                        }
+                        disabled={viewMode}
+                        onChange={(e) => {
+                          const value = e.target.value;
+                          if (/^\d{0,10}$/.test(value)) {
+                            setUserinfo({
+                              ...userInfo,
+                              contact_number: value,
+                            });
+                            setErrorData({ ...errorData, contact_number: "" });
                           }
-                          disabled={viewMode}
-                          onChange={(e) => {
-                            const value = e.target.value;
-                            if (/^\d{0,10}$/.test(value)) {
-                              setUserinfo({
-                                ...userInfo,
-                                contact_number: value,
-                              });
-                              setErrorData({ ...errorData, contact_number: "" });
-                            }
-                          }}
-                          value={
-                            userInfo.contact_number ? userInfo.contact_number : ""
-                          }
-                        />
+                        }}
+                        value={
+                          userInfo.contact_number ? userInfo.contact_number : ""
+                        }
+                      />
 
                       <span className="errorText">
                         {" "}
@@ -822,124 +833,124 @@ const AddUserScreen = () => {
                   </div>
 
                   <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div className="input_box">
-                    <label htmlFor="pan_card">Organisation </label>
-                    <input
-                      type="text"
-                      placeholder="Enter Organisation Name."
-                      name="organisation"
-                      id="organisation"
-                      disabled={viewMode}
-                      className="form-control"
-                      onChange={(e) =>
-                        setUserinfo({
-                          ...userInfo,
-                          organisation: e.target.value,
-                        })
-                      }
-                      value={userInfo.organisation ? userInfo.organisation : ""}
-                    />
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div className="input_box">
-                    <label htmlFor="pan_card">GST Number </label>
-                    <input
-                      type="text"
-                      placeholder="Enter GST No."
-                      name="gst"
-                      id="gst"
-                      disabled={viewMode}
-                      className="form-control"
-                      onChange={(e) =>
-                        setUserinfo({
-                          ...userInfo,
-                          gst: e.target.value,
-                        })
-                      }
-                      value={userInfo.gst ? userInfo.gst : ""}
-                    />
-                  </div>
-                </div>
-                  {
-                    (userInfo?.role_id=="1" || userInfo?.role_id=="2" ) && (
-                      <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                      <div
-                        className={
-                          errorData?.report_to ? "input_box errorBox" : "input_box"
+                    <div className="input_box">
+                      <label htmlFor="pan_card">Organisation </label>
+                      <input
+                        type="text"
+                        placeholder="Enter Organisation Name."
+                        name="organisation"
+                        id="organisation"
+                        disabled={viewMode}
+                        className="form-control"
+                        onChange={(e) =>
+                          setUserinfo({
+                            ...userInfo,
+                            organisation: e.target.value,
+                          })
                         }
-                      >
-                        <label htmlFor="task_name">Report/Assign To  </label>
-                        <Select
-                          id={userInfo.des_id}
-                          defaultValue={""}
-                          isDisabled={viewMode}
-                        //   options={[{ value: null, label: "N.A" },...usersList?.filter(user => (user.role_id === 2||user.role_id === 3)).map((data) => {
-                        //     return {
-                        //         value: data?.user_id,
-                        //         label: data?.user,
-                        //     };
-                        // })]}
-                        options={userListFilterBasisOfRole(userInfo?.role_id,usersList)}
-                          value={usersList
-                            ?.map((data, index) => {
-                            if (userInfo.report_to == data.user_id) {
-                              return {
-                                value: data?.user_id,
-                                label: data?.user,
-                              };
-                            }
-                          })}
-                          onChange={(e) => {
-                            setUserinfo({ ...userInfo, report_to: e.value });
-                            setErrorData({ ...errorData, report_to: "" });
-                          }}
-                        />
-                        <span className="errorText">
-                          {" "}
-                          {errorData?.report_to ? errorData.report_to : ""}
-                        </span>
-                      </div>
+                        value={userInfo.organisation ? userInfo.organisation : ""}
+                      />
                     </div>
+                  </div>
+
+                  <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                    <div className="input_box">
+                      <label htmlFor="pan_card">GST Number </label>
+                      <input
+                        type="text"
+                        placeholder="Enter GST No."
+                        name="gst"
+                        id="gst"
+                        disabled={viewMode}
+                        className="form-control"
+                        onChange={(e) =>
+                          setUserinfo({
+                            ...userInfo,
+                            gst: e.target.value,
+                          })
+                        }
+                        value={userInfo.gst ? userInfo.gst : ""}
+                      />
+                    </div>
+                  </div>
+                  {
+                    (userInfo?.role_id == "1" || userInfo?.role_id == "2") && (
+                      <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                        <div
+                          className={
+                            errorData?.report_to ? "input_box errorBox" : "input_box"
+                          }
+                        >
+                          <label htmlFor="task_name">Report/Assign To  </label>
+                          <Select
+                            id={userInfo.des_id}
+                            defaultValue={""}
+                            isDisabled={viewMode}
+                            //   options={[{ value: null, label: "N.A" },...usersList?.filter(user => (user.role_id === 2||user.role_id === 3)).map((data) => {
+                            //     return {
+                            //         value: data?.user_id,
+                            //         label: data?.user,
+                            //     };
+                            // })]}
+                            options={userListFilterBasisOfRole(userInfo?.role_id, usersList)}
+                            value={usersList
+                              ?.map((data, index) => {
+                                if (userInfo.report_to == data.user_id) {
+                                  return {
+                                    value: data?.user_id,
+                                    label: data?.user,
+                                  };
+                                }
+                              })}
+                            onChange={(e) => {
+                              setUserinfo({ ...userInfo, report_to: e.value });
+                              setErrorData({ ...errorData, report_to: "" });
+                            }}
+                          />
+                          <span className="errorText">
+                            {" "}
+                            {errorData?.report_to ? errorData.report_to : ""}
+                          </span>
+                        </div>
+                      </div>
                     )
                   }
-                
+
 
                 </div>
               </div>
               <div className="col-xl-2 col-md-2 col-sm-12 col-12 relative">
-              {
-                      imgMode==="1" &&(
-                        <span style={{position:"absolute",top:"20px",right:"30px"}} onClick={()=>{
-                          setImgMode("3")
-                          setImgFile("")
-                        }
-                        
-                          } >
-                            <Delete style={{color: 'red',cursor:"pointer"}}/>
-                        </span>
-                      )
-                    }
                 {
-                      imgMode==="2" &&(
-                        <span style={{position:"absolute",top:"20px",right:"30px"}} onClick={()=>{
-                          setImgMode("3")
-                          setImgFile("")
-                          setUserinfo((prev)=>({
-                            ...prev,
-                            user_image_file:""
-                          }))
-                        }
-                        
-                          } >
-                            <Delete style={{color: 'red',cursor:"pointer"}}/>
-                        </span>
-                      )
+                  imgMode === "1" && (
+                    <span style={{ position: "absolute", top: "20px", right: "30px" }} onClick={() => {
+                      setImgMode("3")
+                      setImgFile("")
                     }
+
+                    } >
+                      <Delete style={{ color: 'red', cursor: "pointer" }} />
+                    </span>
+                  )
+                }
+                {
+                  imgMode === "2" && (
+                    <span style={{ position: "absolute", top: "20px", right: "30px" }} onClick={() => {
+                      setImgMode("3")
+                      setImgFile("")
+                      setUserinfo((prev) => ({
+                        ...prev,
+                        user_image_file: ""
+                      }))
+                    }
+
+                    } >
+                      <Delete style={{ color: 'red', cursor: "pointer" }} />
+                    </span>
+                  )
+                }
                 <div className="img_sec">
                   <label htmlFor="uploadImg" title="Upload Logo">
-                    
+
                     {imgMode === "1" ? (
                       <img src={imgFile} alt="logo" width="100%" />
                     ) : null}
@@ -952,7 +963,7 @@ const AddUserScreen = () => {
                             alt="logo"
                             width="100%"
                           />
-                          
+
                         ) : (
                           <>
                             <div className="img_holder">
@@ -977,9 +988,9 @@ const AddUserScreen = () => {
               </div>
             </div>
             <div className="row">
-              
 
-              
+
+
 
               <div className="col-xl-3 col-md-3 col-lg-3 col-sm-12  mb-3">
                 <div className="d-flex flex-column gap-1">
@@ -987,22 +998,22 @@ const AddUserScreen = () => {
                   <input
                     type="file"
                     onChange={(e) => {
-                      handleImageChange(e,"aadhar",'aadharPreview')
+                      handleImageChange(e, "aadhar", 'aadharPreview')
                     }}
                     className="form-control input-field"
                     disabled={viewMode}
                   />
                   {oldFiles?.aadhar && (
                     <Link href={`${filesUrl}/adh/images${oldFiles.aadhar}`} target="_blank">
-                    <img
-                      src={`${filesUrl}/adh/images${oldFiles.aadhar}`}
-                      alt={`Aadhar Card Preview`}
-                      style={{
-                        maxWidth: "100px",
-                        maxHeight: "100px",
-                        
-                      }}
-                    />
+                      <img
+                        src={`${filesUrl}/adh/images${oldFiles.aadhar}`}
+                        alt={`Aadhar Card Preview`}
+                        style={{
+                          maxWidth: "100px",
+                          maxHeight: "100px",
+
+                        }}
+                      />
                     </Link>
                   )}
                   {uploadDocs?.aadharPreview && (
@@ -1024,21 +1035,21 @@ const AddUserScreen = () => {
                   <input
                     type="file"
                     onChange={(e) => {
-                      handleImageChange(e,'pan','panPreview')
+                      handleImageChange(e, 'pan', 'panPreview')
                     }}
                     className="form-control input-field"
                     disabled={viewMode}
                   />
                   {oldFiles?.pan && (
                     <Link target="_blank" href={`${filesUrl}/pan/images${oldFiles.pan}`}>
-                    <img
-                      src={`${filesUrl}/pan/images${oldFiles.pan}`}
-                      alt={`PAN CARD Preview`}
-                      style={{
-                        maxWidth: "100px",
-                        maxHeight: "100px",
-                      }}
-                    />
+                      <img
+                        src={`${filesUrl}/pan/images${oldFiles.pan}`}
+                        alt={`PAN CARD Preview`}
+                        style={{
+                          maxWidth: "100px",
+                          maxHeight: "100px",
+                        }}
+                      />
                     </Link>
                   )}
                   {uploadDocs?.panPreview && (
@@ -1060,7 +1071,7 @@ const AddUserScreen = () => {
                   <input
                     type="file"
                     onChange={(e) => {
-                      handleImageChange(e,'rera','reraPreview')
+                      handleImageChange(e, 'rera', 'reraPreview')
                     }}
                     className="form-control input-field"
                     disabled={viewMode}
@@ -1077,7 +1088,7 @@ const AddUserScreen = () => {
                       />
                     </Link>
                   )}
-                   {uploadDocs?.reraPreview && (
+                  {uploadDocs?.reraPreview && (
                     <img
                       src={uploadDocs.reraPreview}
                       alt={`RERA License Preview`}
@@ -1096,7 +1107,7 @@ const AddUserScreen = () => {
                   <input
                     type="file"
                     onChange={(e) => {
-                      handleImageChange(e,'cheque','chequePreview')
+                      handleImageChange(e, 'cheque', 'chequePreview')
                     }}
                     className="form-control input-field"
                     disabled={viewMode}
@@ -1126,108 +1137,108 @@ const AddUserScreen = () => {
                 </div>
               </div>
               <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div
-                    className={
-                      errorData?.mailing_cont
-                        ? "input_box errorBox"
-                        : "input_box"
-                    }
-                  >
-                    <label htmlFor="task_name"> Country</label>
-                    <Select
-                      id={userInfo.country_id}
-                      defaultValue={""}
-                      isDisabled={viewMode}
-                      options={countrylist?.map((data, index) => {
+                <div
+                  className={
+                    errorData?.mailing_cont
+                      ? "input_box errorBox"
+                      : "input_box"
+                  }
+                >
+                  <label htmlFor="task_name"> Country</label>
+                  <Select
+                    id={userInfo.country_id}
+                    defaultValue={""}
+                    isDisabled={viewMode}
+                    options={countrylist?.map((data, index) => {
+                      return {
+                        value: data?.country_id,
+                        label: data?.country_name,
+                      };
+                    })}
+                    value={countrylist?.map((data, index) => {
+                      if (userInfo.country_id === data.country_id) {
                         return {
                           value: data?.country_id,
                           label: data?.country_name,
                         };
-                      })}
-                      value={countrylist?.map((data, index) => {
-                        if (userInfo.country_id === data.country_id) {
-                          return {
-                            value: data?.country_id,
-                            label: data?.country_name,
-                          };
-                        }
-                      })}
-                      onChange={(e) =>
-                        setUserinfo({ ...userInfo, country_id: e.value })
                       }
-                    />
-                    <span className="errorText">
-                      {" "}
-                      {errorData?.country_id ? errorData.country_id : ""}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div
-                    className={
-                      errorData?.state_id ? "input_box errorBox" : "input_box"
+                    })}
+                    onChange={(e) =>
+                      setUserinfo({ ...userInfo, country_id: e.value })
                     }
-                  >
-                    <label htmlFor="task_name"> State</label>
-                    <Select
-                      id={userInfo.state_id}
-                      defaultValue={""}
-                      isDisabled={viewMode}
-                      options={statelist?.map((data, index) => {
+                  />
+                  <span className="errorText">
+                    {" "}
+                    {errorData?.country_id ? errorData.country_id : ""}
+                  </span>
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                <div
+                  className={
+                    errorData?.state_id ? "input_box errorBox" : "input_box"
+                  }
+                >
+                  <label htmlFor="task_name"> State</label>
+                  <Select
+                    id={userInfo.state_id}
+                    defaultValue={""}
+                    isDisabled={viewMode}
+                    options={statelist?.map((data, index) => {
+                      return {
+                        value: data?.state_id,
+                        label: data?.state_name,
+                      };
+                    })}
+                    value={statelist?.map((data, index) => {
+                      if (userInfo.state_id === data.state_id) {
                         return {
                           value: data?.state_id,
                           label: data?.state_name,
                         };
-                      })}
-                      value={statelist?.map((data, index) => {
-                        if (userInfo.state_id === data.state_id) {
-                          return {
-                            value: data?.state_id,
-                            label: data?.state_name,
-                          };
-                        }
-                      })}
-                      onChange={(e) =>
-                        setUserinfo({ ...userInfo, state_id: e.value })
                       }
-                    />
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div
-                    className={
-                      errorData?.state_id ? "input_box errorBox" : "input_box"
+                    })}
+                    onChange={(e) =>
+                      setUserinfo({ ...userInfo, state_id: e.value })
                     }
-                  >
-                    <label htmlFor="task_name"> City </label>
-                    <Select
-                      id={userInfo.city_id}
-                      defaultValue={""}
-                      isDisabled={viewMode}
-                      options={citylist?.map((data, index) => {
+                  />
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                <div
+                  className={
+                    errorData?.state_id ? "input_box errorBox" : "input_box"
+                  }
+                >
+                  <label htmlFor="task_name"> City </label>
+                  <Select
+                    id={userInfo.city_id}
+                    defaultValue={""}
+                    isDisabled={viewMode}
+                    options={citylist?.map((data, index) => {
+                      return {
+                        value: data?.city_id,
+                        label: data?.city_name,
+                      };
+                    })}
+                    value={citylist?.map((data, index) => {
+                      if (userInfo.city_id === data.city_id) {
                         return {
                           value: data?.city_id,
                           label: data?.city_name,
                         };
-                      })}
-                      value={citylist?.map((data, index) => {
-                        if (userInfo.city_id === data.city_id) {
-                          return {
-                            value: data?.city_id,
-                            label: data?.city_name,
-                          };
-                        }
-                      })}
-                      onChange={(e) =>
-                        setUserinfo({ ...userInfo, city_id: e.value })
                       }
-                    />
-                  </div>
+                    })}
+                    onChange={(e) =>
+                      setUserinfo({ ...userInfo, city_id: e.value })
+                    }
+                  />
                 </div>
+              </div>
 
-                <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+              <div className="col-xl-3 col-md-3 col-sm-12 col-12">
                 <div
                   className={
                     errorData?.lead_id ? "input_box errorBox" : "input_box"
@@ -1325,47 +1336,80 @@ const AddUserScreen = () => {
                   />
                 </div>
               </div>
-
-            </div>
-            
-            
-            {
-              hasCookie("channel") && userInfoCheck?.role_id==null && (
-                <div className="text-end">
-                <div className="submit_btn">
-                  <Link href="/partner/ActivePartners">
-                    <button className=" btn btn-danger rounded-2 me-2">Cancel</button>
-                  </Link>
-                  {
-                    editMode ?  null: viewMode ?(<Link href={`/partner/EditActiveUsers?id=${userInfo.user_code}&mode=edit`}>
-                    <button className="btn btn-cancel text-white me-2 " style={{background:`${clientBtnColor}` }}>Edit</button>
-                  </Link>) : null
+              {/* CP Category */}
+              <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                <div
+                  className={
+                    errorData?.des_id ? "input_box errorBox" : "input_box"
                   }
-                  {editMode ? (
-                    <button
-                      disabled={isLoading}
-                      className="btn text-white"
-                      onClick={updateUserhandler}
-                      style={{background:`${clientBtnColor}` }}
-                    >
-                      {isLoading ? "Loading..." : "Update"}
-                    </button>
-                  ) : viewMode ? null : (
-                    <button
-                      disabled={isLoading}
-                      className="btn text-white"
-                      onClick={addUserHandler}
-                      style={{background:`${clientBtnColor}` }}
-  
-                    >
-                      {isLoading ? "Loading..." : "Save & Submit"}
-                    </button>
-                  )}
+                >
+                  <label htmlFor="task_name">CP Category</label>
+                  <Select
+                    id={userInfo.des_id}
+                    defaultValue={""}
+                    isDisabled={viewMode}
+                    options={cpCategory?.map((data, index) => {
+                      return {
+                        value: data?.des_id,
+                        label: data?.cpCategory,
+                      };
+                    })}
+                    value={cpCategory?.map((data, index) => {
+                      if (userInfo.des_id === data.des_id) {
+                        return {
+                          value: data?.des_id,
+                          label: data?.cpCategory,
+                        };
+                      }
+                    })}
+                    onChange={(e) =>
+                      setUserinfo({ ...userInfo, des_id: e.value })
+                    }
+                  />
                 </div>
               </div>
+
+
+            </div>
+
+
+            {
+              hasCookie("channel") && userInfoCheck?.role_id == null && (
+                <div className="text-end">
+                  <div className="submit_btn">
+                    <Link href="/partner/ActivePartners">
+                      <button className=" btn btn-danger rounded-2 me-2">Cancel</button>
+                    </Link>
+                    {
+                      editMode ? null : viewMode ? (<Link href={`/partner/EditActiveUsers?id=${userInfo.user_code}&mode=edit`}>
+                        <button className="btn btn-cancel text-white me-2 " style={{ background: `${clientBtnColor}` }}>Edit</button>
+                      </Link>) : null
+                    }
+                    {editMode ? (
+                      <button
+                        disabled={isLoading}
+                        className="btn text-white"
+                        onClick={updateUserhandler}
+                        style={{ background: `${clientBtnColor}` }}
+                      >
+                        {isLoading ? "Loading..." : "Update"}
+                      </button>
+                    ) : viewMode ? null : (
+                      <button
+                        disabled={isLoading}
+                        className="btn text-white"
+                        onClick={addUserHandler}
+                        style={{ background: '#293790', cursor: 'pointer' }}   //`${clientBtnColor}`
+
+                      >
+                        {isLoading ? "Loading..." : "Save & Submit"}
+                      </button>
+                    )}
+                  </div>
+                </div>
               )
             }
-            
+
           </div>
         </div>
       </div>

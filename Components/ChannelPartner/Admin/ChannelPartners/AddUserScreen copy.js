@@ -44,13 +44,13 @@ const AddUserScreen = () => {
     pan: null,
     rera: null,
     cheque: null,
-    aadharPreview:null,
-    panPreview:null,
-    reraPreview:null,
-    chequePreview:null,
+    aadharPreview: null,
+    panPreview: null,
+    reraPreview: null,
+    chequePreview: null,
   });
-  const clientBtnColor=hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#405189"
-  const userInfoCheck=hasCookie("userInfo")?JSON.parse(getCookie("userInfo")):null;
+  const clientBtnColor = hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#405189"
+  const userInfoCheck = hasCookie("userInfo") ? JSON.parse(getCookie("userInfo")) : null;
 
 
 
@@ -165,10 +165,10 @@ const AddUserScreen = () => {
         account_no: data2?.account_no,
         bank_ifsc_code: data2?.bank_ifsc_code,
         branch: data2?.branch,
-        isCRM:data1?.db_user_platforms[0].actions,
-        isDMS:data1?.db_user_platforms[1].actions,
-        isSALES:data1?.db_user_platforms[2].actions,
-        isCHANNEL:data1?.db_user_platforms[3].actions
+        isCRM: data1?.db_user_platforms[0].actions,
+        isDMS: data1?.db_user_platforms[1].actions,
+        isSALES: data1?.db_user_platforms[2].actions,
+        isCHANNEL: data1?.db_user_platforms[3].actions
       });
 
       setoldFiles({
@@ -214,7 +214,7 @@ const AddUserScreen = () => {
         if (uploadDocs.rera)
           AddUploadPicture(userId, "rera", uploadDocs.rera[0], 0);
         if (uploadDocs.cheque)
-        AddUploadPicture(userId, "cheque", uploadDocs.cheque[0], 0);
+          AddUploadPicture(userId, "cheque", uploadDocs.cheque[0], 0);
         if (userImage) AddUploadPicture(userId, "lsUser", userImage[0], 0);
         setisLoading(false);
         router.push("/partner/ActivePartners");
@@ -367,7 +367,7 @@ const AddUserScreen = () => {
       reader.onloadend = () => {
         setoldFiles({
           ...oldFiles,
-          [type]:null
+          [type]: null
         })
         setuploadDocs((prevUploadDocs) => ({
           ...prevUploadDocs,
@@ -375,11 +375,11 @@ const AddUserScreen = () => {
           [previewType]: reader.result,
         }));
       };
-      
+
       reader.readAsDataURL(e.target.files[0]);
     }
   };
-  
+
 
   useEffect(() => {
     checkCurrentImg();
@@ -420,7 +420,7 @@ const AddUserScreen = () => {
   }, [router.isReady, id]);
 
   return (
-    <div className={`main_Box w-100 pe-5 mt-3 `} style={{marginTop:"-50px"}}>
+    <div className={`main_Box w-100 pe-5 mt-3 `} style={{ marginTop: "-50px" }}>
 
       <div className="main_content w-100">
         <div className="Add_user_screen">
@@ -522,7 +522,7 @@ const AddUserScreen = () => {
                         className={
                           errorData?.user
                             ? "form-control is-invalid"
-                            : "form-control"  
+                            : "form-control"
                         }
                         onChange={(e) => {
                           setUserinfo({ ...userInfo, user_l_name: e.target.value });
@@ -626,83 +626,83 @@ const AddUserScreen = () => {
                   </div>
 
                   <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div className="input_box">
-                    <label htmlFor="pan_card">Organisation </label>
-                    <input
-                      type="text"
-                      placeholder="Enter Organisation Name."
-                      name="organisation"
-                      id="organisation"
-                      disabled={viewMode}
-                      className="form-control"
-                      onChange={(e) =>
-                        setUserinfo({
-                          ...userInfo,
-                          organisation: e.target.value,
-                        })
-                      }
-                      value={userInfo.organisation ? userInfo.organisation : ""}
-                    />
+                    <div className="input_box">
+                      <label htmlFor="pan_card">Organisation </label>
+                      <input
+                        type="text"
+                        placeholder="Enter Organisation Name."
+                        name="organisation"
+                        id="organisation"
+                        disabled={viewMode}
+                        className="form-control"
+                        onChange={(e) =>
+                          setUserinfo({
+                            ...userInfo,
+                            organisation: e.target.value,
+                          })
+                        }
+                        value={userInfo.organisation ? userInfo.organisation : ""}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div className="input_box">
-                    <label htmlFor="pan_card">GST Number </label>
-                    <input
-                      type="text"
-                      placeholder="Enter GST No."
-                      name="gst"
-                      id="gst"
-                      disabled={viewMode}
-                      className="form-control"
-                      onChange={(e) =>
-                        setUserinfo({
-                          ...userInfo,
-                          gst: e.target.value,
-                        })
-                      }
-                      value={userInfo.gst ? userInfo.gst : ""}
-                    />
+                  <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                    <div className="input_box">
+                      <label htmlFor="pan_card">GST Number </label>
+                      <input
+                        type="text"
+                        placeholder="Enter GST No."
+                        name="gst"
+                        id="gst"
+                        disabled={viewMode}
+                        className="form-control"
+                        onChange={(e) =>
+                          setUserinfo({
+                            ...userInfo,
+                            gst: e.target.value,
+                          })
+                        }
+                        value={userInfo.gst ? userInfo.gst : ""}
+                      />
+                    </div>
                   </div>
-                </div>
 
-                <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                <div
-                  className={
-                    errorData?.report_to ? "input_box errorBox" : "input_box"
-                  }
-                >
-                  <label htmlFor="task_name">Report/Assign To  </label>
-                  <Select
-                    id={userInfo.des_id}
-                    defaultValue={""}
-                    isDisabled={viewMode}
-                    options={usersList?.map((data, index) => {
-                      return {
-                        value: data?.user_id,
-                        label: data?.user,
-                      };
-                    })}
-                    value={usersList?.map((data, index) => {
-                      if (userInfo.report_to === data.user_id) {
-                        return {
-                          value: data?.user_id,
-                          label: data?.user,
-                        };
+                  <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                    <div
+                      className={
+                        errorData?.report_to ? "input_box errorBox" : "input_box"
                       }
-                    })}
-                    onChange={(e) => {
-                      setUserinfo({ ...userInfo, report_to: e.value });
-                      setErrorData({ ...errorData, report_to: "" });
-                    }}
-                  />
-                  <span className="errorText">
-                    {" "}
-                    {errorData?.report_to ? errorData.report_to : ""}
-                  </span>
-                </div>
-              </div>
+                    >
+                      <label htmlFor="task_name">Report/Assign To  </label>
+                      <Select
+                        id={userInfo.des_id}
+                        defaultValue={""}
+                        isDisabled={viewMode}
+                        options={usersList?.map((data, index) => {
+                          return {
+                            value: data?.user_id,
+                            label: data?.user,
+                          };
+                        })}
+                        value={usersList?.map((data, index) => {
+                          if (userInfo.report_to === data.user_id) {
+                            return {
+                              value: data?.user_id,
+                              label: data?.user,
+                            };
+                          }
+                        })}
+                        onChange={(e) => {
+                          setUserinfo({ ...userInfo, report_to: e.value });
+                          setErrorData({ ...errorData, report_to: "" });
+                        }}
+                      />
+                      <span className="errorText">
+                        {" "}
+                        {errorData?.report_to ? errorData.report_to : ""}
+                      </span>
+                    </div>
+                  </div>
 
                 </div>
               </div>
@@ -745,9 +745,9 @@ const AddUserScreen = () => {
               </div>
             </div>
             <div className="row">
-              
 
-              
+
+
 
               <div className="col-xl-3 col-md-3 col-lg-3 col-sm-12  mb-3">
                 <div className="d-flex flex-column gap-1">
@@ -755,22 +755,22 @@ const AddUserScreen = () => {
                   <input
                     type="file"
                     onChange={(e) => {
-                      handleImageChange(e,"aadhar",'aadharPreview')
+                      handleImageChange(e, "aadhar", 'aadharPreview')
                     }}
                     className="form-control input-field"
                     disabled={viewMode}
                   />
                   {oldFiles?.aadhar && (
                     <Link href={`${filesUrl}/adh/images${oldFiles.aadhar}`} target="_blank">
-                    <img
-                      src={`${filesUrl}/adh/images${oldFiles.aadhar}`}
-                      alt={`Aadhar Card Preview`}
-                      style={{
-                        maxWidth: "100px",
-                        maxHeight: "100px",
-                        
-                      }}
-                    />
+                      <img
+                        src={`${filesUrl}/adh/images${oldFiles.aadhar}`}
+                        alt={`Aadhar Card Preview`}
+                        style={{
+                          maxWidth: "100px",
+                          maxHeight: "100px",
+
+                        }}
+                      />
                     </Link>
                   )}
                   {uploadDocs?.aadharPreview && (
@@ -792,21 +792,21 @@ const AddUserScreen = () => {
                   <input
                     type="file"
                     onChange={(e) => {
-                      handleImageChange(e,'pan','panPreview')
+                      handleImageChange(e, 'pan', 'panPreview')
                     }}
                     className="form-control input-field"
                     disabled={viewMode}
                   />
                   {oldFiles?.pan && (
                     <Link target="_blank" href={`${filesUrl}/pan/images${oldFiles.pan}`}>
-                    <img
-                      src={`${filesUrl}/pan/images${oldFiles.pan}`}
-                      alt={`PAN CARD Preview`}
-                      style={{
-                        maxWidth: "100px",
-                        maxHeight: "100px",
-                      }}
-                    />
+                      <img
+                        src={`${filesUrl}/pan/images${oldFiles.pan}`}
+                        alt={`PAN CARD Preview`}
+                        style={{
+                          maxWidth: "100px",
+                          maxHeight: "100px",
+                        }}
+                      />
                     </Link>
                   )}
                   {uploadDocs?.panPreview && (
@@ -828,7 +828,7 @@ const AddUserScreen = () => {
                   <input
                     type="file"
                     onChange={(e) => {
-                      handleImageChange(e,'rera','reraPreview')
+                      handleImageChange(e, 'rera', 'reraPreview')
                     }}
                     className="form-control input-field"
                     disabled={viewMode}
@@ -845,7 +845,7 @@ const AddUserScreen = () => {
                       />
                     </Link>
                   )}
-                   {uploadDocs?.reraPreview && (
+                  {uploadDocs?.reraPreview && (
                     <img
                       src={uploadDocs.reraPreview}
                       alt={`RERA License Preview`}
@@ -864,7 +864,7 @@ const AddUserScreen = () => {
                   <input
                     type="file"
                     onChange={(e) => {
-                      handleImageChange(e,'cheque','chequePreview')
+                      handleImageChange(e, 'cheque', 'chequePreview')
                     }}
                     className="form-control input-field"
                     disabled={viewMode}
@@ -894,146 +894,146 @@ const AddUserScreen = () => {
                 </div>
               </div>
               <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div
-                    className={
-                      errorData?.mailing_cont
-                        ? "input_box errorBox"
-                        : "input_box"
-                    }
-                  >
-                    <label htmlFor="task_name"> Country</label>
-                    <Select
-                      id={userInfo.country_id}
-                      defaultValue={""}
-                      isDisabled={viewMode}
-                      options={countrylist?.map((data, index) => {
+                <div
+                  className={
+                    errorData?.mailing_cont
+                      ? "input_box errorBox"
+                      : "input_box"
+                  }
+                >
+                  <label htmlFor="task_name"> Country</label>
+                  <Select
+                    id={userInfo.country_id}
+                    defaultValue={""}
+                    isDisabled={viewMode}
+                    options={countrylist?.map((data, index) => {
+                      return {
+                        value: data?.country_id,
+                        label: data?.country_name,
+                      };
+                    })}
+                    value={countrylist?.map((data, index) => {
+                      if (userInfo.country_id === data.country_id) {
                         return {
                           value: data?.country_id,
                           label: data?.country_name,
                         };
-                      })}
-                      value={countrylist?.map((data, index) => {
-                        if (userInfo.country_id === data.country_id) {
-                          return {
-                            value: data?.country_id,
-                            label: data?.country_name,
-                          };
-                        }
-                      })}
-                      onChange={(e) =>
-                        setUserinfo({ ...userInfo, country_id: e.value })
                       }
-                    />
-                    <span className="errorText">
-                      {" "}
-                      {errorData?.country_id ? errorData.country_id : ""}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div
-                    className={
-                      errorData?.state_id ? "input_box errorBox" : "input_box"
+                    })}
+                    onChange={(e) =>
+                      setUserinfo({ ...userInfo, country_id: e.value })
                     }
-                  >
-                    <label htmlFor="task_name"> State</label>
-                    <Select
-                      id={userInfo.state_id}
-                      defaultValue={""}
-                      isDisabled={viewMode}
-                      options={statelist?.map((data, index) => {
+                  />
+                  <span className="errorText">
+                    {" "}
+                    {errorData?.country_id ? errorData.country_id : ""}
+                  </span>
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                <div
+                  className={
+                    errorData?.state_id ? "input_box errorBox" : "input_box"
+                  }
+                >
+                  <label htmlFor="task_name"> State</label>
+                  <Select
+                    id={userInfo.state_id}
+                    defaultValue={""}
+                    isDisabled={viewMode}
+                    options={statelist?.map((data, index) => {
+                      return {
+                        value: data?.state_id,
+                        label: data?.state_name,
+                      };
+                    })}
+                    value={statelist?.map((data, index) => {
+                      if (userInfo.state_id === data.state_id) {
                         return {
                           value: data?.state_id,
                           label: data?.state_name,
                         };
-                      })}
-                      value={statelist?.map((data, index) => {
-                        if (userInfo.state_id === data.state_id) {
-                          return {
-                            value: data?.state_id,
-                            label: data?.state_name,
-                          };
-                        }
-                      })}
-                      onChange={(e) =>
-                        setUserinfo({ ...userInfo, state_id: e.value })
                       }
-                    />
-                  </div>
-                </div>
-
-                <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                  <div
-                    className={
-                      errorData?.state_id ? "input_box errorBox" : "input_box"
+                    })}
+                    onChange={(e) =>
+                      setUserinfo({ ...userInfo, state_id: e.value })
                     }
-                  >
-                    <label htmlFor="task_name"> City </label>
-                    <Select
-                      id={userInfo.city_id}
-                      defaultValue={""}
-                      isDisabled={viewMode}
-                      options={citylist?.map((data, index) => {
+                  />
+                </div>
+              </div>
+
+              <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                <div
+                  className={
+                    errorData?.state_id ? "input_box errorBox" : "input_box"
+                  }
+                >
+                  <label htmlFor="task_name"> City </label>
+                  <Select
+                    id={userInfo.city_id}
+                    defaultValue={""}
+                    isDisabled={viewMode}
+                    options={citylist?.map((data, index) => {
+                      return {
+                        value: data?.city_id,
+                        label: data?.city_name,
+                      };
+                    })}
+                    value={citylist?.map((data, index) => {
+                      if (userInfo.city_id === data.city_id) {
                         return {
                           value: data?.city_id,
                           label: data?.city_name,
                         };
-                      })}
-                      value={citylist?.map((data, index) => {
-                        if (userInfo.city_id === data.city_id) {
-                          return {
-                            value: data?.city_id,
-                            label: data?.city_name,
-                          };
-                        }
-                      })}
-                      onChange={(e) =>
-                        setUserinfo({ ...userInfo, city_id: e.value })
                       }
-                    />
-                  </div>
-                </div>
-            </div>
-            
-            
-            {
-              hasCookie("channel") && userInfoCheck?.role_id==null && (
-                <div className="text-end">
-                <div className="submit_btn">
-                  <Link href="/partner/ActivePartners">
-                    <button className=" btn btn-danger rounded-2 me-2">Cancel</button>
-                  </Link>
-                  {
-                    editMode ?  null: viewMode ?(<Link href={`/partner/EditActiveUsers?id=${userInfo.user_code}&mode=edit`}>
-                    <button className="btn btn-cancel text-white me-2 " style={{background:`${clientBtnColor}` }}>Edit</button>
-                  </Link>) : null
-                  }
-                  {editMode ? (
-                    <button
-                      disabled={isLoading}
-                      className="btn text-white"
-                      onClick={updateUserhandler}
-                      style={{background:`${clientBtnColor}` }}
-                    >
-                      {isLoading ? "Loading..." : "Update"}
-                    </button>
-                  ) : viewMode ? null : (
-                    <button
-                      disabled={isLoading}
-                      className="btn text-white"
-                      onClick={addUserHandler}
-                      style={{background:`${clientBtnColor}` }}
-  
-                    >
-                      {isLoading ? "Loading..." : "Save & Submit"}
-                    </button>
-                  )}
+                    })}
+                    onChange={(e) =>
+                      setUserinfo({ ...userInfo, city_id: e.value })
+                    }
+                  />
                 </div>
               </div>
+            </div>
+
+
+            {
+              hasCookie("channel") && userInfoCheck?.role_id == null && (
+                <div className="text-end">
+                  <div className="submit_btn">
+                    <Link href="/partner/ActivePartners">
+                      <button className=" btn btn-danger rounded-2 me-2">Cancel</button>
+                    </Link>
+                    {
+                      editMode ? null : viewMode ? (<Link href={`/partner/EditActiveUsers?id=${userInfo.user_code}&mode=edit`}>
+                        <button className="btn btn-cancel text-white me-2 " style={{ background: `${clientBtnColor}` }}>Edit</button>
+                      </Link>) : null
+                    }
+                    {editMode ? (
+                      <button
+                        disabled={isLoading}
+                        className="btn text-white"
+                        onClick={updateUserhandler}
+                        style={{ background: `${clientBtnColor}` }}
+                      >
+                        {isLoading ? "Loading..." : "Update"}
+                      </button>
+                    ) : viewMode ? null : (
+                      <button
+                        disabled={isLoading}
+                        className="btn text-white"
+                        onClick={addUserHandler}
+                        style={{ background: `${clientBtnColor}` }}
+
+                      >
+                        {isLoading ? "Loading..." : "Save & Submit"}
+                      </button>
+                    )}
+                  </div>
+                </div>
               )
             }
-            
+
           </div>
         </div>
       </div>

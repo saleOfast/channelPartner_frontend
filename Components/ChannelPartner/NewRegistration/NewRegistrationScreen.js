@@ -115,7 +115,7 @@ const NewRegistrationScreen = () => {
     // Get client_url for API (use same logic as getSignInData)
     let clientUrl = window.location.origin;
     if (clientUrl === "http://localhost:3000") {
-      clientUrl = "http://ag1ggclyinnn.example.in";
+      clientUrl = "http://nk.example.coooin";
     }
 
     let newFormfields = {
@@ -152,7 +152,7 @@ const NewRegistrationScreen = () => {
       try {
         let baseUrl = window.location.origin;
         if (baseUrl === "http://localhost:3000") {
-          baseUrl = "http://ag1ggclyinnn.example.in"
+          baseUrl = "http://nk.example.coooin"
         }
         const { data } = await axios.post(Baseurl + "/db/admin/url", {
           client_url: `${baseUrl}`,

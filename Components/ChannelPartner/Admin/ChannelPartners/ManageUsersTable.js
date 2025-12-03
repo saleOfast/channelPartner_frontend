@@ -586,7 +586,8 @@ const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, dataList,
     reportToUser: [list?.reportToUser?.user]?.filter(d => d !== null && d !== undefined),
     user_status: list?.user_status ? "active" : "inactive",
     db_user_profile: [list?.db_user_profile?.db_designation?.designation]?.filter(d => d !== null && d !== undefined),
-    reportToUserId: list?.reportToUser?.user_id
+    reportToUserId: list?.reportToUser?.user_id,
+    City: list?.city?.city_name || list?.db_city?.city_name || ''
   }))
 
   return (

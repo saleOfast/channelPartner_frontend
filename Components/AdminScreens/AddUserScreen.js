@@ -26,6 +26,7 @@ const AddUserScreen = () => {
   const [departMentList, setDepartMentList] = useState([]);
   const [designationList, setDesignationList] = useState([]);
   const [countrylist, setcountrylist] = useState([]);
+  console.log(",,,,,", countrylist.countrylist)
   const [statelist, setStatelist] = useState([]);
   const [errorData, setErrorData] = useState({});
   const [isLoading, setisLoading] = useState(false);
@@ -44,6 +45,7 @@ const AddUserScreen = () => {
   const [updtUId, setUpdtUId] = useState("");
   const [userInfo, setUserinfo] = useState({
   });
+  console.log("ddd", userInfo)
   const [uploadDocs, setuploadDocs] = useState({
     aadhar: null,
     pan: null,
@@ -105,11 +107,12 @@ const AddUserScreen = () => {
 
   const getCountryList = async () => {
     await fetchData(
-      `/db/area/country?country_id=1`,
+      `/db/area/country?country_id=101`,
       setcountrylist,
       errorToast,
       setErrorToast
-    );
+    )
+
   };
 
   const getState = async (id) => {

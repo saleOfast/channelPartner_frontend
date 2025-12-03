@@ -280,6 +280,27 @@ const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, dataList,
       }
     },
     {
+      name: 'City',
+      label: "City",
+      options: {
+        filter: false,
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th className="text-center" style={{ background: clientBtnColor ? clientBtnColor : `#293790`, color: 'white', paddingLeft: "15px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          // const partnerType = partnerTypes.find(data => data.cpt_id === value);
+          return (
+            <div className='status_box fw-bold text-center' style={{ color: "#293790" }} >
+              {/* {partnerType ? partnerType.name : ''} */}
+              {value}
+            </div>
+          )
+        }
+      }
+    },
+    {
       name: 'user_code',
       label: "Action",
       options: {

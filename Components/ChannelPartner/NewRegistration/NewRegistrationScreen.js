@@ -112,7 +112,17 @@ const NewRegistrationScreen = () => {
       return toast.warning("Please enter a valid email address", { autoClose: 2500 });
     }
 
-    let newFormfields = { ...formFields, db_name: clientData?.db_name }
+    // Get client_url for API (use same logic as getSignInData)
+    let clientUrl = window.location.origin;
+    if (clientUrl === "http://localhost:3000") {
+      clientUrl = "http://ag1ggclyinnn.example.in";
+    }
+
+    let newFormfields = {
+      ...formFields,
+      db_name: clientData?.db_name,
+      client_url: clientUrl
+    }
     console.log(newFormfields)
 
     try {
@@ -142,7 +152,7 @@ const NewRegistrationScreen = () => {
       try {
         let baseUrl = window.location.origin;
         if (baseUrl === "http://localhost:3000") {
-          baseUrl = "https://kissan.saleofast.com"
+          baseUrl = "http://ag1ggclyinnn.example.in"
         }
         const { data } = await axios.post(Baseurl + "/db/admin/url", {
           client_url: `${baseUrl}`,

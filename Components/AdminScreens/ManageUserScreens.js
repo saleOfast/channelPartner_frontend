@@ -93,9 +93,9 @@ const ManageUserScreens = () => {
 
             try {
                 const response = await axios.get(Baseurl + `/db/users?mode=ul`, header);
+                console.log("response", response)
                 if (response?.status == 200 || response?.status == 201) {
                     setLoader(false)
-                    console.log(response.data.data)
                     setDataList(response.data.data);
                 }
             } catch (error) {
@@ -111,7 +111,7 @@ const ManageUserScreens = () => {
 
     async function disableHandler() {
 
-        const reqInfo = { user_code: currObj.id, user_status: currObj.action == 1 ? true : false,isAssigned:true }
+        const reqInfo = { user_code: currObj.id, user_status: currObj.action == 1 ? true : false, isAssigned: true }
 
         if (hasCookie('token')) {
             let token = (getCookie('token'));
@@ -128,6 +128,7 @@ const ManageUserScreens = () => {
 
             try {
                 const response = await axios.put(Baseurl + `/db/users`, reqInfo, header);
+                console.log(")))))", response)
                 if (response.status === 204 || response.status === 200) {
                     toast.success(response.data.message)
                     setdisableShowConfirm(false)

@@ -26,7 +26,7 @@ const ViewUserScreens = () => {
                     Accept: "application/json",
                     Authorization: "Bearer ".concat(token),
                     db: db_name,
-                    m_id:78
+                    m_id: 78
                 },
             };
 
@@ -35,9 +35,9 @@ const ViewUserScreens = () => {
                 setDataList(response.data.data);
             } catch (error) {
                 if (error?.response?.data?.message) {
-                    toast.error(error?.response?.data?.message,{autoClose:2500});
+                    toast.error(error?.response?.data?.message, { autoClose: 2500 });
                 } else {
-                    toast.error("Something went wrong!",{autoClose:2500});
+                    toast.error("Something went wrong!", { autoClose: 2500 });
                 }
             }
         }
@@ -59,7 +59,7 @@ const ViewUserScreens = () => {
                 title={"Are You Sure you want to Disable ?"}
             /> */}
 
-             <div className={`main_Box  ${sideView}`}>
+            <div className={`main_Box  ${sideView}`}>
                 <div className="bread_head">
                     <h3 className="content_head">View Details</h3>
                     <nav aria-label="breadcrumb">
@@ -68,7 +68,7 @@ const ViewUserScreens = () => {
                                 <Link href="/crm">Home </Link>
                             </li>
                             <li className="breadcrumb-item">
-                                <Link href="/ManageUsers">Manage Users </Link>
+                                {/* <Link href="/ManageUsers">Manage Users </Link> */}
                             </li>
                             <li className="breadcrumb-item active" aria-current="page">
                                 User Details

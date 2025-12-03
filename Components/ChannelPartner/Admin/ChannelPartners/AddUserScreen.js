@@ -479,17 +479,19 @@ const AddUserScreen = () => {
     getCpCategoryList()
   }, []);
 
+  // Note: State and city fetching is now handled directly in onChange handlers
+  // These useEffects are only for edit/view mode when data is pre-populated
   useEffect(() => {
-    if (userInfo.state_id) {
+    if (userInfo.state_id && (editMode || viewMode) && citylist.length === 0) {
       getcity(userInfo.state_id);
     }
-  }, [userInfo.state_id]);
+  }, [userInfo.state_id, editMode, viewMode]);
 
   useEffect(() => {
-    if (userInfo.country_id) {
+    if (userInfo.country_id && (editMode || viewMode) && statelist.length === 0) {
       getState(userInfo.country_id);
     }
-  }, [userInfo.country_id]);
+  }, [userInfo.country_id, editMode, viewMode]);
 
   useEffect(() => {
     if (!router.isReady) return;
@@ -1163,9 +1165,12 @@ const AddUserScreen = () => {
                         };
                       }
                     })}
-                    onChange={(e) =>
-                      setUserinfo({ ...userInfo, country_id: e.value })
-                    }
+                    onChange={(e) => {
+                      setUserinfo({ ...userInfo, country_id: e.value, state_id: null, city_id: null });
+                      setStatelist([]);
+                      setCitylist([]);
+                      getState(e.value);
+                    }}
                   />
                   <span className="errorText">
                     {" "}
@@ -1191,17 +1196,21 @@ const AddUserScreen = () => {
                         label: data?.state_name,
                       };
                     })}
-                    value={statelist?.map((data, index) => {
-                      if (userInfo.state_id === data.state_id) {
-                        return {
-                          value: data?.state_id,
-                          label: data?.state_name,
-                        };
-                      }
-                    })}
-                    onChange={(e) =>
-                      setUserinfo({ ...userInfo, state_id: e.value })
+                    value={
+                      userInfo.state_id
+                        ? statelist?.find((data) => userInfo.state_id === data.state_id)
+                          ? {
+                              value: userInfo.state_id,
+                              label: statelist.find((data) => userInfo.state_id === data.state_id)?.state_name,
+                            }
+                          : null
+                        : null
                     }
+                    onChange={(e) => {
+                      setUserinfo({ ...userInfo, state_id: e.value, city_id: null });
+                      setCitylist([]);
+                      getcity(e.value);
+                    }}
                   />
                 </div>
               </div>
@@ -1209,7 +1218,7 @@ const AddUserScreen = () => {
               <div className="col-xl-3 col-md-3 col-sm-12 col-12">
                 <div
                   className={
-                    errorData?.state_id ? "input_box errorBox" : "input_box"
+                    errorData?.city_id ? "input_box errorBox" : "input_box"
                   }
                 >
                   <label htmlFor="task_name"> City </label>
@@ -1223,14 +1232,16 @@ const AddUserScreen = () => {
                         label: data?.city_name,
                       };
                     })}
-                    value={citylist?.map((data, index) => {
-                      if (userInfo.city_id === data.city_id) {
-                        return {
-                          value: data?.city_id,
-                          label: data?.city_name,
-                        };
-                      }
-                    })}
+                    value={
+                      userInfo.city_id
+                        ? citylist?.find((data) => userInfo.city_id === data.city_id)
+                          ? {
+                              value: userInfo.city_id,
+                              label: citylist.find((data) => userInfo.city_id === data.city_id)?.city_name,
+                            }
+                          : null
+                        : null
+                    }
                     onChange={(e) =>
                       setUserinfo({ ...userInfo, city_id: e.value })
                     }

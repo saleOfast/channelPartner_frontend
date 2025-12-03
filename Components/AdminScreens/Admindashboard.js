@@ -74,6 +74,7 @@ const Admindashboard = () => {
         try {
             setLoader(true);
             const { data } = await axios.get(`${Baseurl}/db/permission/${navLink}`, header);
+            console.log("0000000", data.data[0]?.children)
             if (data?.status == 200) {
                 setLoader(false);
                 setDynamicFields(data?.data[0]?.children);

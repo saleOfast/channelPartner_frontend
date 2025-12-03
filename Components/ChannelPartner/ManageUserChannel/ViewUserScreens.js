@@ -26,7 +26,7 @@ const ViewUserScreens = () => {
                     Accept: "application/json",
                     Authorization: "Bearer ".concat(token),
                     db: db_name,
-                    m_id:78
+                    m_id: 78
                 },
             };
 
@@ -35,9 +35,9 @@ const ViewUserScreens = () => {
                 setDataList(response.data.data);
             } catch (error) {
                 if (error?.response?.data?.message) {
-                    toast.error(error?.response?.data?.message,{autoClose:2500});
+                    toast.error(error?.response?.data?.message, { autoClose: 2500 });
                 } else {
-                    toast.error("Something went wrong!",{autoClose:2500});
+                    toast.error("Something went wrong!", { autoClose: 2500 });
                 }
             }
         }
@@ -59,7 +59,7 @@ const ViewUserScreens = () => {
                 title={"Are You Sure you want to Disable ?"}
             /> */}
 
-             <div className={`main_Box  ${sideView}`}>
+            <div className={`main_Box  ${sideView}`}>
                 <div className="bread_head">
                     <h3 className="content_head">View Details</h3>
                     <nav aria-label="breadcrumb">
@@ -77,73 +77,73 @@ const ViewUserScreens = () => {
                     </nav>
                 </div>
                 <div className="main_content">
-                <div className="Add_user_screen">
-                    <div className="add_screen_head">
-                        <span className="text_bold">View Details</span> </div>
-                    <div className="add_user_form addUserPage">
-                        <div className="row profilePic">
-                            <div className="col-xl-10 col-md-10 col-sm-12 col-12">
-                                <div className="row">
-                                    <div className="col-xl-5 col-md-5 col-sm-12 col-12">
-                                        <div className="input_box">
-                                            <label htmlFor="profilelevel">Profile  Level *</label>
-                                            <input
-                                                className='form-control'
-                                                name="profilelevel"
-                                                disabled
-                                                id="profilelevel"
-                                                value={dataList?.db_role?.role_name}/>
-                                            
+                    <div className="Add_user_screen">
+                        <div className="add_screen_head">
+                            <span className="text_bold">View Details</span> </div>
+                        <div className="add_user_form addUserPage">
+                            <div className="row profilePic">
+                                <div className="col-xl-10 col-md-10 col-sm-12 col-12">
+                                    <div className="row">
+                                        <div className="col-xl-5 col-md-5 col-sm-12 col-12">
+                                            <div className="input_box">
+                                                <label htmlFor="profilelevel">Profile  Level *</label>
+                                                <input
+                                                    className='form-control'
+                                                    name="profilelevel"
+                                                    disabled
+                                                    id="profilelevel"
+                                                    value={dataList?.db_role?.role_name} />
+
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                                        <div className="input_box">
-                                            <label htmlFor="firstName">Name *</label>
-                                            <input
-                                                type="text"
-                                                disabled
-                                                placeholder='Enter User Name'
-                                                name="name" id="firstName"
-                                                className="form-control"
-                                                value={dataList?.user}
-                                                 />
-                                        </div>
-                                    </div>
-                                    <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                                        <div className="input_box">
-                                            <label htmlFor="contact_no">Contact No *</label>
-                                            <input
-                                                type="number"
-                                                disabled
-                                                name="contact-no" id="contact_no"
-                                                className="form-control"
-                                                value={dataList?.contact_number}
-                                                 />
-                                        </div>
-                                    </div>
-                                    <div className="col-xl-3 col-md-3 col-sm-12 col-12">
-                                        <div className="input_box">
-                                            <label htmlFor="email">Email *</label>
-                                            <input
-                                                type="email"
-                                                placeholder='Enter Email Id.'
-                                                name="email" id="email"
-                                                className="form-control"
-                                                
+                                    <div className="row">
+                                        <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                                            <div className="input_box">
+                                                <label htmlFor="firstName">Name *</label>
+                                                <input
+                                                    type="text"
+                                                    disabled
+                                                    placeholder='Enter User Name'
+                                                    name="name" id="firstName"
+                                                    className="form-control"
+                                                    value={dataList?.user}
                                                 />
+                                            </div>
+                                        </div>
+                                        <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                                            <div className="input_box">
+                                                <label htmlFor="contact_no">Contact No *</label>
+                                                <input
+                                                    type="number"
+                                                    disabled
+                                                    name="contact-no" id="contact_no"
+                                                    className="form-control"
+                                                    value={dataList?.contact_number}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="col-xl-3 col-md-3 col-sm-12 col-12">
+                                            <div className="input_box">
+                                                <label htmlFor="email">Email *</label>
+                                                <input
+                                                    type="email"
+                                                    placeholder='Enter Email Id.'
+                                                    name="email" id="email"
+                                                    className="form-control"
+
+                                                />
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
                 </div>
-                </div>
-                </div>    
-                </div>   
-                </div>
-            </>     
-        
+            </div>
+        </>
+
     );
 };
 

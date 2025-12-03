@@ -63,7 +63,7 @@ const ChannelAddUserScreen = () => {
     isSubmitted: false,
     user_code: "",
     doc_verification: "",
-    reject_reason:""
+    reject_reason: ""
   });
 
   const inputFields = [
@@ -181,10 +181,10 @@ const ChannelAddUserScreen = () => {
         cheque: data2?.c_cheque_file,
         user_code: data1?.user_code,
         doc_verification: data1?.doc_verification,
-        reject_reason:data1?.reject_reason
+        reject_reason: data1?.reject_reason
       });
     } catch (error) {
-      toast.error(error?.response?.data?.message,{autoClose:2500});
+      toast.error(error?.response?.data?.message, { autoClose: 2500 });
     }
   }
 
@@ -212,7 +212,7 @@ const ChannelAddUserScreen = () => {
       );
       const userId = response.data.data.userProfileData.user_id;
       if (response.status === 200 || response.status === 201) {
-        toast.success(response?.data?.message,{autoClose:2500});
+        toast.success(response?.data?.message, { autoClose: 2500 });
         if (uploadDocs.aadhar_card)
           AddUploadPicture(userId, "adh", uploadDocs.aadhar_card[0], 0);
         if (uploadDocs.pan_card)
@@ -233,19 +233,19 @@ const ChannelAddUserScreen = () => {
         setErrorData(taskObject);
       }
       if (error?.response?.data?.message) {
-        toast.error(error?.response?.data?.message,{autoClose:2500});
+        toast.error(error?.response?.data?.message, { autoClose: 2500 });
       } else {
-        toast.error("Something went wrong!",{autoClose:2500});
+        toast.error("Something went wrong!", { autoClose: 2500 });
       }
       setisLoading(false);
     }
   };
 
   const updateUserhandler = async (doc_verify) => {
-    
+
     if (!hasCookie("token")) return;
     if (doc_verify === 3 && updateInfo.reject_reason === "") {
-      return toast.error("Please enter a reason",{autoClose:2500});
+      return toast.error("Please enter a reason", { autoClose: 2500 });
     }
 
     setisLoading(true);
@@ -270,7 +270,7 @@ const ChannelAddUserScreen = () => {
         header
       );
       if (response.status === 200 || response.status === 201) {
-        toast.success(response?.data?.message,{autoClose:2500});
+        toast.success(response?.data?.message, { autoClose: 2500 });
         setisLoading(false);
         router.push("/ManageChannerPartner");
       }
@@ -285,9 +285,9 @@ const ChannelAddUserScreen = () => {
         setErrorData(taskObject);
       }
       if (error?.response?.data?.message) {
-        toast.error(error?.response?.data?.message,{autoClose:2500});
+        toast.error(error?.response?.data?.message, { autoClose: 2500 });
       } else {
-        toast.error("Something went wrong!",{autoClose:2500});
+        toast.error("Something went wrong!", { autoClose: 2500 });
       }
       setisLoading(false);
     }
@@ -322,7 +322,7 @@ const ChannelAddUserScreen = () => {
         requestOptions
       );
       const result = await response.text();
-      toast.info(result?.message,{autoClose:2500});
+      toast.info(result?.message, { autoClose: 2500 });
     } catch (error) {
       console.log("error", error);
     }
@@ -421,7 +421,7 @@ const ChannelAddUserScreen = () => {
                     </div>
                     <div className="logo">
                       <a href="#">
-                        <img src="/DMS_IMAGES/kloudmart.png" alt="normal"/>
+                        <img src="/DMS_IMAGES/kloudmart.png" alt="normal" />
                       </a>
                     </div>
                   </div>
@@ -508,11 +508,10 @@ const ChannelAddUserScreen = () => {
                             />
                           )} */}
                               {input.field === "aadhar" &&
-                              formFields[input.field] ? (
+                                formFields[input.field] ? (
                                 <img
-                                  src={`${filesUrl}/adh/images${
-                                    formFields[input.field]
-                                  }`}
+                                  src={`${filesUrl}/adh/images${formFields[input.field]
+                                    }`}
                                   alt={`${input.label} Preview`}
                                   style={{
                                     maxWidth: "100px",
@@ -525,8 +524,7 @@ const ChannelAddUserScreen = () => {
                                   <img
                                     src={
                                       `${filesUrl}` +
-                                      `/${input.field}/images${
-                                        formFields[input.field]
+                                      `/${input.field}/images${formFields[input.field]
                                       }`
                                     }
                                     alt={`${input.label} Preview`}
@@ -543,25 +541,25 @@ const ChannelAddUserScreen = () => {
                         {
                           formFields.reject_reason && (
                             <div className="col-xl-3 col-md-3 col-lg-3 col-sm-12  mb-3">
-                          <label className="form-label">
-                            Reject Reason
-                          </label>                              
-                          <input
-                            className="form-control input-field"
-                            formcontrolname="Name"
-                            type="text"
-                            name="Reject_reason"
-                            value={formFields.reject_reason}
-                            disabled={true}
-                          />
-                        </div>
+                              <label className="form-label">
+                                Reject Reason
+                              </label>
+                              <input
+                                className="form-control input-field"
+                                formcontrolname="Name"
+                                type="text"
+                                name="Reject_reason"
+                                value={formFields.reject_reason}
+                                disabled={true}
+                              />
+                            </div>
                           )
                         }
-                        
+
 
                         <div className="mt-3  md-text-center">
                           <div className="d-flex">
-                            {(formFields.doc_verification=== 0 ||formFields.doc_verification=== 1)  && (
+                            {(formFields.doc_verification === 0 || formFields.doc_verification === 1) && (
                               <>
                                 <button
                                   className="btn btn-primary Add_btn me-3"

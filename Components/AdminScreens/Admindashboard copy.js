@@ -8,9 +8,9 @@ import { useSelector } from 'react-redux';
 
 const Admindashboard = () => {
     const sideView = useSelector((state) => state.sideView.value);
-    
+
     return (
-         <div className={`main_Box  ${sideView}`}>
+        <div className={`main_Box  ${sideView}`}>
             <div className="bread_head">
                 <h3 className="content_head">ADMIN DASHBOARD</h3>
             </div>
@@ -96,8 +96,8 @@ const Admindashboard = () => {
                                 <div className="icons">
                                     <Hierarchy />
                                 </div>
-                            </div> 
-                            
+                            </div>
+
                             <div className="card_wrapper">
                                 <div className="card_lists">
                                     <div className="card_head"> Account Type Master: </div>
@@ -161,7 +161,7 @@ const Admindashboard = () => {
                                     </ul>
                                 </div>
                                 <div className="icons">
-                                <CubesIcon />
+                                    <CubesIcon />
                                 </div>
                             </div>
 
@@ -178,10 +178,10 @@ const Admindashboard = () => {
                                     </ul>
                                 </div>
                                 <div className="icons">
-                                <GroupIcon />
+                                    <GroupIcon />
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div className="col-xl-6 col-md-6 col-sm-12 col-12">
                             <div className="card_wrapper">
@@ -261,7 +261,7 @@ const Admindashboard = () => {
                                     </ul>
                                 </div>
                                 <div className="icons">
-                                <GroupIcon />
+                                    <GroupIcon />
                                 </div>
                             </div>
 
@@ -276,13 +276,13 @@ const Admindashboard = () => {
                                     </ul>
                                 </div>
                                 <div className="icons">
-                                <CubesIcon />
+                                    <CubesIcon />
                                 </div>
                             </div>
 
 
- 
-                            
+
+
 
                         </div>
                     </div>

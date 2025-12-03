@@ -408,7 +408,10 @@ const ActivePartnersScreen = () => {
                                 <div className='fix-width-1'>
                                     {
                                         userInfo?.role_id == null && (
-                                            <button className="btn ms-0 Add_btn p-2 w-100 d-flex align-items-center justify-content-center" style={{ background: `${clientBtnColor}` }} onClick={() => goto('/partner/ChannelPartnersDetails')}>
+                                            <button className="btn ms-0 Add_btn p-2 w-100 d-flex align-items-center justify-content-center"
+                                                // style={{ background: `${clientBtnColor}` }}
+                                                style={{ background: "#293790" }}
+                                                onClick={() => goto('/partner/ChannelPartnersDetails')}>
                                                 <PlusIcon />
                                                 ADD USER
                                             </button>
@@ -432,7 +435,7 @@ const ActivePartnersScreen = () => {
                                                     color: '#495057',
                                                     backgroundColor: '#fff',
                                                     backgroundClip: 'padding-box',
-                                                    border: '1px solid #ced4da',
+                                                    border: '1px solidhsl(210, 79.70%, 34.70%)',
                                                     borderRadius: '.25rem',
                                                     transition: 'border-color .15s ease-in-out,box-shadow .15s ease-in-out',
                                                     marginTop: '0px'

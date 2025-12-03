@@ -26,7 +26,7 @@ const ViewUserScreens = () => {
                     Accept: "application/json",
                     Authorization: "Bearer ".concat(token),
                     db: db_name,
-                    m_id:78
+                    m_id: 78
                 },
             };
 
@@ -59,7 +59,7 @@ const ViewUserScreens = () => {
                 title={"Are You Sure you want to Disable ?"}
             /> */}
 
-             <div className={`main_Box  ${sideView}`}>
+            <div className={`main_Box  ${sideView}`}>
                 <div className="bread_head">
                     <h3 className="content_head">View Details</h3>
                     <nav aria-label="breadcrumb">

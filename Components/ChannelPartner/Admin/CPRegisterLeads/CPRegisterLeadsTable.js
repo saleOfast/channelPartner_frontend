@@ -635,6 +635,15 @@ const CPRegisterLeadsTable = ({
   };
 
 
+  const isFormValid =
+    formData.stage &&
+    formData.remarks &&
+    (
+      !(formData.stage === "CALL" || formData.stage === "FOLLOW UP" || formData.stage === "VISIT") ||
+      formData.follow_up_date
+    );
+
+
   const handleInputChange = (event) => {
     const { name, value } = event.target;
     setFormData({
@@ -728,7 +737,9 @@ const CPRegisterLeadsTable = ({
                   />
                 </div> */}
       </div>
+
     );
+
   }
 
 
@@ -851,8 +862,6 @@ const CPRegisterLeadsTable = ({
               {errors.email && <Form.Text className="text-danger">{errors.email}</Form.Text>}
             </Form.Group>
 
-
-
             <Form.Group controlId="registrationDate">
               <Form.Label>Registration Date</Form.Label>
               <Form.Control
@@ -922,14 +931,17 @@ const CPRegisterLeadsTable = ({
             </Form.Group>
 
             <div className="d-flex justify-content-between  mt-4">
-              {formData.stage == 'VISIT' && (
+
+              {/* enable this for future if Nk Want send OTP on Visit */}
+
+              {/* {formData.stage == 'VISIT' && (
                 <Button variant="primary" disabled={isOtpSent} type="submit" onClick={() => {
 
                   setConfirm(true)
                   setIsOtpSent(true)
                 }}>
                   SEND OPT
-                </Button>)}
+                </Button>)} */}
               <div className="d-flex gap-2">
 
                 {
@@ -957,9 +969,12 @@ const CPRegisterLeadsTable = ({
               </div>
 
 
-              <Button variant="primary" type="submit" disabled={true}>
+
+              <Button variant="primary" type="submit" disabled={!isFormValid}>
                 UPDATE
               </Button>
+
+
             </div>
 
           </Form>

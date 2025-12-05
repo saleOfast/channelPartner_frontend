@@ -140,7 +140,7 @@ const Layout = ({ Component, pageProps }) => {
                       backgroundColor: "#000"
                     }}
                   >
-                    © {new Date().getFullYear()} <strong>NK Realtors</strong>. All Rights Reserved.
+                    © {new Date().getFullYear()} <strong>Srijan</strong>. All Rights Reserved.
                   </footer>
 
                 </div>

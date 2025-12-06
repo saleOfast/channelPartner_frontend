@@ -39,7 +39,7 @@ const ChannelPartnerRegisterScreen = () => {
       );
       if (data.status === 200) {
         if (data.data.doc_verification === 0) {
-          toast.success(data?.message,{autoClose:2500});
+          toast.success(data?.message, { autoClose: 2500 });
           setFormFields({
             ...formFields,
             name: data.data.user || "",
@@ -49,8 +49,8 @@ const ChannelPartnerRegisterScreen = () => {
             token: token,
             isTokenVerified: true,
           });
-        }else if (data.data.doc_verification === 1) {
-          toast.success("Pending for verification",{autoClose:2500});
+        } else if (data.data.doc_verification === 1) {
+          toast.success("Pending for verification", { autoClose: 2500 });
           setFormFields({
             ...formFields,
             name: data.data.user || "",
@@ -63,8 +63,8 @@ const ChannelPartnerRegisterScreen = () => {
             isTokenVerified: true,
             isUploadVerified: true,
           });
-        }else if (data.data.doc_verification === 2) {
-          toast.success("Documents Verified",{autoClose:2500});
+        } else if (data.data.doc_verification === 2) {
+          toast.success("Documents Verified", { autoClose: 2500 });
           setFormFields({
             ...formFields,
             name: data.data.user || "",
@@ -77,11 +77,11 @@ const ChannelPartnerRegisterScreen = () => {
             isTokenVerified: true,
             isUploadVerified: true,
           });
-          setInterval(()=>{
+          setInterval(() => {
             router.push("/")
-          },[1000])
-        } else{
-          toast.success("Documents Rejected",{autoClose:2500});
+          }, [1000])
+        } else {
+          toast.success("Documents Rejected", { autoClose: 2500 });
           setFormFields({
             ...formFields,
             name: data.data.user || "",
@@ -94,17 +94,17 @@ const ChannelPartnerRegisterScreen = () => {
             isTokenVerified: true,
             isUploadVerified: true,
           });
-          setInterval(()=>{
+          setInterval(() => {
             router.push("/")
-          },[1000])
+          }, [1000])
         }
-        
+
       }
     } catch (error) {
-      
+
       const errorMessage =
         error?.response?.data?.message || "Something went wrong!";
-      toast.error(errorMessage,{autoClose:2500});
+      toast.error(errorMessage, { autoClose: 2500 });
     }
   };
 
@@ -120,7 +120,7 @@ const ChannelPartnerRegisterScreen = () => {
     event.preventDefault();
     try {
       if (!formFields.aadhar || !formFields.pan || !formFields.rera) {
-        toast.error("Aadhar, PAN, and RERA are required.",{autoClose:2500});
+        toast.error("Aadhar, PAN, and RERA are required.", { autoClose: 2500 });
         return;
       }
       const formData = new FormData();
@@ -143,14 +143,14 @@ const ChannelPartnerRegisterScreen = () => {
         formData
       );
       if (data.status === 200) {
-        toast.success(data?.message,{autoClose:2500});
+        toast.success(data?.message, { autoClose: 2500 });
         router.push("/ChannelPartnerRegister_Next");
       }
     } catch (error) {
       console.log(error.response.data);
       const errorMessage =
         error?.response?.data?.message || "Something went wrong!";
-      toast.error(errorMessage,{autoClose:2500});
+      toast.error(errorMessage, { autoClose: 2500 });
     }
   };
 
@@ -161,7 +161,7 @@ const ChannelPartnerRegisterScreen = () => {
     { label: "Bank Cancelled Cheque", field: "cheque" },
   ];
 
-  
+
 
   return (
     <div className="d-block w-100">
@@ -177,7 +177,7 @@ const ChannelPartnerRegisterScreen = () => {
               </div>
               <div className="logo">
                 <a href="#">
-                  <img src="/DMS_IMAGES/kloudmart.png" alt="normal"/>
+                  <img src="/DMS_IMAGES/kloudmart.png" alt="normal" />
                 </a>
               </div>
             </div>
@@ -261,12 +261,11 @@ const ChannelPartnerRegisterScreen = () => {
                             />
                           )}
                         {formFields.isUploadVerified &&
-                        input.field === "aadhar" &&
-                        formFields[input.field] ? (
+                          input.field === "aadhar" &&
+                          formFields[input.field] ? (
                           <img
-                            src={`${filesUrl}/adh/images${
-                              formFields[input.field]
-                            }`}
+                            src={`${filesUrl}/adh/images${formFields[input.field]
+                              }`}
                             alt={`${input.label} Preview`}
                             style={{ maxWidth: "100px", maxHeight: "100px" }}
                           />
@@ -275,7 +274,7 @@ const ChannelPartnerRegisterScreen = () => {
                           input.field !== "aadhar" &&
                           formFields[input.field] && (
                             <img
-                              src={`${filesUrl}`+`/${input.field}/images${formFields[input.field]}`}
+                              src={`${filesUrl}` + `/${input.field}/images${formFields[input.field]}`}
                               alt={`${input.label} Preview`}
                               style={{ maxWidth: "100px", maxHeight: "100px" }}
                             />

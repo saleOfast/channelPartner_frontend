@@ -741,6 +741,28 @@ const CPRegisterLeadsTable = ({
     );
 
   }
+  // OTP API
+  const sendOtpHandler = async () => {
+    try {
+      setIsOtpSent(true);
+      setConfirm(true);
+
+      const response = await axios.post('http://localhost:8050/api/v1/db/channelPartnerLeads/sendVisitOTP', {
+        lead_id: 123
+      });
+      alert(response)
+
+      if (response.data.status) {
+        toast.success("OTP sent successfully!");
+      } else {
+        toast.error("Failed to send OTP");
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("Error sending OTP");
+    }
+  };
+
 
 
   return (
@@ -934,14 +956,15 @@ const CPRegisterLeadsTable = ({
 
               {/* enable this for future if Nk Want send OTP on Visit */}
 
-              {/* {formData.stage == 'VISIT' && (
-                <Button variant="primary" disabled={isOtpSent} type="submit" onClick={() => {
-
-                  setConfirm(true)
-                  setIsOtpSent(true)
-                }}>
+              {formData.stage == 'VISIT' && (
+                <Button
+                  variant="primary"
+                  disabled={isOtpSent}
+                  type="submit"
+                  onClick={sendOtpHandler}
+                >
                   SEND OPT
-                </Button>)} */}
+                </Button>)}
               <div className="d-flex gap-2">
 
                 {

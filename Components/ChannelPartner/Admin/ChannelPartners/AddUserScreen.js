@@ -1200,9 +1200,9 @@ const AddUserScreen = () => {
                       userInfo.state_id
                         ? statelist?.find((data) => userInfo.state_id === data.state_id)
                           ? {
-                              value: userInfo.state_id,
-                              label: statelist.find((data) => userInfo.state_id === data.state_id)?.state_name,
-                            }
+                            value: userInfo.state_id,
+                            label: statelist.find((data) => userInfo.state_id === data.state_id)?.state_name,
+                          }
                           : null
                         : null
                     }
@@ -1236,9 +1236,9 @@ const AddUserScreen = () => {
                       userInfo.city_id
                         ? citylist?.find((data) => userInfo.city_id === data.city_id)
                           ? {
-                              value: userInfo.city_id,
-                              label: citylist.find((data) => userInfo.city_id === data.city_id)?.city_name,
-                            }
+                            value: userInfo.city_id,
+                            label: citylist.find((data) => userInfo.city_id === data.city_id)?.city_name,
+                          }
                           : null
                         : null
                     }

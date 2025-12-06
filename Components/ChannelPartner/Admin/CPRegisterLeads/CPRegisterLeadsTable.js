@@ -97,6 +97,13 @@ const CPRegisterLeadsTable = ({
   const [isUserData, setIsUserData] = useState(null);
   const addUserHandler = async (id, assignedToId) => {
     const object = dataList?.find((item) => item?.cpl_id == id);
+    
+    // Validate required fields
+    if (!object?.state_id || !object?.city_id) {
+      toast.error("State and City are mandatory for onboarding. Please update the lead with State and City information first.", { autoClose: 4000 });
+      return;
+    }
+    
     const db_name = getCookie("db_name");
     const token = getCookie("token");
     const payload = {
@@ -107,7 +114,9 @@ const CPRegisterLeadsTable = ({
       role_id: 1,
       user: object?.first_name,
       user_l_name: object?.last_name,
-      report_to: assignedToId
+      report_to: assignedToId,
+      state_id: object?.state_id,
+      city_id: object?.city_id
     }
     if (!hasCookie("token")) return;
 
@@ -133,13 +142,21 @@ const CPRegisterLeadsTable = ({
       }
     } catch (error) {
       if (error?.response?.data?.status === 422) {
-        const taskObject = error.response.data.data.reduce((obj, item) => {
-          const [key, value] = Object.entries(item)[0];
-          obj[key] = value;
-          return obj;
-        }, {});
-        setErrorData(taskObject);
+        // Handle validation errors
+        let errorMessage = error?.response?.data?.message || "Validation error";
+        
+        if (error?.response?.data?.data && Array.isArray(error.response.data.data)) {
+          const fieldErrors = error.response.data.data.map(item => {
+            const [key, value] = Object.entries(item)[0];
+            return value; // Just show the error message, not the field name
+          }).join(', ');
+          errorMessage = `${errorMessage}: ${fieldErrors}`;
+        }
+        
+        toast.error(errorMessage, { autoClose: 4000 });
+        return; // Don't process other error messages if it's a validation error
       }
+      
       if (error?.response?.data?.message) {
         if (error?.response?.data?.message == "user existed in this db") {
           setIsUserData(error?.response?.data?.userData);
@@ -173,6 +190,7 @@ const CPRegisterLeadsTable = ({
           pass: "pass",
         },
       };
+      
       let newFormData;
       if (onBoradStage && isUserData) {
         newFormData = { ...formData, db_name: db_name, stage: isUserData?.doc_verification == 0 ? "LINK SENT" : isUserData?.doc_verification == 2 ? "ONBOARDED" : "" }
@@ -182,7 +200,17 @@ const CPRegisterLeadsTable = ({
       } else {
         newFormData = { ...formData, db_name: db_name }
       }
-      // const newFormData={...formData,db_name:db_name,}
+
+      // If stage is VISIT and OTP is entered, include OTP in the update request
+      if (formData.stage === 'VISIT' && confirm && otp.some(digit => digit !== '')) {
+        const otpValue = otp.join('');
+        if (otpValue.length !== 4) {
+          toast.error("Please enter complete 4-digit OTP");
+          return;
+        }
+        newFormData = { ...newFormData, otp: parseInt(otpValue) };
+      }
+
       try {
         const response = await axios.put(
           `${Baseurl}/db/channelPartnerLeads`,
@@ -190,8 +218,14 @@ const CPRegisterLeadsTable = ({
           header
         );
         if (response.status === 200 || response.status === 201) {
-          // toast.success(response?.data?.message,{autoClose:2500});
+          toast.success(response?.data?.message || "Updated successfully", { autoClose: 2500 });
           await getDataList();
+          setShowModal(false);
+          setShowAssignTo(false);
+          // Reset OTP fields after successful update
+          setOtp(["", "", "", ""]);
+          setConfirm(false);
+          setIsOtpSent(false);
         }
       } catch (error) {
         if (error?.response?.data?.message) {
@@ -201,8 +235,6 @@ const CPRegisterLeadsTable = ({
         }
       }
       console.log('Form data submitted:', formData);
-      setShowModal(false);
-      setShowAssignTo(false);
     } else {
       setErrors(newErrors);
     }
@@ -744,13 +776,32 @@ const CPRegisterLeadsTable = ({
   // OTP API
   const sendOtpHandler = async () => {
     try {
+      if (!hasCookie("token")) return;
+      
+      const token = getCookie("token");
+      const db_name = getCookie("db_name");
+      
       setIsOtpSent(true);
       setConfirm(true);
 
-      const response = await axios.post('http://localhost:8050/api/v1/db/channelPartnerLeads/sendVisitOTP', {
-        lead_id: 123
-      });
-      alert(response)
+      const payload = {
+        db_name: db_name,
+        cpl_id: formData.cpl_id
+      };
+      
+      const header = {
+        headers: {
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`,
+          pass: "pass"
+        },
+      };
+      
+      const response = await axios.post(
+        `${Baseurl}/db/channelPartnerLeads/sendVisitOTP`,
+        payload,
+        header
+      );
 
       if (response.data.status) {
         toast.success("OTP sent successfully!");
@@ -759,11 +810,89 @@ const CPRegisterLeadsTable = ({
       }
     } catch (error) {
       console.error(error);
-      toast.error("Error sending OTP");
+      setIsOtpSent(false);
+      setConfirm(false);
+      if (error?.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Error sending OTP");
+      }
     }
   };
 
+  const handleOtpChange = (e, index) => {
+    const value = e.target.value.replace(/[^0-9]/g, ''); // Only allow numbers
+    if (value.length > 1) return; // Only allow single digit
+    
+    const newOtp = [...otp];
+    newOtp[index] = value;
+    setOtp(newOtp);
 
+    // Auto-focus next input
+    if (value && index < otp.length - 1) {
+      document.getElementById(`otp-${index + 1}`)?.focus();
+    }
+  };
+
+  const handleOtpBackspace = (e, index) => {
+    if (e.key === 'Backspace' && !otp[index] && index > 0) {
+      // If current field is empty and backspace is pressed, focus previous field
+      document.getElementById(`otp-${index - 1}`)?.focus();
+    }
+  };
+
+  // Verify OTP function
+  const verifyOtp = async () => {
+    if (!hasCookie("token")) return false;
+    
+    const token = getCookie("token");
+    const db_name = getCookie("db_name");
+    const otpValue = otp.join(''); // Combine all OTP digits
+    
+    if (otpValue.length !== 4) {
+      toast.error("Please enter complete 4-digit OTP");
+      return false;
+    }
+
+    const payload = {
+      db_name: db_name,
+      cpl_id: formData.cpl_id,
+      otp: parseInt(otpValue),
+      stage: formData.stage // Include stage field that backend expects
+    };
+
+    const header = {
+      headers: {
+        Accept: "application/json",
+        Authorization: `Bearer ${token}`,
+        pass: "pass"
+      },
+    };
+
+    try {
+      const response = await axios.put(
+        `${Baseurl}/db/channelPartnerLeads`,
+        payload,
+        header
+      );
+
+      if (response.data.status || response.status === 200 || response.status === 201) {
+        toast.success("OTP verified successfully!");
+        return true;
+      } else {
+        toast.error(response.data.message || "OTP verification failed");
+        return false;
+      }
+    } catch (error) {
+      console.error(error);
+      if (error?.response?.data?.message) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("Error verifying OTP");
+      }
+      return false;
+    }
+  };
 
   return (
     <>
@@ -965,31 +1094,37 @@ const CPRegisterLeadsTable = ({
                 >
                   SEND OPT
                 </Button>)}
-              <div className="d-flex gap-2">
-
-                {
-                  confirm && otp.map((digit, index) => (
-                    <input
-                      id={`otp-${index}`}
-                      key={index}
-                      type="text"
-                      maxLength="1"
-                      value={digit}
-                      onChange={(e) => handleOtpChange(e, index)}
-                      onKeyDown={(e) => handleOtpBackspace(e, index)}
-                      className="otp-box"
-                      style={{
-                        width: "40px",
-                        height: "40px",
-                        color: "white",
-                        fontSize: "20px",
-                        textAlign: "center",
-                        borderRadius: "6px",
-                        border: "1px solid #555",
-                      }}
-                    />
-                  ))}
-              </div>
+              {confirm && (
+                <div className="d-flex flex-column gap-2">
+                  <Form.Label style={{ color: "black", fontWeight: "bold", marginBottom: "0" }}>OTP</Form.Label>
+                  <div className="d-flex gap-2">
+                    {
+                      otp.map((digit, index) => (
+                        <input
+                          id={`otp-${index}`}
+                          key={index}
+                          type="text"
+                          maxLength="1"
+                          value={digit}
+                          onChange={(e) => handleOtpChange(e, index)}
+                          onKeyDown={(e) => handleOtpBackspace(e, index)}
+                          className="otp-box"
+                          style={{
+                            width: "40px",
+                            height: "40px",
+                            color: "black",
+                            fontSize: "20px",
+                            textAlign: "center",
+                            borderRadius: "6px",
+                            border: "1px solid #555",
+                            backgroundColor: "white",
+                          }}
+                        />
+                      ))
+                    }
+                  </div>
+                </div>
+              )}
 
 
 

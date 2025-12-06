@@ -156,7 +156,7 @@ const AddProfileScreen = () => {
                                                 placeholder='Enter Profile Name'
                                                 id="profileName"
                                                 className="form-control"
-                                                onChange={(e) => setUserInfo({ ...userInfo, role_name: e.target.value })}
+                                                onChange={(e) => setUserInfo({ ...userInfo, role_name: e.target.value, platform_id: 4 })}
                                                 value={userInfo.role_name ? userInfo.role_name : ''}
                                             />
                                         </div>

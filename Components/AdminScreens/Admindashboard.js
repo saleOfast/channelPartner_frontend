@@ -74,10 +74,19 @@ const Admindashboard = () => {
         try {
             setLoader(true);
             const { data } = await axios.get(`${Baseurl}/db/permission/${navLink}`, header);
-            console.log("0000000", data.data[0]?.children)
+            console.log("Full API Response:", data.data);
+            console.log("DashBoard Navigaton (index 0):", data.data[0]?.children);
+            console.log("DashBoard Master Navigation (index 1):", data.data[1]?.children);
             if (data?.status == 200) {
                 setLoader(false);
-                setDynamicFields(data?.data[0]?.children);
+                // Merge both navigation groups to show all items including "User Master"
+                // data[0] = "DashBoard Navigaton" (regular navigation)
+                // data[1] = "DashBoard Master Navigation" (master settings including "User Master")
+                const allChildren = [
+                    ...(data?.data[0]?.children || []),
+                    ...(data?.data[1]?.children || [])
+                ];
+                setDynamicFields(allChildren);
             }
         } catch (error) {
             setLoader(false);

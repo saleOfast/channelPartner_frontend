@@ -1,8 +1,9 @@
-import { getCookie, hasCookie } from 'cookies-next'
-import React, { useState } from 'react'
+import React from 'react'
 
 const ConfirmBox = ({ title, setshowConfirm, showConfirm, actionType, }) => {
-  const clientBtnColor=hasCookie("clientBtnColor") ? getCookie("clientBtnColor") : "#293790"
+  // Always use blue color (#405189) for confirm button to ensure visibility
+  const confirmButtonColor = "#405189"
+  
     return (
 
         <>
@@ -11,7 +12,7 @@ const ConfirmBox = ({ title, setshowConfirm, showConfirm, actionType, }) => {
                     <div className="text-head">{title}</div>
                     <div className="btn-row">
                     <button className="btn btn-danger rounded-3 me-3" onClick={() => setshowConfirm(!showConfirm)}> Cancel </button>
-                        <button className="btn text-white"  style={{background:clientBtnColor}} onClick={actionType}> Confirm </button>
+                        <button className="btn text-white" style={{background: confirmButtonColor, border: 'none'}} onClick={actionType}> Confirm </button>
                     </div>
                 </div>
             </div> : null}

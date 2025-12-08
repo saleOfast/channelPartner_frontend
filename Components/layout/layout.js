@@ -129,7 +129,7 @@ const Layout = ({ Component, pageProps }) => {
                 <div>
                   <footer
                     style={{
-                      position: "fixed",
+                      position: "sticky",
                       bottom: 0,
                       left: 0,
                       width: "100%",

@@ -528,7 +528,7 @@ const AddUserScreen = () => {
                         errorData?.role_id ? "input_box errorBox" : "input_box"
                       }
                     >
-                      <label htmlFor="profilelevel">User Profile *</label>
+                      <label htmlFor="profilelevel">User Profil*</label>
                       <select
                         className={
                           errorData?.role_id

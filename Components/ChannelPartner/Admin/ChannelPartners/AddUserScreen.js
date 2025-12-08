@@ -11,7 +11,10 @@ import Select from "react-select";
 import { Baseurl, filesUrl } from "../../../../Utils/Constants";
 import { Delete } from "@mui/icons-material";
 
+
 const AddUserScreen = () => {
+
+  const cpCategory = ["Category A", "Category B", "Category C", "Category D"];
   const sideView = useSelector((state) => state.sideView.value);
   const router = useRouter();
   const { id } = router.query;
@@ -23,7 +26,7 @@ const AddUserScreen = () => {
   const [divisionList, setDivisionList] = useState([]);
   const [departMentList, setDepartMentList] = useState([]);
   const [designationList, setDesignationList] = useState([]);
-  const [cpCategory, setcpCategory] = useState([]);
+  const [cpCategory1, setcpCategory] = useState([]);
   const [countrylist, setcountrylist] = useState([]);
   const [statelist, setStatelist] = useState([]);
   const [errorData, setErrorData] = useState({});
@@ -1356,26 +1359,19 @@ const AddUserScreen = () => {
                 >
                   <label htmlFor="task_name">CP Category</label>
                   <Select
-                    id={userInfo.des_id}
-                    defaultValue={""}
                     isDisabled={viewMode}
-                    options={cpCategory?.map((data, index) => {
-                      return {
-                        value: data?.des_id,
-                        label: data?.cpCategory,
-                      };
-                    })}
-                    value={cpCategory?.map((data, index) => {
-                      if (userInfo.des_id === data.des_id) {
-                        return {
-                          value: data?.des_id,
-                          label: data?.cpCategory,
-                        };
-                      }
-                    })}
-                    onChange={(e) =>
-                      setUserinfo({ ...userInfo, des_id: e.value })
+                    options={cpCategory.map((item) => ({
+                      value: item,
+                      label: item,
+                    }))}
+
+                    value={
+                      userInfo.des_id
+                        ? { value: userInfo.des_id, label: userInfo.des_id }
+                        : null
                     }
+
+                    onChange={(e) => setUserinfo({ ...userInfo, des_id: e.value })}
                   />
                 </div>
               </div>

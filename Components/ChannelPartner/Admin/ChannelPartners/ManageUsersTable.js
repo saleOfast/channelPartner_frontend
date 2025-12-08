@@ -280,6 +280,26 @@ const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, dataList,
       }
     },
     {
+      name: 'cp_category',
+      label: "CP Category",
+      options: {
+        filter: false,
+        display: selectedOption === "Channel Partner",
+        customHeadRender: (columnMeta, updateDirection) => (
+          <th className="text-center" style={{ background: clientBtnColor ? clientBtnColor : `#293790`, color: 'white', paddingLeft: "15px" }}   >
+            {columnMeta.label}
+          </th>
+        ),
+        customBodyRender: (value, tableMeta, updateValue) => {
+          return (
+            <div className='status_box fw-bold text-center' style={{ color: "#293790" }} >
+              {value || '-'}
+            </div>
+          )
+        }
+      }
+    },
+    {
       name: 'City',
       label: "City",
       options: {
@@ -579,6 +599,15 @@ const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, dataList,
       }
     }
   };
+  // Debug: Log the data structure to check for cp_category
+  useEffect(() => {
+    if (dataList?.length > 0) {
+      console.log('DataList in ManageUsersTable:', dataList[0]);
+      console.log('cp_category in first item:', dataList[0]?.cp_category);
+      console.log('All keys in first item:', Object.keys(dataList[0] || {}));
+    }
+  }, [dataList]);
+
   const mappedDataList = dataList?.map(list => ({
     ...list,
     createdAt: list?.onboarding_date || list?.createdAt,
@@ -587,7 +616,8 @@ const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, dataList,
     user_status: list?.user_status ? "active" : "inactive",
     db_user_profile: [list?.db_user_profile?.db_designation?.designation]?.filter(d => d !== null && d !== undefined),
     reportToUserId: list?.reportToUser?.user_id,
-    City: list?.db_city?.city_name || list?.city || ''
+    City: list?.db_city?.city_name || list?.city || '',
+    cp_category: list?.cp_category || ''
   }))
 
   return (

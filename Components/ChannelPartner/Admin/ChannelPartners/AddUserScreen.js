@@ -181,6 +181,7 @@ const AddUserScreen = () => {
         div_id: data2?.div_id,
         dep_id: data2?.dep_id,
         des_id: data2?.des_id,
+        cp_category: data1?.cp_category,
         report_to: data1?.report_to,
         aadhar_no: data2?.aadhar_no,
         pan_no: data2?.pan_no,
@@ -1354,7 +1355,7 @@ const AddUserScreen = () => {
               <div className="col-xl-3 col-md-3 col-sm-12 col-12">
                 <div
                   className={
-                    errorData?.des_id ? "input_box errorBox" : "input_box"
+                    errorData?.cp_category ? "input_box errorBox" : "input_box"
                   }
                 >
                   <label htmlFor="task_name">CP Category</label>
@@ -1366,12 +1367,12 @@ const AddUserScreen = () => {
                     }))}
 
                     value={
-                      userInfo.des_id
-                        ? { value: userInfo.des_id, label: userInfo.des_id }
+                      userInfo.cp_category
+                        ? { value: userInfo.cp_category, label: userInfo.cp_category }
                         : null
                     }
 
-                    onChange={(e) => setUserinfo({ ...userInfo, des_id: e.value })}
+                    onChange={(e) => setUserinfo({ ...userInfo, cp_category: e.value })}
                   />
                 </div>
               </div>

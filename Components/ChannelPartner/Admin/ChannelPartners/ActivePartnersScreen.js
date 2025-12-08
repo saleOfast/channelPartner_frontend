@@ -156,6 +156,12 @@ const ActivePartnersScreen = () => {
 
                 if (response?.status === 200 || response?.status === 201) {
                     setLoader(false)
+                    // Debug: Log the response to check if cp_category is present
+                    console.log('API Response:', response?.data?.data);
+                    if (response?.data?.data?.length > 0) {
+                        console.log('First item structure:', response?.data?.data[0]);
+                        console.log('cp_category in first item:', response?.data?.data[0]?.cp_category);
+                    }
                     setDataList(response?.data?.data);
                 }
             } catch (error) {

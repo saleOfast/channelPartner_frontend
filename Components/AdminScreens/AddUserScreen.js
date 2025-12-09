@@ -881,6 +881,29 @@ const AddUserScreen = () => {
                                         </label>
                                       </div>
                                     )}
+                                    {p === "channel" && (
+                                      <div className="form-check" key="channel">
+                                        <input
+                                          className="form-check-input"
+                                          type="checkbox"
+                                          value="option5"
+                                          id="option5"
+                                          checked={userInfo?.isCHANNEL || false}
+                                          onChange={(e) => {
+                                            if (userInfo.isCHANNEL) {
+                                              setUserinfo({ ...userInfo, isCHANNEL: e.target.checked });
+                                            } else {
+                                              checkLicense(e, "partner", "isCHANNEL");
+                                            }
+                                            setErrorData({ ...errorData, isCHANNEL: "" });
+                                          }}
+                                          disabled={viewMode}
+                                        />
+                                        <label className="form-check-label" htmlFor="option5">
+                                          CHANNEL PARTNER
+                                        </label>
+                                      </div>
+                                    )}
 
                                   </>
                                 );

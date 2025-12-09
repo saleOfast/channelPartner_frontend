@@ -21,6 +21,8 @@ const UserPrflMgmtscreens = () => {
     const [deleteshowConfirm, setdeleteshowConfirm] = useState(false)
     const [currObj, setcurrObj] = useState('')
     const[loader,setLoader]=useState(false)
+    const [isRoleAssigned, setIsRoleAssigned] = useState(false)
+    const [deleteConfirmMessage, setDeleteConfirmMessage] = useState("Are You Sure you want to Delete ?")
     const allowedpermissions=hasCookie("allowedpermissions")? JSON.parse(getCookie("allowedpermissions")) :null
 
     function disableConfirm(value) {
@@ -28,9 +30,59 @@ const UserPrflMgmtscreens = () => {
         setdisableShowConfirm(true)
     }
 
-    function deleteConfirm(value) {
+    // Check if role is assigned to users before showing delete confirmation
+    async function deleteConfirm(value) {
         setcurrObj(value)
-        setdeleteshowConfirm(true)
+        
+        // Check if role is assigned to any users
+        if (hasCookie('token')) {
+            let token = (getCookie('token'));
+            let db_name = (getCookie('db_name'));
+
+            let header = {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "Bearer ".concat(token),
+                    db: db_name,
+                    m_id: 59
+                }
+            }
+
+            try {
+                const response = await axios.get(Baseurl + `/db/users/rolewise?role_id=${value}`, header);
+                console.log('Role check API response:', response);
+                
+                if (response?.status === 200 || response?.status === 201) {
+                    const usersWithRole = response.data?.data || [];
+                    console.log('Users with role:', usersWithRole.length, usersWithRole);
+                    
+                    // Check if there are users with this role
+                    if (usersWithRole && Array.isArray(usersWithRole) && usersWithRole.length > 0) {
+                        setIsRoleAssigned(true);
+                        setDeleteConfirmMessage("This role is already assign to a user Are You Sure you want to Delete ?");
+                    } else {
+                        setIsRoleAssigned(false);
+                        setDeleteConfirmMessage(" Role is already assigned. Are You Sure you want to Delete ?");
+                    }
+                } else {
+                    // If response status is not 200/201, show warning message as precaution
+                    setIsRoleAssigned(true);
+                    setDeleteConfirmMessage("This role is already assign to a user Are You Sure you want to Delete ?");
+                }
+                setdeleteshowConfirm(true);
+            } catch (error) {
+                console.error('Error checking role assignment:', error);
+                // If API fails, show warning message as precaution (safer to warn)
+                setIsRoleAssigned(true);
+                setDeleteConfirmMessage("This role is already assign to a user Are You Sure you want to Delete ?");
+                setdeleteshowConfirm(true);
+            }
+        } else {
+            // If no token, show warning message as precaution
+            setIsRoleAssigned(true);
+            setDeleteConfirmMessage("This role is already assign to a user Are You Sure you want to Delete ?");
+            setdeleteshowConfirm(true);
+        }
     }
 
     const getDataList = async () => {
@@ -122,6 +174,8 @@ const UserPrflMgmtscreens = () => {
                     toast.success(response.data.message)
                     setdeleteshowConfirm(false)
                     setcurrObj('')
+                    setIsRoleAssigned(false)
+                    setDeleteConfirmMessage("Are You Sure you want to Delete ?")
                     getDataList();
                 }
             } catch (error) {
@@ -150,9 +204,17 @@ const UserPrflMgmtscreens = () => {
 
             <ConfirmBox
                 showConfirm={deleteshowConfirm}
-                setshowConfirm={setdeleteshowConfirm}
+                setshowConfirm={(val) => {
+                    setdeleteshowConfirm(val);
+                    if (!val) {
+                        setIsRoleAssigned(false);
+                        setDeleteConfirmMessage("Are You Sure you want to Delete ?");
+                    }
+                }}
                 actionType={deleteHandler}
-                title={"Are You Sure you want to Delete ?"} />
+                title={deleteConfirmMessage}
+                cancelLabel="No"
+                confirmLabel="Yes" />
 
              <div className={`main_Box  ${sideView}`}>
                 <div className="bread_head">

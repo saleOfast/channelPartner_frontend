@@ -108,6 +108,7 @@ const ManageUsersTable = ({ start, end, deleteConfirm, disableConfirm, dataList,
             <div className='status_box text-center' style={{ color: "#293790" }}>
               <Link href={`/partner/ChannelPartnersDetails?id=${tableMeta?.rowData[0]}&mode=view`} className='fw-bold text-decoration-underline'>
                 {value}
+               
               </Link>
             </div>
           )

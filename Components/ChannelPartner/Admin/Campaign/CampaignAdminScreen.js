@@ -369,11 +369,12 @@ async function deleteHandler() {
                     <div key={i} className="col-12 col-md-6">
                 <div
                   className="w-100 position-relative Campaign-img"
-                  style={{
-                    backgroundImage:
-                      `url(${filesUrl}`+`/project/images${project?.cover_image})`,
-                  }}
+                  // style={{
+                  //   backgroundImage:
+                  //     `url(${filesUrl}`+`/project/images${project?.cover_image})`,
+                  // }}
                 >
+                  <img src="https://cdn.sanity.io/images/55mm68d3/production/cd60832e6e3ee1bb3241e0de15cbad6aaf1c1fad-1400x875.png"/>
                   <div className="overlay" />
                   <div className="cart-overlay-items">
                     <div className="row">

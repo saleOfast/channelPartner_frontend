@@ -11,6 +11,7 @@ import Modal from "react-bootstrap/Modal";
 import { Button } from 'react-bootstrap';
 import dynamic from 'next/dynamic'
 import Papa from "papaparse";
+import { useRouter } from 'next/router';
 const DynamicTable = dynamic(
     () => import('./ManageUsersTable'),
     { ssr: false }
@@ -18,6 +19,7 @@ const DynamicTable = dynamic(
 
 const ManageUserScreens = () => {
     const sideView = useSelector((state) => state.sideView.value);
+    const router = useRouter();
 
     const [dataList, setDataList] = useState([])
     const [disableShowConfirm, setdisableShowConfirm] = useState(false)
@@ -217,6 +219,51 @@ const ManageUserScreens = () => {
     useEffect(() => {
         getDataList();
     }, [])
+
+    // Refresh when navigating to this page (handles direct navigation and back button)
+    useEffect(() => {
+        if (router.isReady && (router.pathname === '/ManageUsers' || router.asPath === '/ManageUsers')) {
+            getDataList();
+        }
+    }, [router.isReady, router.asPath])
+
+    // Refresh data when route changes to this page
+    useEffect(() => {
+        const handleRouteChange = (url) => {
+            if (url === '/ManageUsers') {
+                getDataList();
+            }
+        };
+
+        router.events.on('routeChangeComplete', handleRouteChange);
+
+        return () => {
+            router.events.off('routeChangeComplete', handleRouteChange);
+        };
+    }, [router])
+
+    // Refresh when window/tab becomes visible (handles browser back/forward and tab switching)
+    useEffect(() => {
+        const handleFocus = () => {
+            if (router.pathname === '/ManageUsers' || router.asPath === '/ManageUsers') {
+                getDataList();
+            }
+        };
+
+        const handleVisibilityChange = () => {
+            if (!document.hidden && (router.pathname === '/ManageUsers' || router.asPath === '/ManageUsers')) {
+                getDataList();
+            }
+        };
+
+        window.addEventListener('focus', handleFocus);
+        document.addEventListener('visibilitychange', handleVisibilityChange);
+
+        return () => {
+            window.removeEventListener('focus', handleFocus);
+            document.removeEventListener('visibilitychange', handleVisibilityChange);
+        };
+    }, [router.pathname, router.asPath])
 
     return (
         <>

@@ -56,9 +56,17 @@ export default function ChannelSignInScreen({ setLoggedIn }) {
   };
 
   const assignPermission = (permissionsArray) => {
+    if (!permissionsArray || !Array.isArray(permissionsArray) || permissionsArray.length === 0) {
+      // If no platform permissions, set empty array
+      dispatch(assignPermissions([]));
+      return;
+    }
     const arr = permissionsArray.reduce((ac, permission) => {
-      const platformName = permission.platform_name.toLowerCase();
-      return [...ac, platformName];
+      if (permission && permission.platform_name) {
+        const platformName = permission.platform_name.toLowerCase();
+        return [...ac, platformName];
+      }
+      return ac;
     }, []);
     dispatch(assignPermissions(arr));
   };

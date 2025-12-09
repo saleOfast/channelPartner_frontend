@@ -14,6 +14,7 @@ const partnerIndexHOC = (WrappedComponent) => {
     const router = useRouter();
     const dispatch=useDispatch()
     const userLogin = useSelector((state) => state.userLogin.value)
+    const permissionMode = useSelector((state) => state.permissionMode.value)
     const [rendercomponent, setRendercomponent] = useState(false)
     let key=true;
      
@@ -22,18 +23,25 @@ const partnerIndexHOC = (WrappedComponent) => {
       
       if (hasCookie("SaLsUsr")) {
         router.push('/admin');
-      }else if(!hasCookie("channel") && hasCookie("user")){
+        return;
+      }
+      
+      // Allow access if channel cookie exists OR permission mode is channel
+      if (hasCookie("channel") || permissionMode === "channel") {
+        setRendercomponent(true);
+      } else if (hasCookie("user")) {
+        // User is logged in but doesn't have channel access
         dispatch(clearTheme());
         dispatch(clearValue())
         dispatch(userLogOut()); 
-         toast.warning("Illegal Route Access")
-         router.push('/')
-      }
-      else{
-        setRendercomponent(true)
+        toast.warning("Illegal Route Access")
+        router.push('/')
+      } else {
+        // Not logged in, allow component to render (it will show login screen)
+        setRendercomponent(true);
       }
       
-    }, [userLogin]);
+    }, [userLogin, permissionMode, router, dispatch]);
 
     return rendercomponent ? <WrappedComponent {...rest} /> : null ;
   };

@@ -132,6 +132,8 @@ export default mainIndexHOC(
         ) {
           return toast("Your Channel Partner Subscription Has Ended");
         } else {
+          // Set cookie first, then dispatch and navigate
+          setCookie('channel', 'channel');
           dispatch(channel());
           router.push("/partner");
         }
@@ -263,23 +265,35 @@ export default mainIndexHOC(
                     </div>
                     <div className="col-12 col-lg-6 d-flex align-items-center mt-5 mt-md-0 justify-content-center" style={{ marginTop: '0%', background:"#F28A21" }}>
                     <div className="row w-100 pb-5">
-                      {allowedpermission?.map((permission, i) => (
-                        <div
-                          key={i}
-                          className="col-12 col-md-6 p-3  d-flex flex-column gap-2 align-items-center justify-content-end "
-                          onClick={() => {
-                            handleClick(permission);
-                          }}
-                        >
-                          <img
-                            src={getPlatformFunc(permission)}
-                            alt={permission}
-                            style={{ width: '35%' }}
-                            className=" cursor-pointer"
-                          />
-                          {/* <b className="fw-3 text-center cursor-pointer ">{permission.toUpperCase()}</b> */}
+                      {allowedpermission && allowedpermission.length > 0 ? (
+                        <>
+                          {allowedpermission.map((permission, i) => (
+                            <div
+                              key={i}
+                              className="col-12 col-md-6 p-3  d-flex flex-column gap-2 align-items-center justify-content-end "
+                              onClick={() => {
+                                handleClick(permission);
+                              }}
+                            >
+                              <img
+                                src={getPlatformFunc(permission)}
+                                alt={permission}
+                                style={{ width: '35%' }}
+                                className=" cursor-pointer"
+                              />
+                              {/* <b className="fw-3 text-center cursor-pointer ">{permission.toUpperCase()}</b> */}
+                            </div>
+                          ))}
+                        </>
+                      ) : (
+                        <div className="col-12 d-flex flex-column align-items-center justify-content-center p-5">
+                          <h4 className="text-white mb-3">No Platform Access</h4>
+                          <p className="text-white text-center">
+                            Your role does not have any platform permissions assigned. 
+                            Please contact your administrator to assign platform access to your role.
+                          </p>
                         </div>
-                      ))}
+                      )}
   
                       {
                         userInfo && userInfo?.role_id ==null && userInfo?.isDB==true && (
@@ -320,7 +334,7 @@ export default mainIndexHOC(
   
                       
                       {/* If the number of icons is odd, add an empty div to balance the last row */}
-                      {((allowedpermission.length + 1) % 2 !== 0) && (
+                      {allowedpermission && allowedpermission.length > 0 && ((allowedpermission.length + 1) % 2 !== 0) && (
                         <div
                           className="col-12 col-md-6 p-3"
                           style={{ visibility: 'hidden' }}

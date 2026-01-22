@@ -30,24 +30,48 @@ const Admindashboard = () => {
 
     const getAllState = async () => {
         try {
-            const res = await axios.get('http://localhost:8050/api/v1/db/admin/state/list?country_id=101');
+            const token = getCookie('token');
+            const db_name = getCookie('db_name');
+            
+            if (!token) {
+                console.error("No token found");
+                return;
+            }
+
+            const header = {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: `Bearer ${token}`,
+                    db: db_name,
+                    pass: 'pass'
+                }
+            };
+
+            const res = await axios.get(`${Baseurl}/db/admin/state/list?country_id=101`, header);
 
             // Debug: Check what the API returns
-            console.log("API RESPONSE:", res.data.data);
-            console.log("FIRST ITEM FIELDS:", res.data.data[0]);
+            console.log("API RESPONSE:", res.data);
+            console.log("API DATA:", res.data?.data);
 
-            // Map is_enabled to is_available for consistency
-            // Check multiple possible field names from API
-            const statesWithAvailability = res.data.data.map(item => ({
-                ...item,
-                is_available: item.is_enabled === true || item.is_enabled === 1 || item.is_available === true || item.status === true || item.active === true
-            }));
+            // Check if data exists and is an array
+            if (res.data?.data && Array.isArray(res.data.data)) {
+                // Map is_enabled to is_available for consistency
+                // Check multiple possible field names from API
+                const statesWithAvailability = res.data.data.map(item => ({
+                    ...item,
+                    is_available: item.is_enabled === true || item.is_enabled === 1 || item.is_available === true || item.status === true || item.active === true
+                }));
 
-            console.log("MAPPED STATES:", statesWithAvailability);
-
-            setStateList(statesWithAvailability);
+                console.log("MAPPED STATES:", statesWithAvailability);
+                setStateList(statesWithAvailability);
+            } else {
+                console.error("Invalid API response structure:", res.data);
+                setStateList([]);
+            }
         } catch (error) {
             console.error("Error fetching states:", error);
+            console.error("Error details:", error.response?.data || error.message);
+            setStateList([]);
         }
     };
 
@@ -116,7 +140,11 @@ const Admindashboard = () => {
         }
     }, [searchTerm, dynamicFields]);
 
-    const handleOpen = () => setOpen(true);
+    const handleOpen = () => {
+        setOpen(true);
+        // Refetch state list when modal opens to ensure fresh data
+        getAllState();
+    };
     const handleClose = () => setOpen(false);
 
     // Toggle state availability - sends individual state to API immediately
@@ -146,13 +174,17 @@ const Admindashboard = () => {
             console.log("TOGGLE PAYLOAD SENT:", payload);
 
             const token = getCookie("token");
+            const db_name = getCookie("db_name");
 
             const response = await axios.put(
-                "http://localhost:8050/api/v1/db/admin/state/toggle-availability",
+                `${Baseurl}/db/admin/state/toggle-availability`,
                 payload,
                 {
                     headers: {
+                        Accept: "application/json",
                         Authorization: `Bearer ${token}`,
+                        db: db_name,
+                        pass: 'pass',
                         "Content-Type": "application/json",
                     },
                 }

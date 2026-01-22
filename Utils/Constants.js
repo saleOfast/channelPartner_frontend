@@ -33,4 +33,5 @@
 
 
 /* ----------------- Local NK Realtors links Without SSL------------- */
-export const Baseurl = 'http://localhost:4000/api/v1';
+// export const Baseurl = 'http://localhost:4000/api/v1';
+export const Baseurl = 'https://api.srijanbandhan.com/api/v1';

@@ -33,4 +33,4 @@
 
 
 /* ----------------- Local NK Realtors links Without SSL------------- */
-export const Baseurl = 'http://localhost:8050/api/v1';
+export const Baseurl = 'http://localhost:4000/api/v1';

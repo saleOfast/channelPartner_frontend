@@ -229,17 +229,12 @@ const UserPrflMgmtscreens = () => {
                 <div className="main_content">
                     <div className="table_screen">
                         <div className="top_btn_sec">
-                            {
-                                allowedpermissions[0]==="channel" ? null :(
-                                    <Link href='/AddProfileManage'>
+                            <Link href='/AddProfileManage'>
                                 <button className="btn btn-primary Add_btn">
                                     <PlusIcon />
                                     ADD PROFILE
                                 </button>
                             </Link>
-                                )
-                            }
-                            
                         </div>
                         <DynamicTable
                             title='Users Profile List'
